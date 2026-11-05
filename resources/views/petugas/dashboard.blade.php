@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Petugas - SIMPATI</title>
@@ -74,6 +76,22 @@
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 16px;
         }
+        .logout-form { margin-top: 12px; }
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 10px;
+            color: #cfe3ea;
+            background: none;
+            border: 0;
+            font: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .logout-button:hover { color: #fff; }
+
+        
 
         /* Main Content */
         main {
@@ -295,6 +313,18 @@
             font-size: 10px;
             font-weight: 700;
         }
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .status-pill.menunggu { background: #fef3c7; color: #92400e; }
+        .status-pill.disetujui { background: #dbeafe; color: #1e40af; }
+        .status-pill.dipinjam { background: #d1fae5; color: #047857; }
+        .status-pill.dikembalikan { background: #f1f5f9; color: #475569; }
+        .status-pill.ditolak { background: #fee2e2; color: #dc2626; }
         .btn-review {
             background: #fff;
             border: 1px solid #cbd5e1;
@@ -352,6 +382,135 @@
             border-radius: 10px;
         }
 
+        /* Catalog Grid ala Siswa */
+        .catalog-section { margin-top: 4px; }
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .item-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .card-img-wrapper img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            padding: 8px;
+            object-fit: contain;
+            z-index: 1;
+        }
+        .placeholder-text {
+            position: relative;
+            font-size: 14px;
+            font-weight: bold;
+            color: #64748b;
+            z-index: 0;
+        }
+        .badge-code {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .badge-code .cat {
+            color: #7c3aed;
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+        .badge-code .cat.band { color: #ea580c; }
+        .badge-code .cat.osis { color: #0284c7; }
+        .badge-code .cat.rohis { color: #059669; }
+
+        .card-body {
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .item-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        .item-loc {
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        .photo-reference-label {
+            font-size: 11px;
+            color: #64748b;
+        }
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .stock-badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .stock-badge.ready { background: #d1fae5; color: #047857; }
+        .stock-badge.busy { background: #fee2e2; color: #dc2626; }
+        .condition {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+
+        .btn-action {
+            width: 100%;
+            background-color: #00897b;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: 0.2s;
+        }
+        .btn-action:hover { background-color: #00796b; }
+        .btn-action.disabled {
+            background-color: #fff;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
         /* Danger Alert Box Terlambat */
         .late-alert-card {
             background-color: #fef2f2;
@@ -387,49 +546,47 @@
             transition: 0.2s;
         }
         .btn-action-danger:hover { background-color: #dc2626; }
+        @media (max-width: 900px) {
+            .dashboard-content-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .catalog-grid { grid-template-columns: 1fr; }
+            aside { width: 190px; padding: 16px; }
+            main { padding: 20px 16px; }
+            .request-item { align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+            .req-user { width: auto; min-width: 120px; }
+            .req-item-info { min-width: 160px; padding: 0; }
+            .req-date { width: auto; text-align: left; }
+        }
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri (Ruang Petugas) -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Ruang Petugas</div>
-     <nav>
-    <a href="/petugas/dashboard">
-        <span>📊</span> Dashboard
-    </a>
-    <a href="/petugas/inventaris">
-        <span>📦</span> Inventaris
-    </a>
-    <a href="/petugas/persetujuan">
-        <span>📝</span> Persetujuan <span style="margin-left:auto; background:#d97706; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">8</span>
-    </a>
-    <a href="/petugas/pengembalian">
-        <span>🔄</span> Pengembalian
-    </a>
-    <a href="/petugas/laporan">
-        <span>📈</span> Laporan
-    </a>
-</nav>
-        </div>
-        <div class="sidebar-footer">
-            Bantuan sarpras • ekstensi 104<br>
-            SIMPATI v1.4
-        </div>
-    </aside>
+    @include('petugas.partials.sidebar', ['active' => 'dashboard'])
+
 
     <!-- Main Area -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Dashboard petugas</h1>
             </div>
+            </div>
             <div class="user-badge">
                 <span class="dot"></span>
-                <span>Rizky Maulana</span>
+                <span>{{ Auth::user()->name }}</span>
             </div>
         </header>
 
@@ -438,9 +595,9 @@
         <div class="title-section">
             <div>
                 <h2>Ringkasan hari ini</h2>
-                <p>Jumat, 25 September 2026 • Diperbarui 10.24 WIB</p>
+                <p>{{ now()->translatedFormat('l, d F Y') }} • Diperbarui {{ now()->format('H.i') }} WIB</p>
             </div>
-            <a href="#" class="btn-add">
+            <a href="{{ route('petugas.inventaris.create') }}" class="btn-add">
                 <span>+</span> Tambah inventaris
             </a>
         </div>
@@ -448,39 +605,133 @@
         <!-- Metric Stat Cards -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">📦</div>
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                </div>
                 <div>
-                    <div class="stat-label">Total inventaris</div>
-                    <div class="stat-value">284</div>
-                    <div class="stat-sub">+12 bulan ini</div>
+                    <div class="stat-label">Total stok alat</div>
+                    <div class="stat-value">{{ $totalStok }}</div>
+                    <div class="stat-sub">Unit tersedia di inventaris</div>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon">🔄</div>
+                <div class="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+                </div>
                 <div>
                     <div class="stat-label">Sedang dipinjam</div>
-                    <div class="stat-value">37</div>
-                    <div class="stat-sub" style="color:#10b981;">13% dari stok</div>
+                    <div class="stat-value">{{ $dipinjamCount }}</div>
+                    <div class="stat-sub" style="color:#10b981;">Sedang digunakan siswa</div>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon warning">◆</div>
+                <div class="stat-icon warning">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
                 <div>
                     <div class="stat-label">Perlu persetujuan</div>
-                    <div class="stat-value">8</div>
-                    <div class="stat-sub" style="color:#d97706;">3 prioritas</div>
+                    <div class="stat-value">{{ $menungguCount }}</div>
+                    <div class="stat-sub" style="color:#d97706;">Pengajuan siswa menunggu</div>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-icon danger">!</div>
+                <div class="stat-icon danger">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
                 <div>
                     <div class="stat-label">Terlambat</div>
-                    <div class="stat-value">3</div>
+                    <div class="stat-value">{{ $terlambatCount }}</div>
                     <div class="stat-sub" style="color:#ef4444;">Perlu tindak lanjut</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Katalog Alat (gaya katalog siswa) -->
+        <div class="catalog-section">
+            <div class="title-section">
+                <div>
+                    <h2>Katalog alat</h2>
+                    <p>Pratinjau inventaris yang dilihat siswa di katalog.</p>
+                </div>
+                <a href="/petugas/inventaris" class="btn-add">Lihat semua</a>
+            </div>
+
+            <div class="catalog-grid">
+                @php
+                    $printerTerdaftar = false;
+                @endphp
+                @foreach($alats as $alat)
+                    @php
+                        $gambarAlat = null;
+                        $pemetaanGambar = [
+                            'printer' => 'printer.jpg',
+                            'projector' => 'proyektor.jpg',
+                            'proyektor' => 'proyektor.jpg',
+                            'sajadah' => 'sajadah.jpg',
+                            'sony' => 'sony1.jpg',
+                            'tenda' => 'tenda.jpg',
+                        ];
+                        $namaAlat = strtolower($alat->nama_alat);
+
+                        foreach ($pemetaanGambar as $kataKunci => $namaFile) {
+                            if (str_contains($namaAlat, $kataKunci) && file_exists(public_path($namaFile))) {
+                                $gambarAlat = $namaFile;
+                                break;
+                            }
+                        }
+                        if ($gambarAlat === 'printer.jpg') {
+                            $printerTerdaftar = true;
+                        }
+                    @endphp
+
+                    <div class="item-card">
+                        <div class="card-img-wrapper">
+                            @if($alat->foto && file_exists(storage_path('app/public/' . $alat->foto)))
+                                <img src="{{ asset('storage/' . $alat->foto) }}" alt="Foto {{ $alat->nama_alat }}" loading="lazy">
+                            @elseif($gambarAlat)
+                                <img src="{{ asset($gambarAlat) }}" alt="Foto {{ $alat->nama_alat }}" loading="lazy">
+                            @else
+                                <div class="placeholder-text">{{ $alat->nama_alat }}</div>
+                            @endif
+                            <div class="badge-code">
+                                <span>{{ $alat->kode_alat ?? '-' }}</span>
+                                <span class="cat {{ strtolower($alat->kategori ?? '') }}">{{ strtoupper($alat->kategori ?? '-') }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <div class="item-title">{{ $alat->nama_alat }}</div>
+                                <div class="item-loc">📍 {{ $alat->lokasi ?? 'Belum ada lokasi' }}</div>
+                            </div>
+                            <div>
+                                <div class="card-meta">
+                                    <span class="stock-badge {{ $alat->stok > 0 ? 'ready' : 'busy' }}">
+                                        • {{ $alat->stok }} tersedia
+                                    </span>
+                                    <span class="condition">{{ $alat->kondisi ?? 'Kondisi baik' }}</span>
+                                </div>
+                                <a href="/petugas/inventaris" class="btn-action">Kelola inventaris</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                @unless($printerTerdaftar)
+                    <div class="item-card">
+                        <div class="card-img-wrapper">
+                            <img src="{{ asset('printer.jpg') }}" alt="Foto printer Epson" loading="lazy">
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <div class="item-title">Printer Epson</div>
+                                <div class="photo-reference-label">Foto referensi • belum terdaftar di inventaris</div>
+                            </div>
+                            <a href="{{ route('petugas.inventaris.index') }}" class="btn-action">Kelola inventaris</a>
+                        </div>
+                    </div>
+                @endunless
             </div>
         </div>
 
@@ -490,90 +741,37 @@
             <!-- Permintaan Terbaru -->
             <div class="card-panel">
                 <div class="panel-header">
-                    <h3>Permintaan terbaru</h3>
-                    <a href="#">Lihat semua →</a>
+                    <h3>Peminjaman terbaru dari siswa</h3>
                 </div>
 
-                <!-- Item 1 -->
-                <div class="request-item">
-                    <div class="req-user">
-                        <strong>Nadia Putri</strong>
-                        <span>Siswa • Ekskul</span>
-                    </div>
-                    <div class="req-item-info">
-                        <div class="req-item-title">Kamera Sony A6400</div>
-                        <div class="badge-code">
-                            <span>MM-CAM-014</span>
-                            <span class="cat">MULTIMEDIA</span>
+                @forelse($peminjamans as $peminjaman)
+                    <div class="request-item">
+                        <div class="req-user">
+                            <strong>{{ $peminjaman->user->name ?? 'Siswa' }}</strong>
+                            <span>Siswa • {{ ucfirst($peminjaman->kategori) }}</span>
+                        </div>
+                        <div class="req-item-info">
+                            <div class="req-item-title">{{ $peminjaman->alat->nama_alat ?? 'Alat tidak ditemukan' }}</div>
+                            <div class="badge-code">
+                                <span>{{ $peminjaman->alat->kode_alat ?? '-' }}</span>
+                                <span class="cat {{ $peminjaman->kategori }}">{{ strtoupper($peminjaman->kategori) }}</span>
+                            </div>
+                        </div>
+                        <div class="req-date">
+                            {{ $peminjaman->tanggal_pinjam->format('d M Y') }}<br>
+                            s.d. {{ $peminjaman->tanggal_kembali->format('d M Y') }}
+                        </div>
+                        <div class="req-status-action">
+                            <span class="status-pill {{ $peminjaman->status }}">
+                                {{ ucfirst($peminjaman->status) }}
+                            </span>
                         </div>
                     </div>
-                    <div class="req-date">25-26 Sep</div>
-                    <div class="req-status-action">
-                        <span class="status-pill-orange">• Menunggu</span>
-                        <a href="#" class="btn-review">Tinjau</a>
+                @empty
+                    <div class="request-item">
+                        <div class="req-item-title">Belum ada pengajuan peminjaman dari siswa.</div>
                     </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="request-item">
-                    <div class="req-user">
-                        <strong>Farhan Akbar</strong>
-                        <span>Siswa • Ekskul</span>
-                    </div>
-                    <div class="req-item-info">
-                        <div class="req-item-title">Portable Speaker JBL</div>
-                        <div class="badge-code">
-                            <span>OS-SPK-005</span>
-                            <span class="cat osis">OSIS</span>
-                        </div>
-                    </div>
-                    <div class="req-date">27 Sep</div>
-                    <div class="req-status-action">
-                        <span class="status-pill-orange">• Menunggu</span>
-                        <a href="#" class="btn-review">Tinjau</a>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="request-item">
-                    <div class="req-user">
-                        <strong>Alya Zahra</strong>
-                        <span>Siswa • Ekskul</span>
-                    </div>
-                    <div class="req-item-info">
-                        <div class="req-item-title">Karpet Masjid 3×5 m</div>
-                        <div class="badge-code">
-                            <span>RH-KRP-011</span>
-                            <span class="cat rohis">ROHIS</span>
-                        </div>
-                    </div>
-                    <div class="req-date">29-30 Sep</div>
-                    <div class="req-status-action">
-                        <span class="status-pill-orange">• Menunggu</span>
-                        <a href="#" class="btn-review">Tinjau</a>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="request-item">
-                    <div class="req-user">
-                        <strong>Bima Pratama</strong>
-                        <span>Siswa • Ekskul</span>
-                    </div>
-                    <div class="req-item-info">
-                        <div class="req-item-title">Mikrofon Wireless</div>
-                        <div class="badge-code">
-                            <span>BND-MIC-008</span>
-                            <span class="cat band">BAND</span>
-                        </div>
-                    </div>
-                    <div class="req-date">1 Okt</div>
-                    <div class="req-status-action">
-                        <span class="status-pill-orange">• Menunggu</span>
-                        <a href="#" class="btn-review">Tinjau</a>
-                    </div>
-                </div>
-
+                @endforelse
             </div>
 
             <!-- Panel Kanan -->
@@ -583,62 +781,50 @@
                 <div class="category-card">
                     <h4>Pemakaian kategori</h4>
                     
-                    <div class="cat-progress-item">
-                        <div class="cat-info">
-                            <span>Multimedia</span>
-                            <strong>78%</strong>
+                    @php
+                        $maxCategoryCount = max(1, (int) $categoryCounts->max());
+                    @endphp
+                    @foreach(['multimedia' => 'Multimedia', 'band' => 'Band', 'osis' => 'OSIS', 'rohis' => 'Rohis'] as $category => $label)
+                        @php
+                            $count = (int) $categoryCounts->get($category, 0);
+                            $width = (int) round(($count / $maxCategoryCount) * 100);
+                            $color = ['multimedia' => '#8b5cf6', 'band' => '#f97316', 'osis' => '#0284c7', 'rohis' => '#10b981'][$category];
+                        @endphp
+                        <div class="cat-progress-item">
+                            <div class="cat-info">
+                                <span>{{ $label }}</span>
+                                <strong>{{ $count }} peminjaman</strong>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: {{ $width }}%; background-color: {{ $color }};"></div>
+                            </div>
                         </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 78%; background-color: #8b5cf6;"></div>
-                        </div>
-                    </div>
-
-                    <div class="cat-progress-item">
-                        <div class="cat-info">
-                            <span>Band</span>
-                            <strong>64%</strong>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 64%; background-color: #f97316;"></div>
-                        </div>
-                    </div>
-
-                    <div class="cat-progress-item">
-                        <div class="cat-info">
-                            <span>OSIS</span>
-                            <strong>52%</strong>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 52%; background-color: #0284c7;"></div>
-                        </div>
-                    </div>
-
-                    <div class="cat-progress-item">
-                        <div class="cat-info">
-                            <span>Rohis</span>
-                            <strong>36%</strong>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 36%; background-color: #10b981;"></div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 <!-- Warning Box Terlambat -->
                 <div class="late-alert-card">
-                    <div class="late-title">3 pengembalian terlambat</div>
+                    <div class="late-title">{{ $terlambatCount }} pengembalian terlambat</div>
                     <ul class="late-list">
-                        <li>• Fajar • Kabel XLR • 4 hari</li>
-                        <li>• Rian • Handycam • 2 hari</li>
-                        <li>• Dimas • Stand banner • 1 hari</li>
+                        @forelse($latePeminjamans as $latePeminjaman)
+                            <li>
+                                • {{ $latePeminjaman->user->name ?? 'Siswa' }}
+                                • {{ $latePeminjaman->alat->nama_alat ?? 'Alat' }}
+                                • {{ $latePeminjaman->tanggal_kembali->diffInDays(today()) }} hari
+                            </li>
+                        @empty
+                            <li>Tidak ada peminjaman terlambat.</li>
+                        @endforelse
                     </ul>
-                    <button class="btn-action-danger">Tindak lanjut</button>
+                    <a href="{{ route('petugas.pengembalian') }}" class="btn-action-danger" style="display:block; text-align:center; text-decoration:none;">Tindak lanjut</a>
                 </div>
 
             </div>
 
         </div>
     </main>
+
+    
 
 </body>
 </html>

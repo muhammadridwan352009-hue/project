@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengembalian Inventaris - SIMPATI</title>
@@ -74,6 +76,22 @@
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 16px;
         }
+        .logout-form { margin-top: 12px; }
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 10px;
+            color: #cfe3ea;
+            background: none;
+            border: 0;
+            font: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .logout-button:hover { color: #fff; }
+        
+
 
         /* Area Utama */
         main {
@@ -492,45 +510,223 @@
             font-weight: 700;
             cursor: pointer;
         }
+        .tab-view {
+            display: none;
+        }
+        .tab-view.active-view {
+            display: block;
+        }
+        .queue-item:focus-visible,
+        .tab-btn:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #38bdf8;
+            outline-offset: 2px;
+        }
+        .interaction-message {
+            display: none;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            color: #065f46;
+            font-size: 12px;
+            margin-bottom: 16px;
+            padding: 10px 14px;
+        }
+        .interaction-message.visible {
+            display: block;
+        }
+        .returned-toolbar {
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .returned-toolbar h3 {
+            color: #071b26;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        .returned-toolbar p {
+            color: #718096;
+            font-size: 12px;
+        }
+        .returned-count-pill,
+        .returned-status-pill {
+            background: #e6f4ea;
+            border-radius: 20px;
+            color: #047857;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 10px;
+        }
+        .returned-search-wrap {
+            align-items: center;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 10px 12px;
+        }
+        .returned-search-wrap input {
+            border: 0;
+            flex: 1;
+            font-size: 12px;
+            outline: 0;
+        }
+        .returned-grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+        .returned-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .returned-card-top,
+        .returned-dates {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+        .returned-card-user {
+            color: #071b26;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .returned-card-class,
+        .returned-date-box .lbl {
+            color: #64748b;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+        .returned-item-name {
+            color: #1e293b;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 12px 0 8px;
+        }
+        .returned-dates {
+            margin-top: 14px;
+        }
+        .returned-date-box .val {
+            color: #334155;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+        .returned-detail-status {
+            background: #e6f4ea;
+            color: #047857;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+        .returned-fine {
+            border-top: 1px solid #f1f5f9;
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 12px;
+            padding-top: 10px;
+        }
+        .returned-fine.has-fine {
+            color: #b45309;
+            font-weight: 700;
+        }
+        .returned-service-confirm {
+            background: #00897b;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 10px;
+            border: 0;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+        }
+        .verify-item.is-damaged {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+        .empty-state {
+            color: #64748b;
+            font-size: 12px;
+            padding: 16px 4px;
+            text-align: center;
+        }
+        @media (max-width: 900px) {
+            aside {
+                padding: 18px 12px;
+                width: 210px;
+            }
+            main {
+                padding: 24px 20px;
+            }
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                display: block;
+            }
+            aside {
+                width: 100%;
+            }
+            aside nav {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            main {
+                padding: 18px 12px;
+            }
+            .summary-box-grid,
+            .meta-info-grid {
+                grid-template-columns: 1fr;
+            }
+            .action-footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .verify-list,
+            .fine-bar,
+            .title-section {
+                align-items: stretch;
+                flex-direction: column;
+            }
+            .tab-switcher {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Ruang Petugas</div>
-        <nav>
-    <a href="/petugas/dashboard">
-        <span>📊</span> Dashboard
-    </a>
-    <a href="/petugas/inventaris">
-        <span>📦</span> Inventaris
-    </a>
-    <a href="/petugas/persetujuan">
-        <span>📝</span> Persetujuan <span style="margin-left:auto; background:#d97706; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">8</span>
-    </a>
-    <a href="/petugas/pengembalian">
-        <span>🔄</span> Pengembalian
-    </a>
-    <a href="/petugas/laporan">
-        <span>📈</span> Laporan
-    </a>
-</nav>
-        </div>
-        <div class="sidebar-footer">
-            Bantuan sarpras • ekstensi 104<br>
-            SIMPATI v1.4
-        </div>
-    </aside>
+    @include('petugas.partials.sidebar', ['active' => 'pengembalian'])
+
 
     <!-- Area Utama -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Pengembalian inventaris</h1>
+            </div>
             </div>
             <div class="user-badge">
                 <span class="dot"></span>
@@ -546,17 +742,18 @@
                 <p>Catat barang kembali, kondisi, dan denda keterlambatan.</p>
             </div>
             <div class="badge-status-group">
-                <span class="pill-count-orange">• 5 menunggu</span>
-                <span class="pill-count-red">• 3 terlambat</span>
+                <span class="pill-count-orange">• <span id="waiting-badge-count">0</span> menunggu</span>
+                <span class="pill-count-red">• <span id="late-badge-count">0</span> terlambat</span>
             </div>
         </div>
 
         <!-- Tab Switcher -->
         <div class="tab-switcher">
-            <a href="#" class="tab-btn active">Belum dikembalikan - 5</a>
-            <a href="#" class="tab-btn">Sudah dikembalikan - 23</a>
+            <a href="#view-belum" class="tab-btn {{ $activeTab === 'belum' ? 'active' : '' }}" data-tab="belum" aria-current="{{ $activeTab === 'belum' ? 'page' : 'false' }}">Belum dikembalikan - <span id="pending-count">0</span></a>
+            <a href="#view-sudah" class="tab-btn {{ $activeTab === 'sudah' ? 'active' : '' }}" data-tab="sudah" aria-current="{{ $activeTab === 'sudah' ? 'page' : 'false' }}">Sudah dikembalikan - <span id="returned-count">0</span></a>
         </div>
-
+        <div id="interaction-message" class="interaction-message" role="status" aria-live="polite"></div>
+        <div id="view-belum" class="tab-view {{ $activeTab === 'belum' ? 'active-view' : '' }}">
         <!-- Main Content Grid -->
         <div class="content-grid">
             
@@ -565,54 +762,16 @@
                 <div class="queue-header">Antrean pengembalian</div>
                 <div class="search-box">
                     <span>🔍</span>
-                    <input type="text" placeholder="Cari peminjam atau alat...">
+                    <input id="queue-search" type="search" placeholder="Cari peminjam atau alat..." aria-label="Cari antrean pengembalian">
                 </div>
-
-                <!-- Item 1 (Selected) -->
-                <div class="queue-item active">
-                    <div class="queue-user-top">
-                        <span class="queue-user-name">Nadia Putri</span>
-                        <span class="queue-date-danger">• Terlambat 1 hari</span>
-                    </div>
-                    <div class="queue-item-desc">Kamera Sony A6400</div>
-                    <div class="badge-code">
-                        <span>MM-CAM-014</span>
-                        <span class="cat">MULTIMEDIA</span>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="queue-item">
-                    <div class="queue-user-top">
-                        <span class="queue-user-name">Farhan Akbar</span>
-                        <span class="queue-date-muted">• Hari ini</span>
-                    </div>
-                    <div class="queue-item-desc">Portable Speaker JBL</div>
-                    <div class="badge-code">
-                        <span>OS-SPK-005</span>
-                        <span class="cat osis">OSIS</span>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="queue-item">
-                    <div class="queue-user-top">
-                        <span class="queue-user-name">Alya Zahra</span>
-                        <span class="queue-date-muted">• Besok</span>
-                    </div>
-                    <div class="queue-item-desc">Karpet Masjid 3×5 m</div>
-                    <div class="badge-code">
-                        <span>RH-KRP-011</span>
-                        <span class="cat rohis">ROHIS</span>
-                    </div>
-                </div>
+                <div id="queue-list"></div>
             </div>
 
             <!-- Detail Pengembalian (Kanan) -->
-            <div class="detail-panel">
+            <div id="detail-panel" class="detail-panel">
                 <div class="detail-top-bar">
-                    <span class="req-id">RET-2026025-019</span>
-                    <span class="status-pill-red">• Terlambat 1 hari</span>
+                    <span id="detail-id" class="req-id"></span>
+                    <span id="detail-status" class="status-pill-red"></span>
                 </div>
                 <div class="detail-title">Detail pengembalian</div>
 
@@ -620,19 +779,19 @@
                 <div class="summary-box-grid">
                     <div class="summary-card-inner">
                         <div class="inner-label">Peminjam</div>
-                        <div class="borrower-name">Nadia Putri</div>
-                        <div class="borrower-sub">XI IPS 2 • NIS 221045</div>
-                        <div class="borrower-sub" style="font-weight: 600;">Koordinator Multimedia</div>
-                        <div class="borrower-stat">12× tepat waktu • 1 keterlambatan</div>
+                        <div id="detail-borrower" class="borrower-name"></div>
+                        <div id="detail-student" class="borrower-sub"></div>
+                        <div id="detail-role" class="borrower-sub" style="font-weight: 600;"></div>
+                        <div id="detail-stat" class="borrower-stat"></div>
                     </div>
 
                     <div class="summary-card-inner">
                         <div class="inner-label">Barang Dikembalikan</div>
                         <div class="badge-code">
-                            <span>MM-CAM-014</span>
-                            <span class="cat">MULTIMEDIA</span>
+                            <span id="detail-code"></span>
+                            <span id="detail-category" class="cat"></span>
                         </div>
-                        <div class="item-name-large">Kamera Sony Alpha A6400</div>
+                        <div id="detail-item" class="item-name-large"></div>
                         <div class="stock-available-tag">• Menunggu pemeriksaan</div>
                     </div>
                 </div>
@@ -641,56 +800,332 @@
                 <div class="meta-info-grid">
                     <div class="meta-card">
                         <div class="label">Tanggal Pinjam</div>
-                        <div class="val">25 Sep 2026 • 08.00</div>
+                        <div id="detail-borrow-date" class="val"></div>
                     </div>
                     <div class="meta-card">
                         <div class="label">Batas Kembali</div>
-                        <div class="val">25 Sep 2026 • 15.00</div>
+                        <div id="detail-due-date" class="val"></div>
                     </div>
                     <div class="meta-card">
                         <div class="label">Tanggal Kembali</div>
-                        <div class="val">26 Sep 2026 • 10.15</div>
+                        <div id="detail-return-date" class="val"></div>
                     </div>
                 </div>
 
                 <!-- Notes & Penalty Box -->
                 <div class="note-penalty-box">
                     <strong>Catatan & Denda Keterlambatan</strong>
-                    Barang diterima kembali dalam kondisi baik dan lengkap. Terlambat 1 hari — denda Rp5.000. Setelah dikonfirmasi, stok otomatis bertambah dan denda tersimpan.
+                    <span id="detail-note"></span>
                 </div>
 
                 <!-- Condition Checklist -->
                 <div class="verify-list">
-                    <div class="verify-item">
+                    <div id="condition-physical" class="verify-item">
                         <span>✓</span> Kondisi fisik baik
                     </div>
-                    <div class="verify-item">
+                    <div id="condition-accessories" class="verify-item">
                         <span>✓</span> Aksesori lengkap
                     </div>
-                    <div class="verify-item">
+                    <div id="condition-cleanliness" class="verify-item">
                         <span>✓</span> Kebersihan baik
                     </div>
                 </div>
 
                 <!-- Action Footer Buttons -->
-                <div class="action-footer-grid">
-                    <button class="btn-damage">✖ Tandai rusak</button>
-                    <button class="btn-note-damage">Catat kerusakan</button>
-                    <button class="btn-confirm-return">✓ Konfirmasi pengembalian</button>
-                </div>
-
-                <!-- Fine Calculator Bar Bottom -->
-                <div class="fine-bar">
-                    <div class="fine-text">
-                        🔄 Setelah dikonfirmasi, stok otomatis bertambah dan denda keterlambatan tersimpan.
+                <form method="POST" action="{{ route('petugas.pengembalian.konfirmasi', ['id' => '__ID__']) }}" id="return-form">
+                    @csrf
+                    <input type="hidden" name="kondisi_kembali" id="form-kondisi" value="baik">
+                    <input type="hidden" name="catatan_kondisi" id="form-catatan" value="">
+                    <div class="action-footer-grid">
+                        <button type="button" class="btn-damage">✖ Tandai rusak</button>
+                        <button type="button" class="btn-note-damage">Catat kerusakan</button>
+                        <button type="submit" class="btn-confirm-return">✓ Konfirmasi pengembalian</button>
                     </div>
-                    <button class="btn-fine-calc">Hitung & simpan denda</button>
+                </form>
+
+                <div class="fine-bar">
+                    <div class="fine-text" id="fine-text-el">
+                        Data diambil langsung dari database peminjaman.
+                    </div>
                 </div>
 
             </div>
 
         </div>
+        </div> <!-- /view-belum -->
+
+        <!-- ============ VIEW: SUDAH DIKEMBALIKAN ============ -->
+        <div id="view-sudah" class="tab-view {{ $activeTab === 'sudah' ? 'active-view' : '' }}">
+            <div class="returned-toolbar">
+                <div>
+                    <h3>Riwayat pengembalian — <span id="returned-heading-count">0</span> barang</h3>
+                    <p>Daftar peminjaman yang sudah dikembalikan.</p>
+                </div>
+                <span class="returned-count-pill">✓ Data tersimpan</span>
+            </div>
+            <div class="returned-search-wrap">
+                <span class="icon">🔍</span>
+                <input id="returned-search" type="search" placeholder="Cari nama peminjam, kode barang, atau kategori..." aria-label="Cari riwayat pengembalian">
+            </div>
+            <div id="returned-grid" class="returned-grid">
+            </div>
+        </div> <!-- /view-sudah -->
+
     </main>
+
+<script>
+(function(){
+    var pendingReturns = @js($pendingReturns);
+    var returnedRecords = @js($returnedRecords);
+    var selectedId = pendingReturns.length ? pendingReturns[0].id : null;
+    var dailyFine = 5000;
+    var queueList = document.getElementById('queue-list');
+    var returnedGrid = document.getElementById('returned-grid');
+    var detailPanel = document.getElementById('detail-panel');
+    var messageBox = document.getElementById('interaction-message');
+    var queueSearch = document.getElementById('queue-search');
+    var returnedSearch = document.getElementById('returned-search');
+
+    function makeElement(tag, className, text) {
+        var element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+    }
+
+    function showMessage(message) {
+        messageBox.textContent = message;
+        messageBox.classList.add('visible');
+    }
+
+    function money(amount) {
+        return 'Rp ' + new Intl.NumberFormat('id-ID').format(amount);
+    }
+
+    function categoryClass(categoryClassName) {
+        return categoryClassName ? 'cat ' + categoryClassName : 'cat';
+    }
+
+    function getSelected() {
+        return pendingReturns.find(function(item) {
+            return item.id === selectedId;
+        }) || null;
+    }
+
+    function renderCounts() {
+        document.getElementById('pending-count').textContent = pendingReturns.length;
+        document.getElementById('waiting-badge-count').textContent = pendingReturns.length;
+        document.getElementById('late-badge-count').textContent = pendingReturns.filter(function(item) {
+            return item.lateDays > 0;
+        }).length;
+        document.getElementById('returned-count').textContent = returnedRecords.length;
+        document.getElementById('returned-heading-count').textContent = returnedRecords.length;
+    }
+
+    function renderQueue() {
+        var query = queueSearch.value.trim().toLocaleLowerCase('id-ID');
+        queueList.replaceChildren();
+
+        var visibleItems = pendingReturns.filter(function(item) {
+            return [item.name, item.item, item.code, item.category].join(' ').toLocaleLowerCase('id-ID').includes(query);
+        });
+        if (!visibleItems.length) {
+            queueList.appendChild(makeElement('div', 'empty-state', pendingReturns.length ? 'Tidak ada antrean yang cocok.' : 'Tidak ada peminjaman yang menunggu pengembalian.'));
+            return;
+        }
+
+        visibleItems.forEach(function(item) {
+            var card = makeElement('div', 'queue-item' + (item.id === selectedId ? ' active' : ''));
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-pressed', item.id === selectedId ? 'true' : 'false');
+            card.dataset.returnId = item.id;
+
+            var top = makeElement('div', 'queue-user-top');
+            top.appendChild(makeElement('span', 'queue-user-name', item.name));
+            top.appendChild(makeElement('span', item.lateDays > 0 ? 'queue-date-danger' : 'queue-date-muted', '• ' + item.dueLabel));
+            card.appendChild(top);
+            card.appendChild(makeElement('div', 'queue-item-desc', item.item));
+
+            var badge = makeElement('div', 'badge-code');
+            badge.appendChild(makeElement('span', '', item.code));
+            badge.appendChild(makeElement('span', categoryClass(item.categoryClass), item.category));
+            card.appendChild(badge);
+            queueList.appendChild(card);
+        });
+    }
+
+    function updateDetail() {
+        var item = getSelected();
+        detailPanel.hidden = !item;
+        if (!item) return;
+
+        document.getElementById('detail-id').textContent = item.id;
+        var status = document.getElementById('detail-status');
+        status.textContent = '• ' + item.dueLabel;
+        status.hidden = item.lateDays <= 0;
+        document.getElementById('detail-borrower').textContent = item.name;
+        document.getElementById('detail-student').textContent = item.className + ' • NIS ' + item.nis;
+        document.getElementById('detail-role').textContent = item.role;
+        document.getElementById('detail-stat').textContent = item.stat;
+        document.getElementById('detail-code').textContent = item.code;
+        var category = document.getElementById('detail-category');
+        category.textContent = item.category;
+        category.className = categoryClass(item.categoryClass);
+        document.getElementById('detail-item').textContent = item.item;
+        document.getElementById('detail-borrow-date').textContent = item.borrowDate;
+        document.getElementById('detail-due-date').textContent = item.dueDate;
+        document.getElementById('detail-return-date').textContent = item.returnDate;
+        document.getElementById('form-kondisi').value = item.damaged ? 'rusak_ringan' : 'baik';
+        document.getElementById('form-catatan').value = item.damageNote;
+
+        var note = 'Barang diterima kembali. ';
+        note += item.lateDays > 0
+            ? 'Terlambat ' + item.lateDays + ' hari — denda ' + money(item.lateDays * dailyFine) + '. '
+            : 'Tidak terlambat — tanpa denda. ';
+        note += item.damageNote
+            ? 'Catatan kerusakan: ' + item.damageNote + ' '
+            : (item.damaged ? 'Barang ditandai rusak. ' : 'Kondisi barang belum ditandai rusak. ');
+        note += 'Data pengembalian akan tersimpan ke database saat dikonfirmasi.';
+        document.getElementById('detail-note').textContent = note;
+
+        var physical = document.getElementById('condition-physical');
+        physical.classList.toggle('is-damaged', item.damaged);
+        physical.querySelector('span').textContent = item.damaged ? '✖' : '✓';
+        physical.lastChild.textContent = item.damaged ? ' Kondisi fisik rusak' : ' Kondisi fisik baik';
+        document.querySelector('.btn-damage').textContent = item.damaged ? '✓ Tandai kondisi baik' : '✖ Tandai rusak';
+    }
+
+    function renderReturned() {
+        var query = returnedSearch.value.trim().toLocaleLowerCase('id-ID');
+        returnedGrid.replaceChildren();
+
+        var visibleItems = returnedRecords.filter(function(item) {
+            return [item.name, item.nis, item.item, item.code, item.category].join(' ').toLocaleLowerCase('id-ID').includes(query);
+        });
+        if (!visibleItems.length) {
+            returnedGrid.appendChild(makeElement(
+                'div',
+                'empty-state',
+                returnedRecords.length ? 'Tidak ada riwayat yang cocok.' : 'Belum ada peminjaman yang dikembalikan.'
+            ));
+            return;
+        }
+
+        visibleItems.forEach(function(item) {
+            var card = makeElement('div', 'returned-card');
+            var top = makeElement('div', 'returned-card-top');
+            var student = makeElement('div');
+            student.appendChild(makeElement('div', 'returned-card-user', item.name));
+            student.appendChild(makeElement('div', 'returned-card-class', item.className + ' • NIS ' + item.nis));
+            top.appendChild(student);
+            top.appendChild(makeElement('span', 'returned-status-pill', '✓ Dikembalikan'));
+            card.appendChild(top);
+            card.appendChild(makeElement('div', 'returned-item-name', item.item));
+
+            var badge = makeElement('div', 'badge-code');
+            badge.appendChild(makeElement('span', '', item.code));
+            badge.appendChild(makeElement('span', categoryClass(item.categoryClass), item.category));
+            card.appendChild(badge);
+
+            var dates = makeElement('div', 'returned-dates');
+            [['Pinjam', item.borrowDate], ['Kembali', item.returnDate]].forEach(function(date) {
+                var dateBox = makeElement('div', 'returned-date-box');
+                dateBox.appendChild(makeElement('div', 'lbl', date[0]));
+                dateBox.appendChild(makeElement('div', 'val', date[1]));
+                dates.appendChild(dateBox);
+            });
+            card.appendChild(dates);
+            var fine = item.fine > 0 ? 'Denda keterlambatan: ' + money(item.fine) : 'Tanpa denda';
+            card.appendChild(makeElement('div', 'returned-fine' + (item.fine > 0 ? ' has-fine' : ''), fine));
+            returnedGrid.appendChild(card);
+        });
+    }
+
+    function activateTab(name) {
+        document.querySelectorAll('.tab-view').forEach(function(view) {
+            view.classList.toggle('active-view', view.id === 'view-' + name);
+        });
+        document.querySelectorAll('.tab-switcher .tab-btn').forEach(function(tab) {
+            var active = tab.dataset.tab === name;
+            tab.classList.toggle('active', active);
+            tab.setAttribute('aria-current', active ? 'page' : 'false');
+        });
+    }
+
+    document.querySelectorAll('.tab-switcher .tab-btn').forEach(function(tab) {
+        tab.addEventListener('click', function(event) {
+            event.preventDefault();
+            activateTab(tab.dataset.tab);
+        });
+    });
+
+    queueList.addEventListener('click', function(event) {
+        var card = event.target.closest('.queue-item');
+        if (!card) return;
+        selectedId = card.dataset.returnId;
+        renderQueue();
+        updateDetail();
+    });
+    queueList.addEventListener('keydown', function(event) {
+        if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.queue-item')) {
+            event.preventDefault();
+            event.target.click();
+        }
+    });
+    queueSearch.addEventListener('input', renderQueue);
+    returnedSearch.addEventListener('input', renderReturned);
+
+    document.querySelector('.btn-damage').addEventListener('click', function() {
+        var item = getSelected();
+        if (!item) return;
+        item.damaged = !item.damaged;
+        if (!item.damaged) item.damageNote = '';
+        document.getElementById('form-kondisi').value = item.damaged ? 'rusak_ringan' : 'baik';
+        document.getElementById('form-catatan').value = item.damageNote;
+        updateDetail();
+        showMessage(item.damaged ? 'Barang ditandai rusak.' : 'Kondisi barang ditandai baik.');
+    });
+
+    document.querySelector('.btn-note-damage').addEventListener('click', function() {
+        var item = getSelected();
+        if (!item) return;
+        var note = window.prompt('Catat kerusakan barang:', item.damageNote);
+        if (note === null) return;
+        item.damageNote = note.trim();
+        item.damaged = Boolean(item.damageNote);
+        document.getElementById('form-kondisi').value = item.damaged ? 'rusak_ringan' : 'baik';
+        document.getElementById('form-catatan').value = item.damageNote;
+        updateDetail();
+        showMessage(item.damageNote ? 'Catatan kerusakan disimpan.' : 'Catatan kerusakan dihapus.');
+    });
+
+    document.getElementById('return-form').addEventListener('submit', function(event) {
+        var item = getSelected();
+        if (!item) {
+            event.preventDefault();
+            return;
+        }
+        if (!window.confirm('Konfirmasi pengembalian atas nama ' + item.name + '?')) {
+            event.preventDefault();
+            return;
+        }
+
+        this.action = this.action.replace('__ID__', encodeURIComponent(item.id));
+    });
+
+    function renderAll() {
+        renderCounts();
+        renderQueue();
+        renderReturned();
+        updateDetail();
+    }
+
+    activateTab(@js($activeTab));
+    renderAll();
+})();
+</script>
+    
 
 </body>
 </html>

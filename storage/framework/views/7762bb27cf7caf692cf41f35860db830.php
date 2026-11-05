@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="<?php echo e(asset('favicon.ico')); ?>">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('favicon.png')); ?>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Siswa - SIMPATI</title>
@@ -57,6 +59,17 @@
             margin-bottom: 16px;
             font-weight: 600;
             font-style: italic;
+        }
+        .typing-cursor {
+            border-right: 2px solid currentColor;
+            padding-right: 2px;
+            animation: cursor-blink 0.75s steps(1) infinite;
+        }
+        @keyframes cursor-blink {
+            50% { border-color: transparent; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .typing-cursor { animation: none; }
         }
         .panel-left p {
             font-size: 13px;
@@ -153,6 +166,27 @@
         .btn-submit:hover {
             background-color: #00796b;
         }
+        @media (max-width: 900px) {
+            .panel-left {
+                padding: 40px 32px;
+            }
+            .panel-right {
+                padding: 32px;
+            }
+        }
+        @media (max-width: 680px) {
+            .panel-left {
+                display: none;
+            }
+            .panel-right {
+                width: 100%;
+                min-height: 100vh;
+                padding: 28px 20px;
+            }
+            .card-form {
+                padding: 26px 22px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -164,8 +198,9 @@
             </div>
             <div>
                 <span class="badge-sub">AKSES SISWA • SMK NEGERI 5 SURAKARTA</span>
-                <h1>"Persiapan kegiatan lebih ringan saat semua alat jelas keberadaannya."</h1>
-                <p>Naka • Koordinator Multimedia</p>
+                <h1 aria-label="Persiapan kegiatan lebih ringan saat semua alat jelas keberadaannya.">
+                    <span id="login-quote" class="typing-cursor" aria-hidden="true">"Persiapan kegiatan lebih ringan saat semua alat jelas keberadaannya."</span>
+                </h1>
             </div>
             <div class="footer-left">
                 Portal Inventaris Sarpras & Prasarana
@@ -181,29 +216,153 @@
                     <h2>Masuk sebagai Siswa</h2>
                     <p>Gunakan akun sekolah untuk mulai meminjam alat.</p>
 
-                    <form action="<?php echo e(route('siswa.beranda')); ?>" method="GET">
+                    <?php if(session('status')): ?>
+                        <div role="status" style="color:#176b52; font-size:12px; margin-bottom:16px;">
+                            <?php echo e(session('status')); ?>
+
+                        </div>
+                    <?php endif; ?>
+
+                    <form method="POST" action="<?php echo e(route('login.siswa.proses')); ?>">
+                        <?php echo csrf_field(); ?>
+
                         <div class="form-group">
-                            <label>NIS atau email sekolah</label>
-                            <input type="text" placeholder="Contoh: 33189 atau siswa@smkn5surakarta.id" class="form-control" required>
+                            <label for="login">NIS atau email sekolah</label>
+                            <input type="text" id="login" name="login" value="<?php echo e(old('login')); ?>" placeholder="Contoh: 33189 atau siswa@smkn5surakarta.id" class="form-control" required autofocus>
+                            <?php $__errorArgs = ['login'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div style="color:#c0392b; font-size:12px; margin-top:4px;"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            <div style="font-size: 11px; color: #718096; margin-top: 6px;">
+                                Akun demo: <strong>siswa@smkn5surakarta.id</strong> atau <strong>33189</strong> · sandi: <strong>password123</strong>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Kata sandi</label>
-                            <input type="password" placeholder="••••••••••••••" class="form-control" required>
+                            <label for="nis">NIS</label>
+                            <input type="text" id="nis" name="nis" value="<?php echo e(old('nis')); ?>" placeholder="Contoh: 33189" class="form-control">
+                            <?php $__errorArgs = ['nis'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div style="color:#c0392b; font-size:12px; margin-top:4px;"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tingkat_kelas">Tingkat Kelas</label>
+                            <select id="tingkat_kelas" name="tingkat_kelas" class="form-control" aria-invalid="<?php echo e($errors->has('tingkat_kelas') ? 'true' : 'false'); ?>" <?php if($errors->has('tingkat_kelas')): ?> aria-describedby="tingkat-kelas-error" <?php endif; ?>>
+                                <option value="">Pilih tingkat kelas</option>
+                                <?php $__currentLoopData = ['X', 'XI', 'XII']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tingkat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($tingkat); ?>" <?php if(old('tingkat_kelas') === $tingkat): echo 'selected'; endif; ?>><?php echo e($tingkat); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <?php $__errorArgs = ['tingkat_kelas'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div id="tingkat-kelas-error" style="color:#c0392b; font-size:12px; margin-top:4px;"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jurusan">Jurusan</label>
+                            <select id="jurusan" name="jurusan" class="form-control" aria-invalid="<?php echo e($errors->has('jurusan') ? 'true' : 'false'); ?>" <?php if($errors->has('jurusan')): ?> aria-describedby="jurusan-error" <?php endif; ?>>
+                                <option value="">Pilih jurusan</option>
+                                <?php $__currentLoopData = [
+                                    'DPIB' => '(DPIB) Desain Pemodelan dan Informasi Bangunan',
+                                    'BKP' => '(BKP) Bisnis Konstruksi dan Properti',
+                                    'TOI' => '(TOI) Teknik Otomasi Industri',
+                                    'TITL' => '(TITL) Teknik Instalasi Tenaga Listrik',
+                                    'TEI' => '(TEI) Teknik Elektronika Industri',
+                                    'TP' => '(TP) Teknik Pemesinan',
+                                    'TKRO' => '(TKRO) Teknik Kendaraan Ringan Otomotif',
+                                    'TBSM' => '(TBSM) Teknik dan Bisnis Sepeda Motor',
+                                    'RPL' => '(RPL) Rekayasa Perangkat Lunak',
+                                ]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kode => $nama): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($kode); ?>" <?php if(old('jurusan') === $kode): echo 'selected'; endif; ?>><?php echo e($nama); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <?php $__errorArgs = ['jurusan'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div id="jurusan-error" style="color:#c0392b; font-size:12px; margin-top:4px;"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Kata sandi</label>
+                            <input type="password" id="password" name="password" placeholder="••••••••••••••" class="form-control" required>
                         </div>
 
                         <div class="form-row">
                             <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="checkbox" style="accent-color: #00897b;"> Ingat saya
+                                <input type="checkbox" name="remember" style="accent-color: #00897b;"> Ingat saya
                             </label>
                             <a href="#">Lupa kata sandi?</a>
                         </div>
 
                         <button type="submit" class="btn-submit">🚀 Masuk ke SIMPATI</button>
                     </form>
+
+                    <p style="margin:18px 0 0; text-align:center;">
+                        Belum punya akun?
+                        <a href="<?php echo e(route('register.siswa')); ?>" style="color:#00897b; font-weight:600; text-decoration:none;">Daftar sebagai siswa</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        const quoteElement = document.getElementById('login-quote');
+        const quote = quoteElement.textContent;
+        const characters = [...quote];
+
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            let characterIndex = 0;
+            let isDeleting = false;
+
+            const typeQuote = () => {
+                quoteElement.textContent = characters.slice(0, characterIndex).join('');
+
+                if (!isDeleting && characterIndex === characters.length) {
+                    isDeleting = true;
+                    window.setTimeout(typeQuote, 1800);
+                    return;
+                }
+
+                if (isDeleting && characterIndex === 0) {
+                    isDeleting = false;
+                    window.setTimeout(typeQuote, 500);
+                    return;
+                }
+
+                characterIndex += isDeleting ? -1 : 1;
+                window.setTimeout(typeQuote, isDeleting ? 35 : 70);
+            };
+
+            quoteElement.textContent = '';
+            typeQuote();
+        }
+    </script>
 </body>
 </html><?php /**PATH C:\xampp7\htdocs\simpati\resources\views/auth/login-siswa.blade.php ENDPATH**/ ?>

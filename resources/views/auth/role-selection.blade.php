@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMPATI - Pilih Peran</title>
@@ -32,15 +34,16 @@
             flex-direction: column;
             justify-content: space-between;
         }
-        .brand {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 1px;
+        .brand-logo {
+            display: block;
+            width: min(230px, 100%);
+            aspect-ratio: 1;
+            object-fit: contain;
+            padding: 8px;
+            border-radius: 18px;
             background: #fff;
-            color: #071b26;
-            padding: 8px 12px;
-            border-radius: 8px;
-            display: inline-block;
+            align-self: center;
+            margin-top: -20px;
         }
         .panel-left h1 {
             font-size: 38px;
@@ -58,6 +61,26 @@
             color: #718096;
         }
 
+        /* Animasi ketik (typewriter) */
+        .hero-text h1 {
+            min-height: 3.6em;
+        }
+        .hero-text h1 .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #00897b;
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.7s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .hero-text p {
+            color: #a0aec0;
+        }
+
         /* Panel Kanan */
         .panel-right {
             width: 55%;
@@ -67,6 +90,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
         .role-wrapper {
             width: 100%;
@@ -126,18 +150,25 @@
             background: #fef3c7;
             color: #d97706;
         }
+        @media (max-width: 768px) {
+            .panel-left {
+                padding: 32px 24px;
+            }
+            .brand-logo {
+                width: min(180px, 55vw);
+                margin-top: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Panel Kiri -->
         <div class="panel-left">
-            <div>
-                <div class="brand">SIMPATI</div>
-            </div>
-            <div>
-                <h1>Alat sekolah, tertata dan siap dipakai.</h1>
-                <p>Sistem inventaris terpadu untuk memantau peminjaman, ketersediaan, serta pemeliharaan sarana prasarana sekolah secara transparan.</p>
+            <img class="brand-logo" src="{{ asset('SIMPATI Inventory Equipment Logo.png') }}" alt="Logo SIMPATI">
+            <div class="hero-text">
+                <h1><span id="typed-text"></span><span class="cursor"></span></h1>
+                <p id="typed-desc"></p>
             </div>
             <div class="footer-left">
                 SMK Negeri 5 Surakarta • Portal Inventaris Utama
@@ -170,5 +201,28 @@
             </div>
         </div>
     </div>
+    <script>
+        const texts = [
+            { el: document.getElementById('typed-text'), text: "Satu Sistem, Semua Inventaris Terkelola.", speed: 60 },
+            { el: document.getElementById('typed-desc'), text: "Kelola peminjaman, pantau ketersediaan, dan jaga kondisi alat inventaris sekolah dengan lebih mudah, tertata, dan transparan.", speed: 25 }
+        ];
+        let t = 0;
+        function typeText() {
+            if (t >= texts.length) return;
+            const { el, text, speed } = texts[t];
+            let i = 0;
+            (function type() {
+                if (i < text.length) {
+                    el.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    t++;
+                    setTimeout(typeText, 400);
+                }
+            })();
+        }
+        window.addEventListener('load', () => setTimeout(typeText, 300));
+    </script>
 </body>
 </html>

@@ -9,6 +9,8 @@ class Borrowing extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $fillable = [
         'nama_peminjam',
         'item_id',

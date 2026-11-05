@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Inventaris - SIMPATI</title>
@@ -74,6 +76,22 @@
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 16px;
         }
+        .logout-form { margin-top: 12px; }
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 10px;
+            color: #cfe3ea;
+            background: none;
+            border: 0;
+            font: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .logout-button:hover { color: #fff; }
+        
+
 
         /* Main Area */
         main {
@@ -313,6 +331,34 @@
             text-decoration: none;
         }
         .btn-edit:hover { color: #00897b; }
+        .btn-delete {
+            background: none;
+            border: none;
+            font-size: 12px;
+            color: #64748b;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-delete:hover { color: #dc2626; }
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .alert-empty {
+            background: #fff;
+            border: 1px dashed #cbd5e1;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            color: #718096;
+            font-size: 13px;
+        }
         .more-opt {
             font-size: 14px;
             color: #94a3b8;
@@ -348,45 +394,42 @@
             background-color: #071b26;
             color: #fff;
         }
+
+        @media (max-width: 768px) {
+            main { padding: 18px 14px; }
+            header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .title-section { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .title-section h2 { font-size: 18px; }
+            .filter-card { flex-direction: column; }
+            .search-box input { font-size: 16px; }
+            .table-card { overflow-x: auto; }
+            table { min-width: 640px; }
+            th, td { padding: 12px 12px; }
+            .table-footer { flex-direction: column; gap: 8px; text-align: center; }
+        }
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Ruang Petugas</div>
-   <nav>
-    <a href="/petugas/dashboard">
-        <span>📊</span> Dashboard
-    </a>
-    <a href="/petugas/inventaris">
-        <span>📦</span> Inventaris
-    </a>
-    <a href="/petugas/persetujuan">
-        <span>📝</span> Persetujuan <span style="margin-left:auto; background:#d97706; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">8</span>
-    </a>
-    <a href="/petugas/pengembalian">
-        <span>🔄</span> Pengembalian
-    </a>
-    <a href="/petugas/laporan">
-        <span>📈</span> Laporan
-    </a>
-</nav>
-        </div>
-        <div class="sidebar-footer">
-            Bantuan sarpras • ekstensi 104<br>
-            SIMPATI v1.4
-        </div>
-    </aside>
+    @include('petugas.partials.sidebar', ['active' => 'inventaris'])
+
 
     <!-- Konten Utama -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Manajemen inventaris</h1>
+            </div>
             </div>
             <div class="user-badge">
                 <span class="dot"></span>
@@ -399,40 +442,25 @@
         <div class="title-section">
             <div>
                 <h2>Manajemen inventaris</h2>
-                <p>Kelola 284 unit alat dari seluruh organisasi siswa.</p>
+                <p>Kelola {{ $items->count() }} unit alat dari seluruh organisasi siswa.</p>
             </div>
             <div class="action-buttons">
-                <a href="#" class="btn-secondary">
-                    <span>↑</span> Impor CSV
-                </a>
-                <a href="#" class="btn-primary">
+                <a href="{{ route('petugas.inventaris.create') }}" class="btn-primary">
                     <span>+</span> Tambah alat
                 </a>
             </div>
         </div>
 
+        @if (session('success'))
+        <div class="alert-success">✔️ {{ session('success') }}</div>
+        @endif
+
         <!-- Filter Search Bar -->
         <div class="filter-card">
             <div class="search-box">
                 <span>🔍</span>
-                <input type="text" placeholder="Cari nama atau kode inventaris...">
+                <input type="text" id="searchInput" placeholder="Cari nama atau kode inventaris...">
             </div>
-            <select class="select-filter">
-                <option>Semua kategori</option>
-                <option>Multimedia</option>
-                <option>Band</option>
-                <option>OSIS</option>
-                <option>Rohis</option>
-            </select>
-            <select class="select-filter">
-                <option>Semua kondisi</option>
-                <option>Baik</option>
-                <option>Perlu cek</option>
-                <option>Dipakai</option>
-            </select>
-            <select class="select-filter">
-                <option>Semua lokasi</option>
-            </select>
         </div>
 
         <!-- Table Card -->
@@ -451,173 +479,76 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Row 1 -->
+                    @forelse($items as $item)
+                    @php
+                        $kategoriKey = strtolower(optional($item->category)->nama_kategori ?? '');
+                        $catClass = match(true) {
+                            str_contains($kategoriKey, 'multimedia') || str_contains($kategoriKey, 'multi') => '',
+                            str_contains($kategoriKey, 'band') => 'band',
+                            str_contains($kategoriKey, 'osis') => 'osis',
+                            str_contains($kategoriKey, 'rohis') => 'rohis',
+                            default => '',
+                        };
+                    @endphp
                     <tr>
                         <td style="padding-left: 20px;">
                             <input type="checkbox" style="accent-color: #00897b;">
                         </td>
                         <td>
                             <div class="item-details">
-                                <strong>Kamera Sony Alpha A6400</strong>
-                                <div class="badge-code">
-                                    <span>MM-CAM-014</span>
-                                    <span class="cat">MULTIMEDIA</span>
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    @if($item->foto && file_exists(storage_path('app/public/' . $item->foto)))
+                                    <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto {{ $item->nama_barang }}"
+                                        style="width:42px; height:42px; object-fit:cover; border-radius:8px; border:1px solid #e2e8f0; flex-shrink:0;">
+                                    @else
+                                    <div style="width:42px; height:42px; border-radius:8px; border:1px solid #e2e8f0; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+                                    @endif
+                                    <div>
+                                        <strong>{{ $item->nama_barang }}</strong>
+                                        <div class="badge-code">
+                                            <span>{{ $item->kode_barang }}</span>
+                                            <span class="cat {{ $catClass }}">{{ strtoupper(optional($item->category)->nama_kategori ?? '-') }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </td>
-                        <td><span class="stock-text">3 / 5</span></td>
-                        <td><span class="status-pill baik">• Baik</span></td>
-                        <td><span class="location-text">Ruang Multimedia</span></td>
+                        <td><span class="stock-text">{{ $item->stok }}</span></td>
+                        <td>
+                            <span class="status-pill {{ $item->kondisi === 'baik' ? 'baik' : ($item->kondisi === 'rusak_ringan' ? 'cek' : 'rusak') }}">
+                                • {{ str_replace('_', ' ', ucfirst($item->kondisi)) }}
+                            </span>
+                        </td>
+                        <td><span class="location-text">{{ optional($item->category)->nama_kategori ?? '-' }}</span></td>
                         <td>
                             <div class="action-cell">
-                                <a href="#" class="btn-edit">✏️ Edit</a>
-                                <button class="more-opt">••</button>
+                                <a href="{{ route('petugas.inventaris.edit', $item) }}" class="btn-edit">✏️ Edit</a>
+                                <form action="{{ route('petugas.inventaris.destroy', $item) }}" method="POST"
+                                    onsubmit="return confirm('Hapus barang ini?')" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-edit" style="background:none; border:none; cursor:pointer; color:#dc2626;">🗑️</button>
+                                </form>
                             </div>
                         </td>
                     </tr>
-
-                    <!-- Row 2 -->
+                    @empty
                     <tr>
-                        <td style="padding-left: 20px;">
-                            <input type="checkbox" style="accent-color: #00897b;">
-                        </td>
-                        <td>
-                            <div class="item-details">
-                                <strong>Mikrofon Wireless Shure</strong>
-                                <div class="badge-code">
-                                    <span>BND-MIC-008</span>
-                                    <span class="cat band">BAND</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="stock-text">5 / 8</span></td>
-                        <td><span class="status-pill baik">• Baik</span></td>
-                        <td><span class="location-text">Studio Musik</span></td>
-                        <td>
-                            <div class="action-cell">
-                                <a href="#" class="btn-edit">✏️ Edit</a>
-                                <button class="more-opt">••</button>
-                            </div>
+                        <td colspan="6" style="text-align:center; padding:40px; color:#94a3b8; font-size:13px;">
+                            Belum ada data inventaris. Klik "Tambah alat" untuk mendaftarkan barang baru.
                         </td>
                     </tr>
-
-                    <!-- Row 3 -->
-                    <tr>
-                        <td style="padding-left: 20px;">
-                            <input type="checkbox" style="accent-color: #00897b;">
-                        </td>
-                        <td>
-                            <div class="item-details">
-                                <strong>Portable Speaker JBL EON</strong>
-                                <div class="badge-code">
-                                    <span>OS-SPK-005</span>
-                                    <span class="cat osis">OSIS</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="stock-text">2 / 4</span></td>
-                        <td><span class="status-pill cek">• Perlu cek</span></td>
-                        <td><span class="location-text">Gudang Aula</span></td>
-                        <td>
-                            <div class="action-cell">
-                                <a href="#" class="btn-edit">✏️ Edit</a>
-                                <button class="more-opt">••</button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Row 4 -->
-                    <tr>
-                        <td style="padding-left: 20px;">
-                            <input type="checkbox" style="accent-color: #00897b;">
-                        </td>
-                        <td>
-                            <div class="item-details">
-                                <strong>Karpet Masjid 3 × 5 m</strong>
-                                <div class="badge-code">
-                                    <span>RH-KRP-011</span>
-                                    <span class="cat rohis">ROHIS</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="stock-text">4 / 6</span></td>
-                        <td><span class="status-pill baik">• Baik</span></td>
-                        <td><span class="location-text">Sekretariat Rohis</span></td>
-                        <td>
-                            <div class="action-cell">
-                                <a href="#" class="btn-edit">✏️ Edit</a>
-                                <button class="more-opt">••</button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Row 5 -->
-                    <tr>
-                        <td style="padding-left: 20px;">
-                            <input type="checkbox" style="accent-color: #00897b;">
-                        </td>
-                        <td>
-                            <div class="item-details">
-                                <strong>Tripod Video Manfrotto</strong>
-                                <div class="badge-code">
-                                    <span>MM-TRP-021</span>
-                                    <span class="cat">MULTIMEDIA</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="stock-text">6 / 7</span></td>
-                        <td><span class="status-pill baik">• Baik</span></td>
-                        <td><span class="location-text">Ruang Multimedia</span></td>
-                        <td>
-                            <div class="action-cell">
-                                <a href="#" class="btn-edit">✏️ Edit</a>
-                                <button class="more-opt">••</button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Row 6 -->
-                    <tr>
-                        <td style="padding-left: 20px;">
-                            <input type="checkbox" style="accent-color: #00897b;">
-                        </td>
-                        <td>
-                            <div class="item-details">
-                                <strong>Mixer Audio Yamaha MG10</strong>
-                                <div class="badge-code">
-                                    <span>BND-MIX-004</span>
-                                    <span class="cat band">BAND</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="stock-text">0 / 2</span></td>
-                        <td><span class="status-pill dipakai">• Dipakai</span></td>
-                        <td><span class="location-text">Studio Musik</span></td>
-                        <td>
-                            <div class="action-cell">
-                                <a href="#" class="btn-edit">✏️ Edit</a>
-                                <button class="more-opt">••</button>
-                            </div>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
 
             <!-- Footer Pagination -->
             <div class="table-footer">
-                <div>Menampilkan 1-6 dari 284 inventaris</div>
-                <div class="pagination">
-                    <a href="#" class="page-link">‹</a>
-                    <a href="#" class="page-link active">1</a>
-                    <a href="#" class="page-link">2</a>
-                    <a href="#" class="page-link">3</a>
-                    <span>...</span>
-                    <a href="#" class="page-link">48</a>
-                    <a href="#" class="page-link">›</a>
-                </div>
+                <div>Menampilkan {{ $items->count() }} inventaris</div>
             </div>
         </div>
     </main>
+    
 
 </body>
 </html>

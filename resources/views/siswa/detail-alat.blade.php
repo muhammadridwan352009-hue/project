@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Alat - SIMPATI</title>
@@ -123,6 +125,10 @@
             color: #718096;
             margin-bottom: 24px;
         }
+        .breadcrumb a {
+            color: #00897b;
+            text-decoration: none;
+        }
 
         /* Layout Detail Utama */
         .detail-grid {
@@ -177,17 +183,7 @@
             align-items: center;
             gap: 6px;
         }
-        .badge-code .cat { color: #7c3aed; font-size: 9px; }
-        .page-indicator {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 10px;
-        }
+        .badge-code .cat { color: #7c3aed; font-size: 9px; text-transform: uppercase; }
 
         .info-header {
             display: flex;
@@ -203,6 +199,7 @@
             gap: 4px;
             margin-bottom: 6px;
         }
+        .status-pill.empty { color: #dc2626; }
         .item-title-large {
             font-size: 22px;
             font-weight: 800;
@@ -313,74 +310,6 @@
             margin-bottom: 16px;
         }
 
-        /* Calendar Mockup */
-        .calendar-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 16px;
-        }
-        .cal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: #1e293b;
-            margin-bottom: 12px;
-        }
-        .cal-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            text-align: center;
-            font-size: 10px;
-        }
-        .cal-day-label {
-            color: #94a3b8;
-            font-weight: 600;
-            padding-bottom: 4px;
-        }
-        .cal-date {
-            padding: 8px 0;
-            border-radius: 6px;
-            color: #334155;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .cal-date.selected {
-            background-color: #00897b;
-            color: #fff;
-            font-weight: bold;
-        }
-        .cal-date.active-range {
-            background-color: #e6f4ea;
-            color: #00897b;
-            font-weight: bold;
-        }
-        .cal-note {
-            font-size: 10px;
-            color: #64748b;
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        /* Time Selection Input Box */
-        .time-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 11px;
-            color: #475569;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .time-box strong { color: #1e293b; }
-
         .status-alert-green {
             background-color: #e6f4ea;
             color: #00695c;
@@ -404,10 +333,18 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
             margin-bottom: 10px;
             transition: 0.2s;
         }
         .btn-submit-booking:hover { background-color: #00796b; }
+        .btn-submit-booking.disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
         .btn-fav-secondary {
             width: 100%;
@@ -423,89 +360,105 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 960px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .item-main-card { grid-template-columns: 1fr; }
+            .img-container { height: 180px; }
+        }
+        @media (max-width: 768px) {
+            main { padding: 18px 14px; }
+            header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .item-main-card, .booking-card, .card-box { padding: 16px; }
+            .item-title-large { font-size: 18px; }
+            .quick-specs { grid-template-columns: repeat(2, 1fr); }
+            .bottom-cards-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 420px) {
+            .quick-specs { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Ruang Siswa</div>
-           <nav>
-    <a href="/siswa/beranda">
-        <span>🏠</span> Beranda
-    </a>
-    <a href="/siswa/katalog">
-        <span>📦</span> Katalog alat
-    </a>
-    <a href="/siswa/peminjaman">
-        <span>📋</span> Peminjaman saya
-    </a>
-    <a href="#">
-        <span>🔔</span> Notifikasi - 3
-    </a>
-</nav>
-        </div>
-        <div class="sidebar-footer">
-            Bantuan sarpras • ekstensi 102<br>
-            SIMPATI v1.4
-        </div>
-    </aside>
+    @include('siswa.partials.sidebar', ['active' => 'katalog'])
+
 
     <!-- Konten Utama -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Detail alat</h1>
             </div>
+            </div>
             <div class="user-badge">
                 <span class="dot"></span>
-                <span>Nadia Putri</span>
+                <span>{{ Auth::user()->name }}</span>
             </div>
         </header>
 
-        <div class="breadcrumb">Beranda / Katalog alat / <strong>Kamera Sony Alpha A6400</strong></div>
+        <div class="breadcrumb">
+            <a href="{{ route('siswa.beranda') }}">Beranda</a> /
+            <a href="{{ route('siswa.katalog') }}">Katalog alat</a> /
+            <strong>{{ $alat->nama_alat }}</strong>
+        </div>
+
+        @if(session('error'))
+            <div style="background: #fee2e2; color: #dc2626; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 12px; font-weight: bold;">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div class="detail-grid">
-            
+
             <!-- Kolom Kiri -->
             <div class="left-content">
-                
+
                 <!-- Main Product Display -->
                 <div class="item-main-card">
                     <div class="img-container">
-                        [ Gambar Kamera Sony ]
+                        <span>{{ $alat->nama_alat }}</span>
                         <div class="badge-code">
-                            <span>MM-CAM-014</span>
-                            <span class="cat">MULTIMEDIA</span>
+                            <span>{{ $alat->kode_alat ?? 'INV-'.$alat->id }}</span>
+                            <span class="cat">{{ $alat->kategori ?? 'UMUM' }}</span>
                         </div>
-                        <div class="page-indicator">1 / 4</div>
                     </div>
 
                     <div class="info-header">
                         <div>
-                            <div class="status-pill">● Tersedia</div>
-                            <div class="item-title-large">Kamera Sony Alpha A6400</div>
+                            <div class="status-pill {{ ($alat->stok ?? 1) > 0 ? '' : 'empty' }}">
+                                ● {{ ($alat->stok ?? 1) > 0 ? 'Tersedia' : 'Habis' }}
+                            </div>
+                            <div class="item-title-large">{{ $alat->nama_alat }}</div>
                             <div class="item-description">
-                                Kamera mirrorless untuk dokumentasi kegiatan sekolah, produksi video, dan liputan acara.
+                                {{ $alat->deskripsi_tampil }}
                             </div>
                         </div>
 
                         <div class="quick-specs">
                             <div class="spec-box">
                                 <div class="label">Stok</div>
-                                <div class="value">3 dari 5 unit</div>
+                                <div class="value">{{ $alat->stok ?? 1 }} unit</div>
                             </div>
                             <div class="spec-box">
                                 <div class="label">Kondisi</div>
-                                <div class="value">Baik</div>
+                                <div class="value">{{ $alat->kondisi ?? 'Baik' }}</div>
                             </div>
                             <div class="spec-box">
                                 <div class="label">Lokasi</div>
-                                <div class="value">Ruang Multimedia</div>
+                                <div class="value">{{ $alat->lokasi ?? 'Ruang Sarpras' }}</div>
                             </div>
                         </div>
                     </div>
@@ -513,26 +466,26 @@
 
                 <!-- Spesifikasi & Aturan -->
                 <div class="bottom-cards-grid">
-                    
+
                     <!-- Tabel Spesifikasi -->
                     <div class="card-box">
                         <div class="card-box-title">Spesifikasi & kelengkapan</div>
                         <table class="spec-table">
                             <tr>
-                                <td>Sensor</td>
-                                <td>APS-C 24.2 MP</td>
+                                <td>Kategori</td>
+                                <td>{{ $alat->kategori ?? 'Umum' }}</td>
                             </tr>
                             <tr>
-                                <td>Lensa</td>
-                                <td>16-50 mm f/3.5</td>
+                                <td>Lokasi</td>
+                                <td>{{ $alat->lokasi ?? 'Ruang Sarpras' }}</td>
                             </tr>
                             <tr>
-                                <td>Video</td>
-                                <td>4K UHD</td>
+                                <td>Kondisi</td>
+                                <td>{{ $alat->kondisi ?? 'Baik' }}</td>
                             </tr>
                             <tr>
                                 <td>Kelengkapan</td>
-                                <td>Baterai, charger, tas, strap</td>
+                                <td>Unit utama & aksesoris standar</td>
                             </tr>
                         </table>
                     </div>
@@ -542,9 +495,9 @@
                         <div class="card-box-title">Aturan peminjaman</div>
                         <ul class="rule-list">
                             <li><span class="check">✓</span> Maksimal peminjaman 3 hari.</li>
-                            <li><span class="check">✓</span> Wajib didampingi koordinator ekskul.</li>
-                            <li><span class="check">✓</span> Periksa baterai dan lensa saat pengambilan.</li>
-                            <li><span class="check">✓</span> Kerusakan wajib dilaporkan maksimal 2 jam.</li>
+                            <li><span class="check">✓</span> Wajib didampingi petugas atau pengurus.</li>
+                            <li><span class="check">✓</span> Periksa kondisi fisik saat pengambilan.</li>
+                            <li><span class="check">✓</span> Kerusakan wajib dilaporkan segera.</li>
                         </ul>
                     </div>
 
@@ -552,59 +505,27 @@
 
             </div>
 
-            <!-- Kolom Kanan: Pemilih Tanggal -->
+            <!-- Kolom Kanan: Aksi & Informasi Pengajuan -->
             <div class="booking-card">
-                <h3>Pilih tanggal peminjaman</h3>
-                <p class="sub">Tanggal hijau tersedia. Maksimal 3 hari berturut-turut.</p>
-
-                <!-- Kalender Minimalis -->
-                <div class="calendar-box">
-                    <div class="cal-header">
-                        <span>‹</span>
-                        <span>September 2026</span>
-                        <span>›</span>
-                    </div>
-                    <div class="cal-grid">
-                        <div class="cal-day-label">Sen</div>
-                        <div class="cal-day-label">Sel</div>
-                        <div class="cal-day-label">Rab</div>
-                        <div class="cal-day-label">Kam</div>
-                        <div class="cal-day-label">Jum</div>
-                        <div class="cal-day-label">Sab</div>
-                        <div class="cal-day-label">Min</div>
-
-                        <div class="cal-date">21</div>
-                        <div class="cal-date">22</div>
-                        <div class="cal-date">23</div>
-                        <div class="cal-date active-range">24</div>
-                        <div class="cal-date selected">25</div>
-                        <div class="cal-date selected">26</div>
-                        <div class="cal-date">27</div>
-                    </div>
-                    <div class="cal-note">25–26 Sep sudah dipilih (Maksimal 3 hari).</div>
-                </div>
-
-                <!-- Rentang Waktu -->
-                <div class="time-box">
-                    <span>Mulai</span>
-                    <strong>Jum, 25 Sep 2026 - 08.00</strong>
-                </div>
-
-                <div class="time-box">
-                    <span>Selesai</span>
-                    <strong>Sab, 26 Sep 2026 - 15.00</strong>
-                </div>
+                <h3>Form Peminjaman</h3>
+                <p class="sub">Pastikan stok mencukupi sebelum mengajukan.</p>
 
                 <div class="status-alert-green">
-                    <span>✓</span> 3 unit tersedia pada rentang ini.
+                    <span>✓</span> {{ $alat->stok ?? 1 }} unit tersedia untuk dipinjam.
                 </div>
 
-                <button class="btn-submit-booking">↗ Ajukan peminjaman</button>
-                <button class="btn-fav-secondary">♡ Simpan ke favorit</button>
+                @if(($alat->stok ?? 1) > 0)
+                    <a href="{{ route('siswa.peminjaman.create') }}?alat_id={{ $alat->id }}&kategori={{ strtolower($alat->kategori ?? '') }}" class="btn-submit-booking">↗ Ajukan peminjaman</a>
+                @else
+                    <button class="btn-submit-booking disabled">Stok Habis</button>
+                @endif
+                
+                <a href="{{ route('siswa.katalog') }}" class="btn-fav-secondary">‹ Kembali ke Katalog</a>
             </div>
 
         </div>
     </main>
+    
 
 </body>
 </html>

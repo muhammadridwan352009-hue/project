@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog Alat - SIMPATI</title>
@@ -141,24 +143,6 @@
             color: #718096;
             margin-top: 2px;
         }
-        .view-toggle {
-            display: flex;
-            gap: 6px;
-        }
-        .btn-toggle {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        .btn-toggle.active {
-            background-color: #00897b;
-            color: #fff;
-            border-color: #00897b;
-        }
-
         /* Search & Filter Bar */
         .filter-card {
             background: #fff;
@@ -191,50 +175,6 @@
             font-size: 13px;
             color: #333;
         }
-        .toggle-available {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 10px 16px;
-            font-size: 12px;
-            color: #475569;
-            font-weight: 600;
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 34px;
-            height: 20px;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #cbd5e1; transition: .3s; border-radius: 20px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
-            background-color: white; transition: .3s; border-radius: 50%;
-        }
-        input:checked + .slider { background-color: #00897b; }
-        input:checked + .slider:before { transform: translateX(14px); }
-
-        .btn-filter {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #334155;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
         .filter-tags {
             display: flex;
             justify-content: space-between;
@@ -280,6 +220,15 @@
             flex-direction: column;
             justify-content: space-between;
         }
+        .item-card[hidden],
+        #catalog-no-results[hidden] {
+            display: none;
+        }
+        #catalog-no-results {
+            grid-column: 1 / -1;
+            padding: 16px;
+            text-align: center;
+        }
         .card-img-wrapper {
             position: relative;
             width: 100%;
@@ -291,19 +240,25 @@
             overflow: hidden;
         }
         .card-img-wrapper img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            z-index: 1;
         }
         .placeholder-text {
+            position: relative;
             font-size: 14px;
             font-weight: bold;
             color: #64748b;
+            z-index: 0;
         }
         .badge-code {
             position: absolute;
             top: 12px;
             left: 12px;
+            z-index: 2;
             background: rgba(255, 255, 255, 0.95);
             padding: 4px 10px;
             border-radius: 6px;
@@ -328,6 +283,7 @@
             position: absolute;
             bottom: 12px;
             left: 12px;
+            z-index: 2;
             width: 30px;
             height: 30px;
             background: rgba(255,255,255,0.9);
@@ -398,46 +354,49 @@
             color: #334155;
             border: 1px solid #cbd5e1;
         }
+        
+        @media (max-width: 1024px) {
+            .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            main { padding: 18px 14px; }
+            header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .title-section { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .title-section h2 { font-size: 18px; }
+            .filter-card { padding: 14px; }
+            .filter-top { flex-direction: column; }
+            .filter-tags { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+        @media (max-width: 480px) {
+            .catalog-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Ruang Siswa</div>
-          <nav>
-    <a href="/siswa/beranda">
-        <span>🏠</span> Beranda
-    </a>
-    <a href="/siswa/katalog">
-        <span>📦</span> Katalog alat
-    </a>
-    <a href="/siswa/peminjaman">
-        <span>📋</span> Peminjaman saya
-    </a>
-    <a href="#">
-        <span>🔔</span> Notifikasi - 3
-    </a>
-</nav>
-        </div>
-        <div class="sidebar-footer">
-            Bantuan sarpras • ekstensi 102<br>
-            SIMPATI v1.4
-        </div>
-    </aside>
+    @include('siswa.partials.sidebar', ['active' => 'katalog'])
+
 
     <!-- Konten Utama -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Katalog alat</h1>
             </div>
+            </div>
             <div class="user-badge">
                 <span class="dot"></span>
-                <span>Nadia Putri</span>
+                <span>{{ Auth::user()->name }}</span>
             </div>
         </header>
 
@@ -446,11 +405,7 @@
         <div class="title-section">
             <div>
                 <h2>Temukan alat untuk kegiatanmu</h2>
-                <p>196 unit inventaris dari 4 kategori ekskul.</p>
-            </div>
-            <div class="view-toggle">
-                <button class="btn-toggle active">☰</button>
-                <button class="btn-toggle">☷</button>
+                <p>{{ $alats->count() }} alat dari {{ $alats->pluck('kategori')->unique()->count() }} kategori.</p>
             </div>
         </div>
 
@@ -458,188 +413,79 @@
         <div class="filter-card">
             <div class="filter-top">
                 <div class="search-box">
-                    <span>🔍</span>
-                    <input type="text" placeholder="Cari nama, kode inventaris, atau lokasi...">
+                    <input id="catalog-search" type="search" placeholder="Cari nama, kode inventaris, lokasi, atau kategori..." aria-label="Cari alat">
                 </div>
-                <div class="toggle-available">
-                    <span>Hanya tersedia</span>
-                    <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <button class="btn-filter">
-                    <span>⚙️</span> Filter lainnya
-                </button>
             </div>
 
             <div class="filter-tags">
                 <div class="tags-group">
-                    <a href="#" class="tag active">Semua alat · 106</a>
-                    <a href="#" class="tag">Rohis · 32</a>
-                    <a href="#" class="tag">Band · 48</a>
-                    <a href="#" class="tag">OSIS · 66</a>
-                    <a href="#" class="tag">Multimedia · 41</a>
+                    <a href="#" class="tag active">Semua alat · {{ $alats->count() }}</a>
+                    @foreach($alats->groupBy('kategori') as $kategori => $alatKategori)
+                        <a href="#" class="tag">{{ ucfirst($kategori) }} · {{ $alatKategori->count() }}</a>
+                    @endforeach
                 </div>
-                <div class="tag-info">Menampilkan 1-6 dari 106 alat</div>
+                <div class="tag-info" id="catalog-result-count">Menampilkan {{ $alats->count() }} alat</div>
             </div>
         </div>
 
-        <!-- Catalog Grid -->
-        <div class="catalog-grid">
-            
-            <!-- Item 1 -->
-            <div class="item-card">
-                <div class="card-img-wrapper">
-                    <div class="placeholder-text">Kamera Sony</div>
-                    <div class="badge-code">
-                        <span>MM-CAM-014</span>
-                        <span class="cat">MULTIMEDIA</span>
+       <!-- Catalog Grid -->
+       <div class="catalog-grid">
+           @foreach($alats as $alat)
+           <div class="item-card" data-search="{{ strtolower($alat->nama_alat . ' ' . ($alat->kode_alat ?? '') . ' ' . ($alat->lokasi ?? '') . ' ' . ($alat->kategori ?? '')) }}">
+               <div class="card-img-wrapper">
+                   <img
+                       src="{{ asset($alat->foto_katalog) }}"
+                       alt="Foto {{ $alat->nama_alat }}"
+                       loading="lazy"
+                   >
+                   <div class="badge-code">
+                        <span>{{ $alat->kode_alat ?? 'MM-CAM-014' }}</span>
+                        <span class="cat">{{ $alat->kategori ?? 'MULTIMEDIA' }}</span>
                     </div>
-                    <button class="btn-fav">♡</button>
+                    <button class="btn-fav">â™¡</button>
                 </div>
                 <div class="card-body">
                     <div>
-                        <div class="item-title">Kamera Sony Alpha A6400</div>
-                        <div class="item-loc">📍 Ruang Multimedia</div>
+                        <div class="item-title">{{ $alat->nama_alat }}</div>
+                        <div class="item-loc">{{ ucfirst($alat->kategori ?? 'multimedia') }}</div>
                     </div>
                     <div>
                         <div class="card-meta">
-                            <span class="stock-badge ready">• 3 tersedia</span>
-                            <span class="condition">Kondisi baik</span>
+                            <span class="stock-badge ready">{{ $alat->stok ?? 3 }} tersedia</span>
+                            <span class="condition">{{ $alat->kondisi ?? 'Kondisi baik' }}</span>
                         </div>
-                        <a href="#" class="btn-action">Lihat detail</a>
+                       {{-- Tombol Lihat Detail dinamis dengan ID alat --}}
+<a href="{{ route('siswa.katalog.show', $alat->id) }}"
+   class="btn-action">
+    Lihat detail
+</a>
                     </div>
                 </div>
             </div>
-
-            <!-- Item 2 -->
-            <div class="item-card">
-                <div class="card-img-wrapper">
-                    <div class="placeholder-text">Mikrofon Shure</div>
-                    <div class="badge-code">
-                        <span>BND-MIC-082</span>
-                        <span class="cat band">BAND</span>
-                    </div>
-                    <button class="btn-fav">♡</button>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div class="item-title">Mikrofon Wireless Shure</div>
-                        <div class="item-loc">📍 Studio Musik</div>
-                    </div>
-                    <div>
-                        <div class="card-meta">
-                            <span class="stock-badge ready">• 5 tersedia</span>
-                            <span class="condition">Kondisi baik</span>
-                        </div>
-                        <a href="#" class="btn-action">Lihat detail</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="item-card">
-                <div class="card-img-wrapper">
-                    <div class="placeholder-text">Speaker JBL</div>
-                    <div class="badge-code">
-                        <span>OS-SPK-005</span>
-                        <span class="cat osis">OSIS</span>
-                    </div>
-                    <button class="btn-fav">♡</button>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div class="item-title">Portable Speaker JBL EON</div>
-                        <div class="item-loc">📍 Gudang Aula</div>
-                    </div>
-                    <div>
-                        <div class="card-meta">
-                            <span class="stock-badge ready">• 2 tersedia</span>
-                            <span class="condition">Kondisi baik</span>
-                        </div>
-                        <a href="#" class="btn-action">Lihat detail</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="item-card">
-                <div class="card-img-wrapper">
-                    <div class="placeholder-text">Karpet Masjid</div>
-                    <div class="badge-code">
-                        <span>RH-KRP-011</span>
-                        <span class="cat rohis">ROHIS</span>
-                    </div>
-                    <button class="btn-fav">♡</button>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div class="item-title">Karpet Masjid 3 × 5 m</div>
-                        <div class="item-loc">📍 Sekretariat Rohis</div>
-                    </div>
-                    <div>
-                        <div class="card-meta">
-                            <span class="stock-badge ready">• 4 tersedia</span>
-                            <span class="condition">Kondisi baik</span>
-                        </div>
-                        <a href="#" class="btn-action">Lihat detail</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 5 -->
-            <div class="item-card">
-                <div class="card-img-wrapper">
-                    <div class="placeholder-text">Tripod Manfrotto</div>
-                    <div class="badge-code">
-                        <span>MM-TRP-021</span>
-                        <span class="cat">MULTIMEDIA</span>
-                    </div>
-                    <button class="btn-fav">♡</button>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div class="item-title">Tripod Video Manfrotto</div>
-                        <div class="item-loc">📍 Ruang Multimedia</div>
-                    </div>
-                    <div>
-                        <div class="card-meta">
-                            <span class="stock-badge ready">• 6 tersedia</span>
-                            <span class="condition">Kondisi baik</span>
-                        </div>
-                        <a href="#" class="btn-action">Lihat detail</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 6 -->
-            <div class="item-card">
-                <div class="card-img-wrapper">
-                    <div class="placeholder-text">Mixer Yamaha</div>
-                    <div class="badge-code">
-                        <span>BND-MIX-004</span>
-                        <span class="cat band">BAND</span>
-                    </div>
-                    <button class="btn-fav">♡</button>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div class="item-title">Mixer Audio Yamaha MG10</div>
-                        <div class="item-loc">📍 Studio Musik</div>
-                    </div>
-                    <div>
-                        <div class="card-meta">
-                            <span class="stock-badge busy">• Sedang dipinjam</span>
-                            <span class="condition">Kondisi baik</span>
-                        </div>
-                        <a href="#" class="btn-action disabled">Lihat jadwal</a>
-                    </div>
-                </div>
-            </div>
-
+            @endforeach
+            <p class="tag-info" id="catalog-no-results" hidden>Tidak ada alat yang cocok dengan pencarian.</p>
         </div>
-    </main>
+        <script>
+            const catalogSearch = document.getElementById('catalog-search');
+            const catalogItems = document.querySelectorAll('.item-card');
+            const resultCount = document.getElementById('catalog-result-count');
+            const noResults = document.getElementById('catalog-no-results');
+
+            catalogSearch.addEventListener('input', () => {
+                const query = catalogSearch.value.trim().toLocaleLowerCase('id');
+                let visibleCount = 0;
+
+                catalogItems.forEach((item) => {
+                    const matches = item.dataset.search.includes(query);
+                    item.hidden = !matches;
+                    if (matches) visibleCount++;
+                });
+
+                resultCount.textContent = `Menampilkan ${visibleCount} alat`;
+                noResults.hidden = visibleCount > 0;
+            });
+        </script>
+    
 
 </body>
 </html>

@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peminjaman Saya - SIMPATI</title>
@@ -389,35 +391,34 @@
                 justify-content: center; /* Tombol jadi melebar penuh (full width) agar mudah ditekan di HP */
             }
         }
+        
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Ruang Siswa</div>
-            <nav>
-                <a href="/siswa/beranda"><span>🏠</span> Beranda</a>
-                <a href="/siswa/katalog"><span>📦</span> Katalog alat</a>
-                <a href="/siswa/peminjaman" class="active"><span>📋</span> Peminjaman saya</a>
-                <a href="#"><span>🔔</span> Notifikasi</a>
-            </nav>
-        </div>
-        <div class="sidebar-footer">Bantuan sarpras</div>
-    </aside>
+    @include('siswa.partials.sidebar', ['active' => 'peminjaman'])
+
 
     <!-- Konten Utama -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Peminjaman saya</h1>
             </div>
+            </div>
             <div class="user-badge">
                 <span class="dot"></span>
-                <span>Nadia Putri</span>
+                <span>{{ Auth::user()->name }}</span>
             </div>
         </header>
 
@@ -429,7 +430,7 @@
                 <h2>Status & riwayat peminjaman</h2>
                 <p>Lacak proses dari pengajuan hingga pengembalian.</p>
             </div>
-           <a href="{{ route('siswa.peminjaman.create') }}" class="btn-add">
+          <a href="{{ route('siswa.katalog') }}" class="btn-add">
     <span>+</span> Ajukan peminjaman
 </a>
         </div>
@@ -510,6 +511,7 @@
 
         </div>
     </main>
+    
 
 </body>
 </html>

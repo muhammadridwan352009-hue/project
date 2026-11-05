@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Inventaris - SIMPATI</title>
@@ -74,6 +76,22 @@
             border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 16px;
         }
+        .logout-form { margin-top: 12px; }
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 10px;
+            color: #cfe3ea;
+            background: none;
+            border: 0;
+            font: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .logout-button:hover { color: #fff; }
+        
+
 
         /* Area Utama */
         main {
@@ -179,13 +197,22 @@
             border-radius: 8px;
             font-size: 12px;
             color: #64748b;
-            text-decoration: none;
+            border: 0;
+            background: transparent;
             font-weight: 600;
             transition: 0.2s;
+            cursor: pointer;
         }
         .tab-btn.active {
             background-color: #071b26;
             color: #fff;
+        }
+        .tab-btn:focus-visible,
+        .queue-item:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 2px solid #00897b;
+            outline-offset: 2px;
         }
 
         /* Main Content Layout Grid */
@@ -238,6 +265,10 @@
             cursor: pointer;
             transition: 0.2s;
             background: #fff;
+            display: block;
+            width: 100%;
+            text-align: left;
+            font: inherit;
         }
         .queue-item.active {
             border-color: #10b981;
@@ -426,7 +457,7 @@
         /* Action Footer Buttons - Khusus Laporan (Export) */
         .action-footer-grid {
             display: grid;
-            grid-template-columns: 100px 120px 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
             padding-top: 16px;
             border-top: 1px solid #f1f5f9;
@@ -436,16 +467,6 @@
             background-color: #ef4444;
             color: #fff;
             border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .btn-revise {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            color: #334155;
             padding: 12px;
             border-radius: 10px;
             font-size: 12px;
@@ -491,45 +512,205 @@
             font-weight: 700;
             cursor: pointer;
         }
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+        .demo-notice {
+            margin: -10px 0 18px;
+            padding: 10px 14px;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1e40af;
+            font-size: 12px;
+        }
+        .empty-state {
+            padding: 18px 10px;
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+        }
+        .status-message {
+            margin: 0 0 16px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #ecfdf5;
+            color: #166534;
+            font-size: 12px;
+        }
+        .condition-report-section {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+        .condition-report-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .condition-report-heading h2 { color: #071b26; font-size: 18px; }
+        .condition-report-heading p { color: #64748b; font-size: 12px; margin-top: 4px; }
+        .condition-report-summary {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+            padding: 16px 24px;
+        }
+        .condition-summary-card {
+            padding: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+        .condition-summary-card span { display: block; color: #64748b; font-size: 11px; }
+        .condition-summary-card strong { display: block; color: #071b26; font-size: 22px; margin-top: 4px; }
+        .condition-report-table-wrap { overflow-x: auto; }
+        .condition-report-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        .condition-report-table th,
+        .condition-report-table td {
+            padding: 12px 16px;
+            border-top: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .condition-report-table th { background: #f8fafc; color: #64748b; font-size: 10px; text-transform: uppercase; }
+        .condition-report-table td.description { min-width: 220px; white-space: pre-wrap; }
+        .condition-report-empty { padding: 28px; text-align: center; color: #64748b; font-size: 13px; }
+        .btn-view-report {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #00897b;
+            background: #e6f4f2;
+            color: #00897b;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-view-report:hover { background: #00897b; color: #fff; }
+        .report-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 27, 38, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+        }
+        .report-modal-backdrop.open { display: flex; }
+        .report-modal {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 620px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .report-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            background: #fff;
+        }
+        .report-modal-header h3 { color: #071b26; font-size: 16px; }
+        .report-modal-close {
+            border: none;
+            background: #f1f5f9;
+            color: #334155;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .report-modal-close:hover { background: #e2e8f0; }
+        .report-modal-body { padding: 20px 24px; }
+        .report-modal-body dl { display: grid; grid-template-columns: 150px 1fr; gap: 10px 16px; margin: 0; }
+        .report-modal-body dt { color: #94a3b8; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .report-modal-body dd { color: #1e293b; font-size: 13px; margin: 0; }
+        .report-modal-body dd.description { white-space: pre-wrap; }
+        @media (max-width: 680px) {
+            .report-modal-body dl { grid-template-columns: 1fr; gap: 4px; }
+            .report-modal-body dd { margin-bottom: 10px; }
+        }
+        .condition-export-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 9px;
+            padding: 10px 14px;
+            background: #00897b;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        @media (max-width: 900px) {
+            aside { width: 210px; padding: 18px; }
+            main { padding: 24px; }
+            .content-grid { grid-template-columns: 1fr; gap: 16px; }
+            .detail-panel { padding: 18px; }
+            .verify-list { flex-direction: column; }
+        }
+        @media (max-width: 680px) {
+            body { display: block; }
+            aside { width: 100%; padding: 14px; }
+            aside > div:first-child { display: flex; align-items: center; gap: 14px; }
+            .brand { margin: 0; }
+            .menu-label, .sidebar-footer { display: none; }
+            nav { display: flex; flex-wrap: wrap; gap: 4px; }
+            nav a { padding: 8px; margin: 0; }
+            main { padding: 18px 14px; }
+            .content-grid { grid-template-columns: 1fr; }
+            .summary-box-grid, .meta-info-grid { grid-template-columns: 1fr; }
+            .action-footer-grid { grid-template-columns: 1fr 1fr; }
+            .btn-export { grid-column: 1 / -1; }
+            .title-section { align-items: flex-start; gap: 12px; }
+            .badge-status-group { flex-direction: column; }
+            .condition-report-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 14px; }
+            .condition-report-heading { align-items: flex-start; flex-direction: column; padding: 16px; }
+        }
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri - Ruang Petugas (Menu Laporan Aktif) -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Ruang Petugas</div>
-           <nav>
-    <a href="/petugas/dashboard">
-        <span>📊</span> Dashboard
-    </a>
-    <a href="/petugas/inventaris">
-        <span>📦</span> Inventaris
-    </a>
-    <a href="/petugas/persetujuan">
-        <span>📝</span> Persetujuan <span style="margin-left:auto; background:#d97706; color:#fff; font-size:10px; padding:2px 6px; border-radius:10px;">8</span>
-    </a>
-    <a href="/petugas/pengembalian">
-        <span>🔄</span> Pengembalian
-    </a>
-    <a href="/petugas/laporan">
-        <span>📈</span> Laporan
-    </a>
-</nav>
-        </div>
-        <div class="sidebar-footer">
-            Bantuan sarpras • ekstensi 104<br>
-            SIMPATI v1.4
-        </div>
-    </aside>
+    @include('petugas.partials.sidebar', ['active' => 'laporan'])
+
 
     <!-- Area Utama -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Laporan inventaris</h1>
+            </div>
             </div>
             <div class="user-badge">
                 <span class="dot"></span>
@@ -539,157 +720,145 @@
 
         <div class="breadcrumb">Dashboard / <strong>Laporan inventaris</strong></div>
 
-        <div class="title-section">
-            <div>
-                <h2>Laporan inventaris</h2>
-                <p>Ringkasan aktivitas peminjaman dan pengembalian inventaris.</p>
+        <section class="condition-report-section">
+            <div class="condition-report-heading">
+                <div>
+                    <h2>Laporan kondisi alat dari siswa</h2>
+                    <p>Data laporan tersimpan dari formulir siswa, termasuk kondisi dan deskripsi kerusakan.</p>
+                </div>
+                <a class="condition-export-link" href="{{ route('petugas.laporan.kondisi.export') }}">⬇ Export laporan kondisi (CSV)</a>
             </div>
-            <div class="badge-status-group">
-                <span class="pill-count-orange">• 8 menunggu</span>
-                <span class="pill-count-red">• 3 terlambat</span>
-            </div>
-        </div>
-
-        <!-- Tab Switcher Bar -->
-        <div class="tab-switcher">
-            <a href="#" class="tab-btn active">Laporan transaksi</a>
-            <a href="#" class="tab-btn">Rekap pengembalian</a>
-        </div>
-
-        <!-- Main Content Layout Grid -->
-        <div class="content-grid">
-            
-            <!-- Antrean Ringkasan Transaksi (Kiri) -->
-            <div class="queue-card">
-                <div class="queue-header">Ringkasan transaksi</div>
-                <div class="search-box">
-                    <span>🔍</span>
-                    <input type="text" placeholder="Cari peminjam atau alat...">
+            <div class="condition-report-summary">
+                <div class="condition-summary-card">
+                    <span>Total laporan</span>
+                    <strong>{{ $laporanKondisis->count() }}</strong>
                 </div>
-
-                <!-- Queue Item 1 (Selected) -->
-                <div class="queue-item active">
-                    <div class="queue-user-top">
-                        <span class="queue-user-name">Nadia Putri</span>
-                        <span class="queue-date">• 25–26 Sep</span>
-                    </div>
-                    <div class="queue-item-desc">Kamera Sony A6400</div>
-                    <div class="badge-code">
-                        <span>MM-CAM-014</span>
-                        <span class="cat">MULTIMEDIA</span>
-                    </div>
+                <div class="condition-summary-card">
+                    <span>Baik / normal</span>
+                    <strong>{{ $rekapKondisi['baik'] ?? 0 }}</strong>
                 </div>
-
-                <!-- Queue Item 2 -->
-                <div class="queue-item">
-                    <div class="queue-user-top">
-                        <span class="queue-user-name">Farhan Akbar</span>
-                        <span class="queue-date" style="color: #64748b;">• 27 Sep</span>
-                    </div>
-                    <div class="queue-item-desc">Portable Speaker JBL</div>
-                    <div class="badge-code">
-                        <span>OS-SPK-005</span>
-                        <span class="cat osis">OSIS</span>
-                    </div>
+                <div class="condition-summary-card">
+                    <span>Rusak ringan</span>
+                    <strong>{{ $rekapKondisi['rusak_ringan'] ?? 0 }}</strong>
                 </div>
-
-                <!-- Queue Item 3 -->
-                <div class="queue-item">
-                    <div class="queue-user-top">
-                        <span class="queue-user-name">Alya Zahra</span>
-                        <span class="queue-date" style="color: #64748b;">• 28–30 Sep</span>
-                    </div>
-                    <div class="queue-item-desc">Karpet Masjid 3×5 m</div>
-                    <div class="badge-code">
-                        <span>RH-KRP-011</span>
-                        <span class="cat rohis">ROHIS</span>
-                    </div>
+                <div class="condition-summary-card">
+                    <span>Rusak berat</span>
+                    <strong>{{ $rekapKondisi['rusak_berat'] ?? 0 }}</strong>
+                </div>
+                <div class="condition-summary-card">
+                    <span>Belum dipakai</span>
+                    <strong>{{ $rekapKondisi['belum_dipakai'] ?? 0 }}</strong>
                 </div>
             </div>
-
-            <!-- Detail Laporan (Kanan) -->
-            <div class="detail-panel">
-                <div class="detail-top-bar">
-                    <span class="req-id">RPT-2026025-010</span>
-                    <span class="status-pill-orange">• Menunggu persetujuan</span>
+            @if($laporanKondisis->isEmpty())
+                <div class="condition-report-empty">Belum ada laporan kondisi alat dari siswa.</div>
+            @else
+                <div class="condition-report-table-wrap">
+                    <table class="condition-report-table">
+                        <thead>
+                            <tr>
+                                <th>Tanggal laporan</th>
+                                <th>Siswa</th>
+                                <th>Alat</th>
+                                <th>Lokasi / tanggal kembali</th>
+                                <th>Kondisi</th>
+                                <th>Deskripsi laporan siswa</th>
+                                <th>Bukti foto</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($laporanKondisis as $laporanKondisi)
+                                <tr>
+                                    <td>{{ $laporanKondisi->created_at?->format('d M Y H:i') }}</td>
+                                    <td>
+                                        <strong>{{ $laporanKondisi->peminjaman?->user?->name ?? $laporanKondisi->nama_peminjam }}</strong><br>
+                                        {{ $laporanKondisi->peminjaman?->user?->email ?? '' }}
+                                    </td>
+                                    <td>
+                                        <strong>{{ $laporanKondisi->peminjaman?->alat?->nama_alat ?? 'Alat' }}</strong><br>
+                                        {{ $laporanKondisi->kode_inventaris }} · {{ ucfirst($laporanKondisi->kategori) }}
+                                    </td>
+                                    <td>
+                                        {{ $laporanKondisi->lokasi_kegiatan }}<br>
+                                        {{ $laporanKondisi->tanggal_pengembalian ?: '-' }}
+                                    </td>
+                                    <td>{{ str_replace('_', ' ', ucfirst($laporanKondisi->kondisi_terima)) }}</td>
+                                    <td class="description">{{ $laporanKondisi->deskripsi_kerusakan ?: '-' }}</td>
+                                    <td>{{ $laporanKondisi->kirim_dengan_foto ? 'Terlampir' : 'Tidak' }}</td>
+                                    <td>
+                                        <button type="button" class="btn-view-report" data-view-report
+                                            data-tanggal="{{ $laporanKondisi->created_at?->format('d M Y H:i') ?? '-' }}"
+                                            data-siswa="{{ $laporanKondisi->peminjaman?->user?->name ?? $laporanKondisi->nama_peminjam }}"
+                                            data-email="{{ $laporanKondisi->peminjaman?->user?->email ?? '-' }}"
+                                            data-alat="{{ $laporanKondisi->peminjaman?->alat?->nama_alat ?? 'Alat' }}"
+                                            data-kode="{{ $laporanKondisi->kode_inventaris }}"
+                                            data-kategori="{{ ucfirst($laporanKondisi->kategori) }}"
+                                            data-lokasi="{{ $laporanKondisi->lokasi_kegiatan }}"
+                                            data-kembali="{{ $laporanKondisi->tanggal_pengembalian ?: '-' }}"
+                                            data-kondisi="{{ str_replace('_', ' ', ucfirst($laporanKondisi->kondisi_terima)) }}"
+                                            data-deskripsi="{{ $laporanKondisi->deskripsi_kerusakan ?: '-' }}"
+                                            data-foto="{{ $laporanKondisi->kirim_dengan_foto ? 'Terlampir (siswa melampirkan bukti foto)' : 'Tidak ada bukti foto' }}">
+                                            👁 Lihat laporan
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                <div class="detail-title">Ringkasan laporan</div>
-
-                <!-- Profile & Item Summary Grid -->
-                <div class="summary-box-grid">
-                    <div class="summary-card-inner">
-                        <div class="inner-label">Peminjam</div>
-                        <div class="borrower-name">Nadia Putri</div>
-                        <div class="borrower-sub">XI IPS 2 • NIS 221045</div>
-                        <div class="borrower-sub" style="font-weight: 600;">Koordinator Multimedia</div>
-                        <div class="borrower-stat">12× tepat waktu • 0 pelanggaran</div>
-                    </div>
-
-                    <div class="summary-card-inner">
-                        <div class="inner-label">Item</div>
-                        <div class="badge-code">
-                            <span>MM-CAM-014</span>
-                            <span class="cat">MULTIMEDIA</span>
-                        </div>
-                        <div class="item-name-large">Kamera Sony Alpha A6400</div>
-                        <div class="stock-available-tag">• 3 unit tersedia - kondisi baik</div>
-                    </div>
-                </div>
-
-                <!-- Metadata Grid -->
-                <div class="meta-info-grid">
-                    <div class="meta-card">
-                        <div class="label">Periode</div>
-                        <div class="val">25 Sep 08.00 — 26 Sep 15.00</div>
-                    </div>
-                    <div class="meta-card">
-                        <div class="label">Keperluan</div>
-                        <div class="val">Dokumentasi LDKS 2026</div>
-                    </div>
-                    <div class="meta-card">
-                        <div class="label">Lokasi</div>
-                        <div class="val">Aula & Lapangan Utama</div>
-                    </div>
-                </div>
-
-                <!-- Notes Box -->
-                <div class="note-alert-box">
-                    <strong>Catatan Peminjam</strong>
-                    Kamera digunakan oleh tim dokumentasi 3 siswa. Surat tugas pembina sudah dilampirkan.
-                </div>
-
-                <!-- Verification Item Status -->
-                <div class="verify-list">
-                    <div class="verify-item">
-                        <span>✓</span> Stok tersedia
-                    </div>
-                    <div class="verify-item">
-                        <span>✓</span> Jadwal tidak bentrok
-                    </div>
-                    <div class="verify-item">
-                        <span>✓</span> Pembina terverifikasi
-                    </div>
-                </div>
-
-                <!-- Action Footer Buttons - Sesuaikan Tombol Laporan -->
-                <div class="action-footer-grid">
-                    <button class="btn-reject">✖ Tolak</button>
-                    <button class="btn-revise">Minta revisi</button>
-                    <button class="btn-export">✓ Export laporan</button>
-                </div>
-
-                <!-- Return Bar Bottom -->
-                <div class="return-bar">
-                    <div class="return-text">
-                        🔄 Barang sudah kembali? Periksa kondisi sebelum mencatat.
-                    </div>
-                    <button class="btn-return-confirm">Konfirmasi kembali</button>
-                </div>
-
-            </div>
-
-        </div>
+            @endif
+        </section>
     </main>
+
+    <!-- Modal Detail Laporan Siswa -->
+    <div class="report-modal-backdrop" id="report-modal-backdrop">
+        <div class="report-modal" role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
+            <div class="report-modal-header">
+                <h3 id="report-modal-title">Detail laporan kondisi alat</h3>
+                <button type="button" class="report-modal-close" data-close-report aria-label="Tutup">✕</button>
+            </div>
+            <div class="report-modal-body">
+                <dl>
+                    <dt>Tanggal laporan</dt><dd data-field="tanggal">-</dd>
+                    <dt>Siswa</dt><dd data-field="siswa">-</dd>
+                    <dt>Email siswa</dt><dd data-field="email">-</dd>
+                    <dt>Alat</dt><dd data-field="alat">-</dd>
+                    <dt>Kode inventaris</dt><dd data-field="kode">-</dd>
+                    <dt>Kategori</dt><dd data-field="kategori">-</dd>
+                    <dt>Lokasi kegiatan</dt><dd data-field="lokasi">-</dd>
+                    <dt>Tanggal pengembalian</dt><dd data-field="kembali">-</dd>
+                    <dt>Kondisi alat</dt><dd data-field="kondisi">-</dd>
+                    <dt>Bukti foto</dt><dd data-field="foto">-</dd>
+                    <dt>Deskripsi laporan siswa</dt><dd class="description" data-field="deskripsi">-</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const reportModal = document.getElementById('report-modal-backdrop');
+
+    document.querySelectorAll('[data-view-report]').forEach((button) => {
+        button.addEventListener('click', () => {
+            reportModal.querySelectorAll('[data-field]').forEach((field) => {
+                field.textContent = button.dataset[field.dataset.field] || '-';
+            });
+            reportModal.classList.add('open');
+        });
+    });
+
+    reportModal.addEventListener('click', (event) => {
+        if (event.target === reportModal || event.target.closest('[data-close-report]')) {
+            reportModal.classList.remove('open');
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') reportModal.classList.remove('open');
+    });
+</script>
+    
 
 </body>
 </html>

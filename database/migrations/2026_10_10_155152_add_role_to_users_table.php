@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $t) {
+            if (!Schema::hasColumn('users', 'role'))  $t->string('role')->default('siswa');
+            if (!Schema::hasColumn('users', 'nis'))   $t->string('nis', 20)->nullable()->unique();
+            if (!Schema::hasColumn('users', 'kelas')) $t->string('kelas', 30)->nullable();
+        });
+    }
+
+    public function down(): void 
+    {
+        Schema::table('users', function (Blueprint $t) {
+            $t->dropColumn(['role', 'nis', 'kelas']);
+        });
+    }
+};

@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="<?php echo e(asset('favicon.ico')); ?>">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('favicon.png')); ?>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beranda Siswa - SIMPATI</title>
@@ -87,6 +89,11 @@
             padding-bottom: 16px;
             border-bottom: 1px solid #e2e8f0;
         }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
         header .title-sub {
             font-size: 11px;
             color: #718096;
@@ -110,6 +117,20 @@
             font-weight: 600;
             color: #2d3748;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .btn-logout {
+            background: #fff;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            color: #b91c1c;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 9px 14px;
+            transition: 0.2s;
+        }
+        .btn-logout:hover {
+            background: #fef2f2;
         }
         .dot {
             width: 8px;
@@ -291,6 +312,19 @@
         }
         .status-badge.yellow { background: #fef3c7; color: #b45309; }
         .status-badge.green { background: #d1fae5; color: #047857; }
+        .status-badge.menunggu { background: #fef3c7; color: #92400e; }
+        .status-badge.disetujui { background: #dbeafe; color: #1e40af; }
+        .status-badge.dipinjam { background: #d1fae5; color: #047857; }
+        .status-badge.dikembalikan { background: #f1f5f9; color: #475569; }
+        .status-badge.ditolak { background: #fee2e2; color: #dc2626; }
+        .empty-loans {
+            padding: 28px 16px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            color: #718096;
+            font-size: 13px;
+            text-align: center;
+        }
 
         .alert-box {
             background-color: #e6f4ea;
@@ -335,55 +369,70 @@
             gap: 12px;
             margin-top: 16px;
         }
+        .notification-card.approved {
+            background-color: #ecfdf5;
+            border-color: #a7f3d0;
+        }
         .notification-card .notif-title {
             font-size: 12px;
             font-weight: bold;
             color: #92400e;
             margin-bottom: 2px;
         }
+        .notification-card.approved .notif-title { color: #047857; }
         .notification-card .notif-desc {
             font-size: 11px;
             color: #b45309;
+        }
+        .notification-card.approved .notif-desc { color: #065f46; }
+        
+        @media (max-width: 768px) {
+            main { padding: 18px 14px; }
+            header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .banner { flex-direction: column; align-items: flex-start; gap: 14px; padding: 20px; }
+            .banner h2 { font-size: 18px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+            .content-grid { grid-template-columns: 1fr; gap: 16px; }
+            .loan-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .loan-info { flex-wrap: wrap; }
+        }
+        @media (max-width: 420px) {
+            .category-grid { grid-template-columns: 1fr; }
+            .stat-card .number { font-size: 24px; }
         }
     </style>
 </head>
 <body>
 
     <!-- Sidebar Kiri -->
-    <aside>
-        <div>
-            <div class="brand">SIMPATI</div>
-            <div class="menu-label">Menu Utama</div>
-           <nav>
-    <a href="/siswa/beranda">
-        <span>🏠</span> Beranda
-    </a>
-    <a href="/siswa/katalog">
-        <span>📦</span> Katalog alat
-    </a>
-    <a href="/siswa/peminjaman">
-        <span>📋</span> Peminjaman saya
-    </a>
-    <a href="#">
-        <span>🔔</span> Notifikasi - 3
-    </a>
-</nav>
-        </div>
-        <div class="sidebar-footer">
-            Sistem Inventaris Sekolah<br>SMK Negeri 5 Surakarta
-        </div>
-    </aside>
+    <?php echo $__env->make('siswa.partials.sidebar', ['active' => 'beranda'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
 
     <!-- Konten Utama Kanan -->
     <main>
         <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div>
                 <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
                 <h1>Beranda siswa</h1>
             </div>
-            <div class="user-badge">
-                <span class="dot"></span>
-                <span>Nadia Putri</span>
+            </div>
+            <div class="header-actions">
+                <div class="user-badge">
+                    <span class="dot"></span>
+                    <span><?php echo e($siswa->name); ?></span>
+                </div>
+                <form method="POST" action="<?php echo e(route('logout')); ?>">
+                    <?php echo csrf_field(); ?>
+                    <button type="submit" class="btn-logout">Keluar</button>
+                </form>
             </div>
         </header>
 
@@ -392,79 +441,115 @@
         <!-- Banner Sambutan -->
         <div class="banner">
             <div>
-                <h2>Selamat siang, Nadia! 👋</h2>
-                <p>Kamera Multimedia perlu dikembalikan ke pihak sekolah pukul 15.00.</p>
+                <h2>Selamat siang, <?php echo e(\Illuminate\Support\Str::before($siswa->name, ' ')); ?>! 👋</h2>
+                <p>Lihat status dan riwayat alat yang sudah Anda ajukan untuk dipinjam.</p>
             </div>
-            <a href="#" class="btn-banner">Lihat pinjaman</a>
+           <a href="<?php echo e(route('siswa.peminjaman.index')); ?>" class="btn-banner">Lihat pinjaman</a>
         </div>
+
+        <?php $__empty_1 = true; $__currentLoopData = $peminjamanDisetujui; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $peminjaman): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <div class="notification-card approved">
+                <span style="font-size: 16px;">✅</span>
+                <div>
+                    <div class="notif-title">Peminjaman disetujui petugas</div>
+                    <div class="notif-desc">
+                        <?php echo e($peminjaman->alat->nama_alat ?? 'Alat'); ?>
+
+                        <?php if($peminjaman->status === 'dipinjam'): ?>
+                            sudah disetujui dan sedang dipinjam.
+                        <?php else: ?>
+                            sudah disetujui. Silakan ambil sesuai jadwal peminjaman.
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <div class="notification-card">
+                <span style="font-size: 16px;">⏳</span>
+                <div>
+                    <div class="notif-title">Belum ada peminjaman disetujui</div>
+                    <div class="notif-desc">Pemberitahuan akan muncul di sini setelah petugas menyetujui pengajuan Anda.</div>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Kartu Statistik -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div>
-                    <div class="label">Pinjaman aktif</div>
-                    <div class="number">2</div>
-                    <div class="desc orange">1 unit perlu dikembalikan</div>
+                    <div class="label">Peminjaman disetujui</div>
+                    <div class="number"><?php echo e($statusCounts->get('disetujui', 0) + $statusCounts->get('dipinjam', 0)); ?></div>
+                    <div class="desc orange">Disetujui atau sedang dipinjam</div>
                 </div>
-                <div class="stat-icon bg-green-light">📦</div>
+                <div class="stat-icon bg-green-light"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
             </div>
             <div class="stat-card">
                 <div>
                     <div class="label">Menunggu persetujuan</div>
-                    <div class="number">1</div>
-                    <div class="desc blue">Diajukan 2 jam lalu</div>
+                    <div class="number"><?php echo e($statusCounts->get('menunggu', 0)); ?></div>
+                    <div class="desc blue">Menunggu ditinjau petugas</div>
                 </div>
-                <div class="stat-icon bg-orange-light">⏳</div>
+                <div class="stat-icon bg-orange-light"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
             </div>
             <div class="stat-card">
                 <div>
                     <div class="label">Riwayat selesai</div>
-                    <div class="number">12</div>
-                    <div class="desc gray">Semua dikembalikan tertib</div>
+                    <div class="number"><?php echo e($statusCounts->get('dikembalikan', 0)); ?></div>
+                    <div class="desc gray">Alat yang sudah dikembalikan</div>
                 </div>
-                <div class="stat-icon bg-blue-light">✅</div>
+                <div class="stat-icon bg-blue-light"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><polyline points="9 15 11 17 15 13"></polyline></svg></div>
             </div>
         </div>
 
         <!-- Grid Bawah -->
         <div class="content-grid">
-            <!-- Pinjaman Aktif -->
+            <!-- Peminjaman Terbaru -->
             <div class="card">
                 <div class="card-header">
                     <div>
-                        <div class="card-title">Pinjaman aktif</div>
-                        <div class="card-subtitle">Pantau barang yang sedang gunakan</div>
+                        <div class="card-title">Peminjaman terbaru</div>
+                        <div class="card-subtitle">Status pengajuan dan alat yang Anda pinjam</div>
                     </div>
-                    <a href="#" class="link-all">Lihat semua ›</a>
+                   <a href="<?php echo e(route('siswa.peminjaman.index')); ?>" class="link-all">Lihat semua</a>
                 </div>
 
-                <div class="loan-item">
-                    <div class="loan-info">
-                        <div class="item-thumb">CAM</div>
-                        <div>
-                            <span class="badge-code">INV-CAM-014</span>
-                            <div class="item-name">Kamera Sony Alpha A6400</div>
-                            <div class="item-date">24-26 Sep 2026 • Ruang Multimedia</div>
-                        </div>
-                    </div>
-                    <span class="status-badge yellow">⚠️ Besok</span>
-                </div>
+                <?php $__empty_1 = true; $__currentLoopData = $peminjamans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $peminjaman): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div class="loan-item">
+                        <div class="loan-info">
+                            <div class="item-thumb"><?php echo e(strtoupper(substr($peminjaman->alat->kode_alat ?? 'ALAT', 0, 3))); ?></div>
+                            <div>
+                                <span class="badge-code"><?php echo e($peminjaman->alat->kode_alat ?? '-'); ?></span>
+                                <div class="item-name"><?php echo e($peminjaman->alat->nama_alat ?? 'Alat tidak ditemukan'); ?></div>
+                                <div class="item-date">
+                                    <?php echo e($peminjaman->tanggal_pinjam->format('d M Y')); ?> - <?php echo e($peminjaman->tanggal_kembali->format('d M Y')); ?>
 
-                <div class="loan-item">
-                    <div class="loan-info">
-                        <div class="item-thumb">MIC</div>
-                        <div>
-                            <span class="badge-code orange">INV-MIC-082</span>
-                            <div class="item-name">Mikrofon Wireless Shure</div>
-                            <div class="item-date">26-28 Sep 2026 • Studio Musik</div>
+                                    · <?php echo e($peminjaman->lokasi_penggunaan); ?>
+
+                                </div>
+                            </div>
                         </div>
+                        <span class="status-badge <?php echo e($peminjaman->status); ?>">
+                            <?php switch($peminjaman->status):
+                                case ('menunggu'): ?> Menunggu <?php break; ?>
+                                <?php case ('disetujui'): ?> Disetujui <?php break; ?>
+                                <?php case ('dipinjam'): ?> Dipinjam <?php break; ?>
+                                <?php case ('dikembalikan'): ?> Dikembalikan <?php break; ?>
+                                <?php case ('ditolak'): ?> Ditolak <?php break; ?>
+                                <?php default: ?> <?php echo e(ucfirst($peminjaman->status)); ?>
+
+                            <?php endswitch; ?>
+                        </span>
                     </div>
-                    <span class="status-badge green">✓ 3 hari lagi</span>
-                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <div class="empty-loans">
+                        Anda belum mengajukan peminjaman alat.
+                        <a href="<?php echo e(route('siswa.peminjaman.create')); ?>" class="link-all">Ajukan peminjaman</a>
+                    </div>
+                <?php endif; ?>
 
                 <div class="alert-box">
                     <span>💡</span> 
-                    <span>Rekam jejak Anda baik — 12 pengembalian tepat waktu.</span>
+                    <span>Periksa status pengajuan Anda secara berkala di halaman Peminjaman saya.</span>
                 </div>
             </div>
 
@@ -498,16 +583,10 @@
                     </div>
                 </div>
 
-                <div class="notification-card">
-                    <span style="font-size: 16px;">⏳</span>
-                    <div>
-                        <div class="notif-title">Permintaan tripod disetujui</div>
-                        <div class="notif-desc">Ambil di ruang sarpras mulai pukul 10.00.</div>
-                    </div>
-                </div>
             </div>
         </div>
     </main>
+    
 
 </body>
-</html>
+</html><?php /**PATH C:\xampp7\htdocs\simpati\resources\views/siswa/beranda.blade.php ENDPATH**/ ?>

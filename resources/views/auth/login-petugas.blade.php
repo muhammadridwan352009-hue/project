@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Petugas - SIMPATI</title>
@@ -32,6 +34,16 @@
         .btn-submit { width: 100%; background-color: #00897b; color: #fff; border: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
         .btn-submit:hover { background-color: #00796b; }
         .warning-box { margin-top: 16px; background-color: #fffbeb; border: 1px solid #fde68a; padding: 10px 12px; border-radius: 8px; font-size: 11px; color: #92400e; display: flex; align-items: center; gap: 8px; }
+        .error-msg { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 16px; }
+
+        @media (max-width: 900px) {
+            .panel-left { display: none; }
+            .panel-right { width: 100%; padding: 24px 16px; }
+        }
+        @media (max-width: 480px) {
+            .card-form { padding: 20px 16px; }
+            .card-form h2 { font-size: 19px; }
+        }
     </style>
 </head>
 <body>
@@ -60,21 +72,28 @@
                     <h2>Masuk sebagai Petugas</h2>
                     <p>Khusus petugas korporasi dan pembina yang terdaftar.</p>
 
-                    <!-- Mengarah langsung ke Dashboard Petugas -->
-                    <form action="{{ route('petugas.dashboard') }}" method="GET">
+                    {{-- Tampilkan error jika login gagal --}}
+                    @if ($errors->has('login'))
+                        <div class="error-msg">
+                            {{ $errors->first('login') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('login.petugas.proses') }}" method="POST">
+                        @csrf
                         <div class="form-group">
-                            <label>ID petugas atau email</label>
-                            <input type="text" placeholder="Contoh: PTO-006 atau petugas@smkn5surakarta.id" class="form-control" required>
+                            <label for="login">ID petugas atau email</label>
+                            <input type="text" id="login" name="login" value="{{ old('login') }}" placeholder="Contoh: PTO-006 atau petugas@smkn5surakarta.id" class="form-control" required autofocus>
                         </div>
 
                         <div class="form-group">
-                            <label>Kata sandi</label>
-                            <input type="password" placeholder="••••••••••••••" class="form-control" required>
+                            <label for="password">Kata sandi</label>
+                            <input type="password" id="password" name="password" placeholder="••••••••••••••" class="form-control" required>
                         </div>
 
                         <div class="form-row">
                             <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="checkbox" style="accent-color: #00897b;"> Tetap masuk di perangkat ini
+                                <input type="checkbox" name="remember" style="accent-color: #00897b;"> Tetap masuk di perangkat ini
                             </label>
                         </div>
 

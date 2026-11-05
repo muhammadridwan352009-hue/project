@@ -15,6 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('nis')->nullable()->unique();
+            $table->string('kelas')->nullable();
+            $table->string('tingkat_kelas')->nullable();
+            $table->string('jurusan')->nullable();
+            $table->string('foto')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('siswa'); // Kolom role multi-user

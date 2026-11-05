@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Siswa - SIMPATI</title>
@@ -57,6 +59,17 @@
             margin-bottom: 16px;
             font-weight: 600;
             font-style: italic;
+        }
+        .typing-cursor {
+            border-right: 2px solid currentColor;
+            padding-right: 2px;
+            animation: cursor-blink 0.75s steps(1) infinite;
+        }
+        @keyframes cursor-blink {
+            50% { border-color: transparent; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .typing-cursor { animation: none; }
         }
         .panel-left p {
             font-size: 13px;
@@ -153,6 +166,27 @@
         .btn-submit:hover {
             background-color: #00796b;
         }
+        @media (max-width: 900px) {
+            .panel-left {
+                padding: 40px 32px;
+            }
+            .panel-right {
+                padding: 32px;
+            }
+        }
+        @media (max-width: 680px) {
+            .panel-left {
+                display: none;
+            }
+            .panel-right {
+                width: 100%;
+                min-height: 100vh;
+                padding: 28px 20px;
+            }
+            .card-form {
+                padding: 26px 22px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -164,8 +198,9 @@
             </div>
             <div>
                 <span class="badge-sub">AKSES SISWA • SMK NEGERI 5 SURAKARTA</span>
-                <h1>"Persiapan kegiatan lebih ringan saat semua alat jelas keberadaannya."</h1>
-                <p>Naka • Koordinator Multimedia</p>
+                <h1 aria-label="Persiapan kegiatan lebih ringan saat semua alat jelas keberadaannya.">
+                    <span id="login-quote" class="typing-cursor" aria-hidden="true">"Persiapan kegiatan lebih ringan saat semua alat jelas keberadaannya."</span>
+                </h1>
             </div>
             <div class="footer-left">
                 Portal Inventaris Sarpras & Prasarana
@@ -181,29 +216,124 @@
                     <h2>Masuk sebagai Siswa</h2>
                     <p>Gunakan akun sekolah untuk mulai meminjam alat.</p>
 
-                    <form action="{{ route('siswa.beranda') }}" method="GET">
+                    @if (session('status'))
+                        <div role="status" style="color:#176b52; font-size:12px; margin-bottom:16px;">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('login.siswa.proses') }}">
+                        @csrf
+
                         <div class="form-group">
-                            <label>NIS atau email sekolah</label>
-                            <input type="text" placeholder="Contoh: 33189 atau siswa@smkn5surakarta.id" class="form-control" required>
+                            <label for="login">NIS atau email sekolah</label>
+                            <input type="text" id="login" name="login" value="{{ old('login') }}" placeholder="Contoh: 33189 atau siswa@smkn5surakarta.id" class="form-control" required autofocus>
+                            @error('login')
+                                <div style="color:#c0392b; font-size:12px; margin-top:4px;">{{ $message }}</div>
+                            @enderror
+                            <div style="font-size: 11px; color: #718096; margin-top: 6px;">
+                                Akun demo: <strong>siswa@smkn5surakarta.id</strong> atau <strong>33189</strong> · sandi: <strong>password123</strong>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Kata sandi</label>
-                            <input type="password" placeholder="••••••••••••••" class="form-control" required>
+                            <label for="nis">NIS</label>
+                            <input type="text" id="nis" name="nis" value="{{ old('nis') }}" placeholder="Contoh: 33189" class="form-control">
+                            @error('nis')
+                                <div style="color:#c0392b; font-size:12px; margin-top:4px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tingkat_kelas">Tingkat Kelas</label>
+                            <select id="tingkat_kelas" name="tingkat_kelas" class="form-control" aria-invalid="{{ $errors->has('tingkat_kelas') ? 'true' : 'false' }}" @if ($errors->has('tingkat_kelas')) aria-describedby="tingkat-kelas-error" @endif>
+                                <option value="">Pilih tingkat kelas</option>
+                                @foreach (['X', 'XI', 'XII'] as $tingkat)
+                                    <option value="{{ $tingkat }}" @selected(old('tingkat_kelas') === $tingkat)>{{ $tingkat }}</option>
+                                @endforeach
+                            </select>
+                            @error('tingkat_kelas')
+                                <div id="tingkat-kelas-error" style="color:#c0392b; font-size:12px; margin-top:4px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jurusan">Jurusan</label>
+                            <select id="jurusan" name="jurusan" class="form-control" aria-invalid="{{ $errors->has('jurusan') ? 'true' : 'false' }}" @if ($errors->has('jurusan')) aria-describedby="jurusan-error" @endif>
+                                <option value="">Pilih jurusan</option>
+                                @foreach ([
+                                    'DPIB' => '(DPIB) Desain Pemodelan dan Informasi Bangunan',
+                                    'BKP' => '(BKP) Bisnis Konstruksi dan Properti',
+                                    'TOI' => '(TOI) Teknik Otomasi Industri',
+                                    'TITL' => '(TITL) Teknik Instalasi Tenaga Listrik',
+                                    'TEI' => '(TEI) Teknik Elektronika Industri',
+                                    'TP' => '(TP) Teknik Pemesinan',
+                                    'TKRO' => '(TKRO) Teknik Kendaraan Ringan Otomotif',
+                                    'TBSM' => '(TBSM) Teknik dan Bisnis Sepeda Motor',
+                                    'RPL' => '(RPL) Rekayasa Perangkat Lunak',
+                                ] as $kode => $nama)
+                                    <option value="{{ $kode }}" @selected(old('jurusan') === $kode)>{{ $nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('jurusan')
+                                <div id="jurusan-error" style="color:#c0392b; font-size:12px; margin-top:4px;">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Kata sandi</label>
+                            <input type="password" id="password" name="password" placeholder="••••••••••••••" class="form-control" required>
                         </div>
 
                         <div class="form-row">
                             <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="checkbox" style="accent-color: #00897b;"> Ingat saya
+                                <input type="checkbox" name="remember" style="accent-color: #00897b;"> Ingat saya
                             </label>
                             <a href="#">Lupa kata sandi?</a>
                         </div>
 
                         <button type="submit" class="btn-submit">🚀 Masuk ke SIMPATI</button>
                     </form>
+
+                    <p style="margin:18px 0 0; text-align:center;">
+                        Belum punya akun?
+                        <a href="{{ route('register.siswa') }}" style="color:#00897b; font-weight:600; text-decoration:none;">Daftar sebagai siswa</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        const quoteElement = document.getElementById('login-quote');
+        const quote = quoteElement.textContent;
+        const characters = [...quote];
+
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            let characterIndex = 0;
+            let isDeleting = false;
+
+            const typeQuote = () => {
+                quoteElement.textContent = characters.slice(0, characterIndex).join('');
+
+                if (!isDeleting && characterIndex === characters.length) {
+                    isDeleting = true;
+                    window.setTimeout(typeQuote, 1800);
+                    return;
+                }
+
+                if (isDeleting && characterIndex === 0) {
+                    isDeleting = false;
+                    window.setTimeout(typeQuote, 500);
+                    return;
+                }
+
+                characterIndex += isDeleting ? -1 : 1;
+                window.setTimeout(typeQuote, isDeleting ? 35 : 70);
+            };
+
+            quoteElement.textContent = '';
+            typeQuote();
+        }
+    </script>
 </body>
 </html>
