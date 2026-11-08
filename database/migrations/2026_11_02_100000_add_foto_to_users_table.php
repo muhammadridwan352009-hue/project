@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Menambahkan kolom foto (path gambar profil) ke tabel users.
+     * Menambahkan kolom foto ke tabel users jika belum ada.
      */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('foto')->nullable()->after('password');
+            if (!Schema::hasColumn('users', 'foto')) {
+                $table->string('foto')->nullable()->after('password');
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('foto');
+            if (Schema::hasColumn('users', 'foto')) {
+                $table->dropColumn('foto');
+            }
         });
     }
 };
