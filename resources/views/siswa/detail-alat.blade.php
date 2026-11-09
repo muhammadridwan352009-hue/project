@@ -169,6 +169,11 @@
             color: #a0aec0;
             font-weight: bold;
         }
+        .img-container > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .badge-code {
             position: absolute;
             top: 12px;
@@ -429,7 +434,11 @@
                 <!-- Main Product Display -->
                 <div class="item-main-card">
                     <div class="img-container">
-                        <span>{{ $alat->nama_alat }}</span>
+                        @if($alat->foto_katalog)
+                            <img src="{{ $alat->foto_katalog }}" alt="Foto {{ $alat->nama_alat }}">
+                        @else
+                            <span>{{ $alat->nama_alat }}</span>
+                        @endif
                         <div class="badge-code">
                             <span>{{ $alat->kode_alat ?? 'INV-'.$alat->id }}</span>
                             <span class="cat">{{ $alat->kategori ?? 'UMUM' }}</span>

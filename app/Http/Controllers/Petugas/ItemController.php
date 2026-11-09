@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Petugas;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\Alat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ItemController extends Controller
 {
@@ -29,7 +32,13 @@ class ItemController extends Controller
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'kode_barang' => 'required|string|max:20|unique:items,kode_barang',
+            'kode_barang' => [
+                'required',
+                'string',
+                'max:20',
+                'unique:items,kode_barang',
+                Rule::unique('alats', 'kode_alat'),
+            ],
             'nama_barang' => 'required|string|max:255',
             'stok'        => 'required|integer|min:0',
             'kondisi'     => 'required|in:baik,rusak_ringan,rusak_berat',
@@ -50,7 +59,14 @@ class ItemController extends Controller
             $data['foto'] = $request->file('foto')->store('foto-barang', 'public');
         }
 
-        Item::create($data);
+        DB::transaction(function () use ($data) {
+            $item = Item::create($data);
+            $category = Category::findOrFail($item->category_id);
+            $alat = new Alat();
+            $this->syncStudentCatalogItem($alat, $item, $category);
+            $alat->save();
+            $item->alat()->associate($alat)->save();
+        });
 
         return redirect()->route('petugas.inventaris.index')
                          ->with('success', 'Data barang berhasil ditambahkan!');
@@ -68,7 +84,13 @@ class ItemController extends Controller
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'kode_barang' => 'required|string|max:20|unique:items,kode_barang,' . $item->id,
+            'kode_barang' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('items', 'kode_barang')->ignore($item->id),
+                Rule::unique('alats', 'kode_alat')->ignore($item->alat_id),
+            ],
             'nama_barang' => 'required|string|max:255',
             'stok'        => 'required|integer|min:0',
             'kondisi'     => 'required|in:baik,rusak_ringan,rusak_berat',
@@ -78,14 +100,22 @@ class ItemController extends Controller
         $data = $request->only(['category_id', 'kode_barang', 'nama_barang', 'stok', 'kondisi']);
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
-            if ($item->foto && Storage::disk('public')->exists($item->foto)) {
-                Storage::disk('public')->delete($item->foto);
-            }
             $data['foto'] = $request->file('foto')->store('foto-barang', 'public');
         }
 
-        $item->update($data);
+        $fotoLama = $item->foto;
+        DB::transaction(function () use ($item, $data) {
+            $item->update($data);
+            $category = Category::findOrFail($item->category_id);
+            $alat = $item->alat_id ? Alat::findOrFail($item->alat_id) : new Alat();
+            $this->syncStudentCatalogItem($alat, $item, $category);
+            $alat->save();
+            $item->alat()->associate($alat)->save();
+        });
+
+        if ($request->hasFile('foto') && $fotoLama && Storage::disk('public')->exists($fotoLama)) {
+            Storage::disk('public')->delete($fotoLama);
+        }
 
         return redirect()->route('petugas.inventaris.index')
                          ->with('success', 'Data barang berhasil diperbarui!');
@@ -94,9 +124,34 @@ class ItemController extends Controller
     // Delete: Hapus data barang
     public function destroy(Item $item)
     {
-        $item->delete();
+        DB::transaction(function () use ($item) {
+            if ($item->alat_id) {
+                Alat::whereKey($item->alat_id)->update([
+                    'is_active' => false,
+                    'stok' => 0,
+                ]);
+            }
+
+            $item->delete();
+        });
 
         return redirect()->route('petugas.inventaris.index')
                          ->with('success', 'Data barang berhasil dihapus!');
+    }
+
+    private function syncStudentCatalogItem(Alat $alat, Item $item, Category $category): void
+    {
+        $alat->fill([
+            'kode_alat' => $item->kode_barang,
+            'nama_alat' => $item->nama_barang,
+            'kategori' => strtolower($category->nama),
+            'stok' => $item->stok,
+            'kondisi' => ucfirst(str_replace('_', ' ', $item->kondisi)),
+            'is_active' => true,
+        ]);
+
+        if ($item->foto) {
+            $alat->foto = $item->foto;
+        }
     }
 }

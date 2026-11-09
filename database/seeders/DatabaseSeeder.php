@@ -10,6 +10,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(CategorySeeder::class);
+
         // Account Petugas
         User::updateOrCreate(
             ['email' => 'petugas@smkn5surakarta.id'],

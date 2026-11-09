@@ -202,7 +202,7 @@
                     <select name="category_id" class="form-control" required>
                         <option value="">-- Pilih kategori --</option>
                         @foreach ($categories as $c)
-                        <option value="{{ $c->id }}" {{ $item->category_id == $c->id ? 'selected' : '' }}>{{ $c->nama_kategori ?? $c->name }}</option>
+                        <option value="{{ $c->id }}" {{ $item->category_id == $c->id ? 'selected' : '' }}>{{ $c->nama }}</option>
                         @endforeach
                     </select>
                     @error('category_id') <div class="error-msg">{{ $message }}</div> @enderror

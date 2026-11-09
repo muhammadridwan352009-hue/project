@@ -295,10 +295,7 @@
                         <button type="submit" class="btn-submit">🚀 Masuk ke SIMPATI</button>
                     </form>
 
-                    <p style="margin:18px 0 0; text-align:center;">
-                        Belum punya akun?
-                        <a href="{{ route('register.siswa') }}" style="color:#00897b; font-weight:600; text-decoration:none;">Daftar sebagai siswa</a>
-                    </p>
+
                 </div>
             </div>
         </div>

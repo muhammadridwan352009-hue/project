@@ -28,6 +28,12 @@ Route::get('/login/petugas', function () {
     return view('auth.login-petugas');
 })->name('login.petugas');
 
+// --- RUTE DAFTAR SISWA DI AREA PETUGAS ---
+Route::get('/petugas/daftar-siswa', [AuthController::class, 'createSiswaPetugas'])
+    ->middleware(['auth', 'role:petugas'])->name('petugas.daftar-siswa');
+Route::post('/petugas/daftar-siswa', [AuthController::class, 'storeSiswaPetugas'])
+    ->middleware(['auth', 'role:petugas'])->name('petugas.daftar-siswa.proses');
+
 
 // ==========================================
 // AREA SISWA (Dilindungi middleware auth dan role:siswa)
@@ -79,13 +85,15 @@ Route::get('/petugas/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'role:petugas'])
     ->name('petugas.dashboard');
 
-// --- RUTE CRUD INVENTARIS ---
-Route::get('/petugas/inventaris', [ItemController::class, 'index'])->name('petugas.inventaris.index');
-Route::get('/petugas/inventaris/create', [ItemController::class, 'create'])->name('petugas.inventaris.create');
-Route::post('/petugas/inventaris', [ItemController::class, 'store'])->name('petugas.inventaris.store');
-Route::get('/petugas/inventaris/{item}/edit', [ItemController::class, 'edit'])->name('petugas.inventaris.edit');
-Route::put('/petugas/inventaris/{item}', [ItemController::class, 'update'])->name('petugas.inventaris.update');
-Route::delete('/petugas/inventaris/{item}', [ItemController::class, 'destroy'])->name('petugas.inventaris.destroy');
+// --- RUTE CRUD INVENTARIS (Khusus petugas) ---
+Route::middleware(['auth', 'role:petugas'])->group(function () {
+    Route::get('/petugas/inventaris', [ItemController::class, 'index'])->name('petugas.inventaris.index');
+    Route::get('/petugas/inventaris/create', [ItemController::class, 'create'])->name('petugas.inventaris.create');
+    Route::post('/petugas/inventaris', [ItemController::class, 'store'])->name('petugas.inventaris.store');
+    Route::get('/petugas/inventaris/{item}/edit', [ItemController::class, 'edit'])->name('petugas.inventaris.edit');
+    Route::put('/petugas/inventaris/{item}', [ItemController::class, 'update'])->name('petugas.inventaris.update');
+    Route::delete('/petugas/inventaris/{item}', [ItemController::class, 'destroy'])->name('petugas.inventaris.destroy');
+});
 
 // --- RUTE APPROVAL PETUGAS ---
 Route::middleware(['auth', 'role:petugas'])->group(function () {
@@ -106,10 +114,12 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
 
 use App\Http\Controllers\Petugas\PengembalianController;
 
-Route::get('/petugas/pengembalian', [PengembalianController::class, 'index'])
-    ->name('petugas.pengembalian');
-Route::post('/petugas/pengembalian/{id}/konfirmasi', [PengembalianController::class, 'konfirmasi'])
-    ->name('petugas.pengembalian.konfirmasi');
+Route::middleware(['auth', 'role:petugas'])->group(function () {
+    Route::get('/petugas/pengembalian', [PengembalianController::class, 'index'])
+        ->name('petugas.pengembalian');
+    Route::post('/petugas/pengembalian/{id}/konfirmasi', [PengembalianController::class, 'konfirmasi'])
+        ->name('petugas.pengembalian.konfirmasi');
+});
 
 // ==========================================
 // RUTE PROSES LOGIN & LOGOUT

@@ -433,11 +433,15 @@
            @foreach($alats as $alat)
            <div class="item-card" data-search="{{ strtolower($alat->nama_alat . ' ' . ($alat->kode_alat ?? '') . ' ' . ($alat->lokasi ?? '') . ' ' . ($alat->kategori ?? '')) }}">
                <div class="card-img-wrapper">
-                   <img
-                       src="{{ asset($alat->foto_katalog) }}"
-                       alt="Foto {{ $alat->nama_alat }}"
-                       loading="lazy"
-                   >
+                   @if($alat->foto_katalog)
+                       <img
+                           src="{{ $alat->foto_katalog }}"
+                           alt="Foto {{ $alat->nama_alat }}"
+                           loading="lazy"
+                       >
+                   @else
+                       <span class="placeholder-text">{{ $alat->nama_alat }}</span>
+                   @endif
                    <div class="badge-code">
                         <span>{{ $alat->kode_alat ?? 'MM-CAM-014' }}</span>
                         <span class="cat">{{ $alat->kategori ?? 'MULTIMEDIA' }}</span>

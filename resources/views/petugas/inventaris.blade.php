@@ -481,7 +481,7 @@
                 <tbody>
                     @forelse($items as $item)
                     @php
-                        $kategoriKey = strtolower(optional($item->category)->nama_kategori ?? '');
+                        $kategoriKey = strtolower(optional($item->category)->nama ?? '');
                         $catClass = match(true) {
                             str_contains($kategoriKey, 'multimedia') || str_contains($kategoriKey, 'multi') => '',
                             str_contains($kategoriKey, 'band') => 'band',
@@ -507,7 +507,7 @@
                                         <strong>{{ $item->nama_barang }}</strong>
                                         <div class="badge-code">
                                             <span>{{ $item->kode_barang }}</span>
-                                            <span class="cat {{ $catClass }}">{{ strtoupper(optional($item->category)->nama_kategori ?? '-') }}</span>
+                                            <span class="cat {{ $catClass }}">{{ strtoupper(optional($item->category)->nama ?? '-') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -519,7 +519,7 @@
                                 • {{ str_replace('_', ' ', ucfirst($item->kondisi)) }}
                             </span>
                         </td>
-                        <td><span class="location-text">{{ optional($item->category)->nama_kategori ?? '-' }}</span></td>
+                        <td><span class="location-text">{{ optional($item->category)->nama ?? '-' }}</span></td>
                         <td>
                             <div class="action-cell">
                                 <a href="{{ route('petugas.inventaris.edit', $item) }}" class="btn-edit">✏️ Edit</a>

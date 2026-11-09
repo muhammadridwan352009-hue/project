@@ -56,7 +56,7 @@ class PeminjamanController extends Controller
 
     public function create()
     {
-        $alats = Alat::where('stok', '>', 0)->get();
+        $alats = Alat::where('is_active', true)->where('stok', '>', 0)->get();
         return view('siswa.peminjaman.create', compact('alats'));
     }
 
@@ -79,7 +79,7 @@ class PeminjamanController extends Controller
         }
 
         $alat = Alat::findOrFail($data['alat_id']);
-        if ($alat->stok <= 0) {
+        if (!$alat->is_active || $alat->stok <= 0) {
             return back()->with('error', 'Stok alat tidak tersedia.');
         }
 
@@ -144,6 +144,7 @@ class PeminjamanController extends Controller
     public function getAlatsByKategori($kategori)
     {
         $alats = Alat::where('kategori', $kategori)
+            ->where('is_active', true)
             ->where('stok', '>', 0)
             ->get(['id', 'nama_alat', 'kode_alat', 'stok']);
 

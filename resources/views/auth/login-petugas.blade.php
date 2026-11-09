@@ -35,6 +35,8 @@
         .btn-submit:hover { background-color: #00796b; }
         .warning-box { margin-top: 16px; background-color: #fffbeb; border: 1px solid #fde68a; padding: 10px 12px; border-radius: 8px; font-size: 11px; color: #92400e; display: flex; align-items: center; gap: 8px; }
         .error-msg { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 6px; font-size: 12px; margin-bottom: 16px; }
+        .register-link { color: #00897b; font-weight: 600; text-decoration: none; }
+        .register-link:hover { text-decoration: underline; }
 
         @media (max-width: 900px) {
             .panel-left { display: none; }
@@ -104,6 +106,11 @@
                         <span>⚠️</span>
                         <span>Belum punya akun petugas? Hubungi tim sarpras sekolah tingkat pusat.</span>
                     </div>
+
+                    <p style="margin:18px 0 0; text-align:center; font-size:12px; color:#718096;">
+                        Belum punya akun?
+                        <a href="{{ route('register.siswa') }}" class="register-link">Daftar sebagai Siswa</a>
+                    </p>
                 </div>
             </div>
         </div>

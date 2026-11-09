@@ -16,6 +16,8 @@ class Alat extends Model
         'stok',
         'deskripsi',
         'kondisi',
+        'foto',
+        'is_active',
     ];
 
     public function peminjamans()
@@ -30,6 +32,10 @@ class Alat extends Model
 
     public function getFotoKatalogAttribute(): ?string
     {
+        if ($this->foto) {
+            return '/storage/' . ltrim($this->foto, '/');
+        }
+
         $pemetaanGambar = [
             'printer' => 'printer.jpg',
             'projector' => 'proyektor.jpg',
@@ -43,7 +49,7 @@ class Alat extends Model
 
         foreach ($pemetaanGambar as $kataKunci => $namaFile) {
             if (str_contains($nama, $kataKunci) && file_exists(public_path($namaFile))) {
-                return $namaFile;
+                return '/' . $namaFile;
             }
         }
 

@@ -10,9 +10,7 @@ class KatalogController extends Controller
     // Menampilkan katalog alat
     public function index()
     {
-        $alats = Alat::all()
-            ->filter(fn (Alat $alat) => $alat->foto_katalog !== null)
-            ->values();
+        $alats = Alat::where('is_active', true)->latest()->get();
 
         return view('siswa.katalog', compact('alats'));
     }
@@ -20,7 +18,7 @@ class KatalogController extends Controller
     // Menampilkan detail alat
     public function show($id)
     {
-        $alat = Alat::findOrFail($id);
+        $alat = Alat::where('is_active', true)->findOrFail($id);
 
         return view('siswa.detail-alat', compact('alat'));
     }

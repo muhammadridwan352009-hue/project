@@ -33,6 +33,45 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
+        $user = User::create([
+            'name' => $validated['name'],
+            'nis' => $validated['nis'],
+            'kelas' => $validated['tingkat_kelas'].' '.$validated['jurusan'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+            'role' => 'siswa',
+        ]);
+
+        // Otomatis autentikasi siswa setelah pendaftaran berhasil
+        Auth::guard('web')->login($user);
+        $request->session()->regenerate();
+
+        return redirect()
+            ->route('siswa.beranda')
+            ->with('status', 'Pendaftaran berhasil. Selamat datang di SIMPATI!');
+    }
+
+    // Petugas mendaftarkan akun siswa baru dari ruang petugas
+    public function createSiswaPetugas()
+    {
+        return view('petugas.daftar-siswa');
+    }
+
+    public function storeSiswaPetugas(Request $request)
+    {
+        $jurusan = [
+            'DPIB', 'BKP', 'TOI', 'TITL', 'TEI', 'TP', 'TKRO', 'TBSM', 'RPL',
+        ];
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'nis' => ['required', 'string', 'regex:/^[0-9]{5,20}$/', 'unique:users,nis'],
+            'tingkat_kelas' => ['required', Rule::in(['X', 'XI', 'XII'])],
+            'jurusan' => ['required', Rule::in($jurusan)],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
         User::create([
             'name' => $validated['name'],
             'nis' => $validated['nis'],
@@ -43,8 +82,8 @@ class AuthController extends Controller
         ]);
 
         return redirect()
-            ->route('login.siswa')
-            ->with('status', 'Pendaftaran berhasil. Silakan masuk dengan akun siswa Anda.');
+            ->route('petugas.daftar-siswa')
+            ->with('status', 'Akun siswa berhasil dibuat. Siswa dapat langsung masuk menggunakan NIS dan kata sandi tersebut.');
     }
 
     public function loginSiswa(Request $request)

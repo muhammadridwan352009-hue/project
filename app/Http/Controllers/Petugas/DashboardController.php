@@ -38,22 +38,10 @@ class DashboardController extends Controller
             ->groupBy('kategori')
             ->pluck('total', 'kategori');
 
-        $semuaAlat = Alat::query()
+        $alats = Alat::query()
+            ->where('is_active', true)
             ->orderBy('nama_alat')
             ->get();
-        $kataKunciGambar = ['printer', 'projector', 'proyektor', 'sajadah', 'sony', 'tenda'];
-        $alatDenganGambar = $semuaAlat->filter(function (Alat $alat) use ($kataKunciGambar): bool {
-            $namaAlat = strtolower($alat->nama_alat);
-
-            foreach ($kataKunciGambar as $kataKunci) {
-                if (str_contains($namaAlat, $kataKunci)) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-        $alats = $alatDenganGambar->values();
 
         return view('petugas.dashboard', [
             'totalStok' => Alat::sum('stok'),
