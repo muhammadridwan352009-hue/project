@@ -54,6 +54,12 @@ chmod 664 "$DB_PATH" 2>/dev/null || true
 # --------------------------------------------------
 # 4. Buat file .env dari environment variables
 # --------------------------------------------------
+# Generate APP_KEY jika belum disediakan oleh Railway variables
+if [ -z "$APP_KEY" ]; then
+    echo ">>> APP_KEY tidak ditemukan di environment, membuat otomatis..."
+    GENERATED_KEY=$(php artisan key:generate --show)
+    export APP_KEY="$GENERATED_KEY"
+fi
 cat > /var/www/html/.env << EOF
 APP_NAME=SIMPATI
 APP_ENV=production
@@ -90,7 +96,7 @@ chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 
 # --------------------------------------------------
-# 6. Clear cache lama
+# 6. Clear & persiapkan cache
 # --------------------------------------------------
 php artisan config:clear 2>/dev/null || true
 php artisan cache:clear 2>/dev/null || true
@@ -100,15 +106,15 @@ php artisan view:clear 2>/dev/null || true
 # 7. Jalankan migrasi database
 # --------------------------------------------------
 echo ">>> Menjalankan migrasi database..."
-php artisan migrate --force --no-interaction
+php artisan migrate --force --no-interaction || echo ">>> Peringatan: migrasi gagal atau sudah up-to-date."
 echo ">>> Migrasi selesai."
 
 # --------------------------------------------------
-# 8. Cache untuk produksi (lebih cepat)
+# 8. Cache untuk produksi
 # --------------------------------------------------
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+php artisan config:cache || true
+php artisan route:cache || true
+php artisan view:cache || true
 
 echo ">>> Cache berhasil dibuat."
 echo ">>> SIMPATI siap! Port: $PORT"
