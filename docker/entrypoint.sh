@@ -6,7 +6,18 @@ echo " SIMPATI - Starting up..."
 echo "========================================"
 
 # --------------------------------------------------
-# 1. Pastikan direktori storage ada (dari volume)
+# 1. Gunakan PORT dari environment (Railway inject ini)
+#    Default ke 8080 jika tidak ada
+# --------------------------------------------------
+PORT=${PORT:-8080}
+
+# Update nginx config dengan port yang benar
+sed -i "s/listen 8080;/listen ${PORT};/g" /etc/nginx/http.d/default.conf
+
+echo ">>> Server akan berjalan di port: $PORT"
+
+# --------------------------------------------------
+# 2. Pastikan direktori storage ada
 # --------------------------------------------------
 mkdir -p /var/www/html/storage/app/public
 mkdir -p /var/www/html/storage/framework/cache/data
@@ -17,32 +28,42 @@ mkdir -p /var/www/html/bootstrap/cache
 mkdir -p /var/www/html/database
 
 # --------------------------------------------------
-# 2. Pastikan file SQLite ada (dari volume /data)
+# 3. Setup file SQLite
 # --------------------------------------------------
-if [ ! -f /data/database.sqlite ]; then
-    echo ">>> Membuat database SQLite baru di /data/database.sqlite..."
-    touch /data/database.sqlite
+# Cek apakah ada volume persistent (Fly.io)
+if [ -d "/data" ]; then
+    echo ">>> Volume /data ditemukan (Fly.io mode)"
+    if [ ! -f /data/database.sqlite ]; then
+        echo ">>> Membuat database SQLite baru di /data/database.sqlite..."
+        touch /data/database.sqlite
+    fi
+    ln -sf /data/database.sqlite /var/www/html/database/database.sqlite
+    DB_PATH="/data/database.sqlite"
+else
+    echo ">>> Menggunakan database SQLite lokal (Railway mode)"
+    if [ ! -f /var/www/html/database/database.sqlite ]; then
+        touch /var/www/html/database/database.sqlite
+    fi
+    DB_PATH="/var/www/html/database/database.sqlite"
 fi
 
-# Symlink atau salin database dari volume ke lokasi Laravel
-ln -sf /data/database.sqlite /var/www/html/database/database.sqlite
-chmod 664 /data/database.sqlite
+chmod 664 "$DB_PATH" 2>/dev/null || true
 
 # --------------------------------------------------
-# 3. Set environment variables dari secrets Fly.io
+# 4. Buat file .env dari environment variables
 # --------------------------------------------------
 cat > /var/www/html/.env << EOF
 APP_NAME=SIMPATI
 APP_ENV=production
 APP_KEY=${APP_KEY}
 APP_DEBUG=false
-APP_URL=${APP_URL:-https://simpati.fly.dev}
+APP_URL=${APP_URL:-https://simpati.up.railway.app}
 
 LOG_CHANNEL=stderr
 LOG_LEVEL=error
 
 DB_CONNECTION=sqlite
-DB_DATABASE=/data/database.sqlite
+DB_DATABASE=${DB_PATH}
 
 SESSION_DRIVER=file
 SESSION_LIFETIME=120
@@ -54,45 +75,44 @@ FILESYSTEM_DISK=local
 
 BROADCAST_CONNECTION=log
 MAIL_MAILER=log
-MAIL_FROM_ADDRESS="noreply@simpati.fly.dev"
+MAIL_FROM_ADDRESS="noreply@simpati.app"
 MAIL_FROM_NAME="SIMPATI"
 EOF
 
 echo ">>> File .env berhasil dibuat."
 
 # --------------------------------------------------
-# 4. Set permissions
+# 5. Set permissions
 # --------------------------------------------------
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-chown www-data:www-data /data/database.sqlite
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 
 # --------------------------------------------------
-# 5. Clear cache lama
+# 6. Clear cache lama
 # --------------------------------------------------
 php artisan config:clear 2>/dev/null || true
 php artisan cache:clear 2>/dev/null || true
 php artisan view:clear 2>/dev/null || true
 
 # --------------------------------------------------
-# 6. Jalankan migrasi database
+# 7. Jalankan migrasi database
 # --------------------------------------------------
 echo ">>> Menjalankan migrasi database..."
 php artisan migrate --force --no-interaction
 echo ">>> Migrasi selesai."
 
 # --------------------------------------------------
-# 7. Cache konfigurasi untuk produksi (lebih cepat)
+# 8. Cache untuk produksi (lebih cepat)
 # --------------------------------------------------
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
 echo ">>> Cache berhasil dibuat."
-echo ">>> SIMPATI siap diakses!"
+echo ">>> SIMPATI siap! Port: $PORT"
 echo "========================================"
 
 # --------------------------------------------------
-# 8. Jalankan Supervisor (Nginx + PHP-FPM)
+# 9. Jalankan Supervisor (Nginx + PHP-FPM)
 # --------------------------------------------------
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
