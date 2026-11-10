@@ -11,21 +11,29 @@ use App\Http\Controllers\Siswa\NotifikasiController;
 use App\Http\Controllers\PeminjamanController; // <-- TAMBAHKAN INI
 use App\Http\Controllers\ProfilController;
 
-// Halaman Utama / Pemilihan Role
+// Halaman Utama / Login Bersama (Siswa & Petugas)
 Route::get('/', function () {
-    return view('auth.role-selection');
+    if (Auth::check()) {
+        $user = Auth::user();
+        return $user->role === 'petugas' 
+            ? redirect()->route('petugas.dashboard')
+            : redirect()->route('siswa.beranda');
+    }
+    return view('auth.login');
 })->name('login');
 
-// Halaman Login (Form)
+Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
+
+// Fallback rute lama agar kompatibel
 Route::get('/login/siswa', function () {
-    return view('auth.login-siswa');
+    return redirect()->route('login');
 })->name('login.siswa');
 
 Route::view('/register/siswa', 'auth.register-siswa')->name('register.siswa');
 Route::post('/register/siswa', [AuthController::class, 'registerSiswa'])->name('register.siswa.proses');
 
 Route::get('/login/petugas', function () {
-    return view('auth.login-petugas');
+    return redirect()->route('login');
 })->name('login.petugas');
 
 // --- RUTE DAFTAR SISWA DI AREA PETUGAS ---
@@ -97,6 +105,17 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
 
 // --- RUTE APPROVAL PETUGAS ---
 Route::middleware(['auth', 'role:petugas'])->group(function () {
+    // Persetujuan Akun Siswa Baru
+    Route::get('/petugas/persetujuan-siswa', [\App\Http\Controllers\Petugas\StudentApprovalController::class, 'index'])
+        ->name('petugas.persetujuan-siswa');
+    Route::put('/petugas/persetujuan-siswa/{id}/approve', [\App\Http\Controllers\Petugas\StudentApprovalController::class, 'approve'])
+        ->name('petugas.persetujuan-siswa.approve');
+    Route::put('/petugas/persetujuan-siswa/{id}/reject', [\App\Http\Controllers\Petugas\StudentApprovalController::class, 'reject'])
+        ->name('petugas.persetujuan-siswa.reject');
+    Route::delete('/petugas/persetujuan-siswa/{id}', [\App\Http\Controllers\Petugas\StudentApprovalController::class, 'destroy'])
+        ->name('petugas.persetujuan-siswa.destroy');
+
+    // Persetujuan Peminjaman Alat
     Route::get('/petugas/persetujuan', [ApprovalController::class, 'index'])->name('petugas.persetujuan');
     Route::put('/petugas/persetujuan/{id}', [ApprovalController::class, 'updateStatus'])->name('petugas.persetujuan.update');
     Route::put('/petugas/perpanjangan/{id}', [ApprovalController::class, 'updatePerpanjangan'])

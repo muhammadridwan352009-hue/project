@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -556,26 +556,21 @@
                     <div class="card-subtitle" style="margin-bottom: 16px;">Inventaris per unit institusi</div>
 
                     <div class="category-grid">
-                        <a href="#" class="category-box">
-                            <span class="icon">💻</span>
-                            <div class="cat-name">Ratus</div>
-                            <div class="cat-count">84 unit</div>
+                        @php
+                            $iconMap = [
+                                'multimedia' => '🎬',
+                                'osis' => '🏢',
+                                'band' => '🎸',
+                                'rohis' => '🕌',
+                            ];
+                        @endphp
+                        @foreach($kategoriList as $cat)
+                        <a href="{{ route('siswa.katalog') }}" class="category-box">
+                            <span class="icon">{{ $iconMap[$cat['slug']] ?? '📦' }}</span>
+                            <div class="cat-name">{{ $cat['nama'] }}</div>
+                            <div class="cat-count">{{ $cat['count'] }} unit</div>
                         </a>
-                        <a href="#" class="category-box">
-                            <span class="icon">📷</span>
-                            <div class="cat-name">Audio</div>
-                            <div class="cat-count">48 unit</div>
-                        </a>
-                        <a href="#" class="category-box">
-                            <span class="icon">🖨️</span>
-                            <div class="cat-name">DLL</div>
-                            <div class="cat-count">32 unit</div>
-                        </a>
-                        <a href="#" class="category-box">
-                            <span class="icon">🎬</span>
-                            <div class="cat-name">Multimedia</div>
-                            <div class="cat-count">41 unit</div>
-                        </a>
+                        @endforeach
                     </div>
                 </div>
 

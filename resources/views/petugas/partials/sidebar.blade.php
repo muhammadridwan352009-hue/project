@@ -555,27 +555,23 @@
                 </span>
                 <span class="nav-text">Inventaris</span>
             </a>
-            <a href="{{ route('petugas.daftar-siswa') }}" class="nav-item {{ ($active ?? '') === 'daftar-siswa' ? 'active' : '' }}" title="Daftar Siswa" data-tooltip="Daftar Siswa">
+            <a href="{{ route('petugas.persetujuan-siswa') }}" class="nav-item {{ ($active ?? '') === 'persetujuan-siswa' ? 'active' : '' }}" title="Persetujuan Akun Siswa" data-tooltip="Persetujuan Akun Siswa{{ !empty($pendingSiswaCount) && $pendingSiswaCount > 0 ? ' (' . $pendingSiswaCount . ')' : '' }}">
                 <span class="nav-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
-                        <line x1="19" y1="8" x2="19" y2="14"></line>
-                        <line x1="22" y1="11" x2="16" y2="11"></line>
+                        <polyline points="16 11 18 13 22 9"></polyline>
                     </svg>
+                    @if(!empty($pendingSiswaCount) && $pendingSiswaCount > 0)
+                        <span class="badge-dot"></span>
+                    @endif
                 </span>
-                <span class="nav-text">Daftar Siswa</span>
+                <span class="nav-text">Persetujuan Akun Siswa</span>
+                @if(!empty($pendingSiswaCount) && $pendingSiswaCount > 0)
+                    <span class="nav-badge">{{ $pendingSiswaCount }}</span>
+                @endif
             </a>
-                <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                    </svg>
-                </span>
-                <span class="nav-text">Inventaris</span>
-            </a>
-            <a href="{{ route('petugas.persetujuan') }}" class="nav-item {{ ($active ?? '') === 'persetujuan' ? 'active' : '' }}" title="Persetujuan" data-tooltip="Persetujuan{{ !empty($menungguCount) && $menungguCount > 0 ? ' (' . $menungguCount . ')' : '' }}">
+            <a href="{{ route('petugas.persetujuan') }}" class="nav-item {{ ($active ?? '') === 'persetujuan' ? 'active' : '' }}" title="Persetujuan Peminjaman" data-tooltip="Persetujuan{{ !empty($menungguCount) && $menungguCount > 0 ? ' (' . $menungguCount . ')' : '' }}">
                 <span class="nav-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>

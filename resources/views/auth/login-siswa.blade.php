@@ -488,8 +488,14 @@
                     <p class="intro-desc">Gunakan akun sekolah untuk mulai meminjam alat praktik.</p>
 
                     @if (session('status'))
-                        <div role="status" style="color:#0f766e; background:#f0fdfa; border:1px solid #ccfbf1; padding:10px 14px; border-radius:8px; font-size:12.5px; margin-bottom:16px;">
+                        <div role="status" style="color:#0f766e; background:#f0fdfa; border:1px solid #ccfbf1; padding:12px 16px; border-radius:10px; font-size:13px; line-height: 1.5; margin-bottom:18px;">
                             {{ session('status') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div role="alert" style="color:#b91c1c; background:#fef2f2; border:1px solid #fecaca; padding:12px 16px; border-radius:10px; font-size:13px; line-height: 1.5; margin-bottom:18px;">
+                            {{ session('error') }}
                         </div>
                     @endif
 
@@ -568,7 +574,10 @@
                         </button>
                     </form>
 
-                    {{-- Link pendaftaran siswa telah dipindahkan ke login petugas --}}
+                    <div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 13px; color: #64748b;">
+                        Belum memiliki akun siswa?
+                        <a href="{{ route('register.siswa') }}" style="color: #00897b; font-weight: 700; text-decoration: none; margin-left: 4px;">Daftar Akun Siswa</a>
+                    </div>
                 </div>
             </div>
         </div>

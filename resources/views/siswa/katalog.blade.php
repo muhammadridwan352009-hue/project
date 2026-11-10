@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -452,8 +452,11 @@
                     <div>
                         <div class="item-title">{{ $alat->nama_alat }}</div>
                         <div class="item-loc">{{ ucfirst($alat->kategori ?? 'multimedia') }}</div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="{{ $alat->deskripsi_tampil }}">
+                            {{ $alat->deskripsi_tampil }}
+                        </div>
                     </div>
-                    <div>
+                    <div style="margin-top: 10px;">
                         <div class="card-meta">
                             <span class="stock-badge ready">{{ $alat->stok ?? 3 }} tersedia</span>
                             <span class="condition">{{ $alat->kondisi ?? 'Kondisi baik' }}</span>

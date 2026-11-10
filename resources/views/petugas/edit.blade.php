@@ -221,6 +221,12 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Deskripsi Barang</label>
+                    <textarea name="deskripsi" rows="3" class="form-control" placeholder="Masukkan deskripsi dan kegunaan barang..." style="resize: vertical; font-family: inherit; line-height: 1.5;">{{ old('deskripsi', $item->deskripsi ?? ($item->alat->deskripsi ?? '')) }}</textarea>
+                    @error('deskripsi') <div class="error-msg">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="form-group">
                     <label>Stok</label>
                     <input type="number" name="stok" value="{{ old('stok', $item->stok) }}" min="0" class="form-control" required>
                     @error('stok') <div class="error-msg">{{ $message }}</div> @enderror

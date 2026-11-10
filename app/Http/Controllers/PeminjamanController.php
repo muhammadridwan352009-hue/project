@@ -36,11 +36,23 @@ class PeminjamanController extends Controller
             ->take(3)
             ->get();
 
+        $kategoriList = \App\Models\Category::all()->map(function ($cat) {
+            $count = Alat::where('is_active', true)
+                ->where('kategori', strtolower($cat->nama))
+                ->count();
+            return [
+                'nama' => $cat->nama,
+                'count' => $count,
+                'slug' => strtolower($cat->nama),
+            ];
+        });
+
         return view('siswa.beranda', compact(
             'siswa',
             'peminjamans',
             'statusCounts',
-            'peminjamanDisetujui'
+            'peminjamanDisetujui',
+            'kategoriList'
         ));
     }
 

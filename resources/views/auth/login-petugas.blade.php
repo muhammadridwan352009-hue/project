@@ -589,12 +589,7 @@
 
                     <div class="warning-box">
                         <span style="font-size: 16px;">⚠️</span>
-                        <span>Belum punya akun petugas? Hubungi tim sarpras sekolah tingkat pusat untuk aktivasi akun.</span>
-                    </div>
-
-                    <div class="register-box" style="margin-top: 20px; text-align: center; font-size: 13px; color: #64748b;">
-                        Belum punya akun?
-                        <a href="{{ route('register.siswa') }}" class="register-link">Daftar sebagai Siswa</a>
+                        <span>Khusus petugas dan pengelola inventaris sekolah. Siswa silakan masuk atau mendaftar melalui halaman siswa.</span>
                     </div>
                 </div>
             </div>

@@ -477,7 +477,7 @@
         <!-- Panel Kanan: Form Pendaftaran Siswa -->
         <section class="panel-right">
             <div class="form-wrapper">
-                <a href="{{ route('login.siswa') }}" class="back-link">‹ Kembali ke login siswa</a>
+                <a href="{{ route('login') }}" class="back-link">‹ Kembali ke login</a>
 
                 <div class="card-form">
                     <h2>Daftar sebagai Siswa</h2>
@@ -554,7 +554,7 @@
 
                     <p class="login-note">
                         Sudah punya akun?
-                        <a href="{{ route('login.siswa') }}" class="login-link">Masuk di sini</a>
+                        <a href="{{ route('login') }}" class="login-link">Masuk di sini</a>
                     </p>
                 </div>
             </div>

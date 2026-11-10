@@ -466,10 +466,6 @@
             color: #64748b;
             margin-bottom: 12px;
         }
-        .photo-reference-label {
-            font-size: 11px;
-            color: #64748b;
-        }
         .card-meta {
             display: flex;
             justify-content: space-between;
@@ -660,9 +656,6 @@
             </div>
 
             <div class="catalog-grid">
-                @php
-                    $printerTerdaftar = false;
-                @endphp
                 @foreach($alats as $alat)
                     @php
                         $gambarAlat = null;
@@ -681,9 +674,6 @@
                                 $gambarAlat = $namaFile;
                                 break;
                             }
-                        }
-                        if ($gambarAlat === 'printer.jpg') {
-                            $printerTerdaftar = true;
                         }
                     @endphp
 
@@ -718,20 +708,6 @@
                         </div>
                     </div>
                 @endforeach
-                @unless($printerTerdaftar)
-                    <div class="item-card">
-                        <div class="card-img-wrapper">
-                            <img src="{{ asset('printer.jpg') }}" alt="Foto printer Epson" loading="lazy">
-                        </div>
-                        <div class="card-body">
-                            <div>
-                                <div class="item-title">Printer Epson</div>
-                                <div class="photo-reference-label">Foto referensi • belum terdaftar di inventaris</div>
-                            </div>
-                            <a href="{{ route('petugas.inventaris.index') }}" class="btn-action">Kelola inventaris</a>
-                        </div>
-                    </div>
-                @endunless
             </div>
         </div>
 

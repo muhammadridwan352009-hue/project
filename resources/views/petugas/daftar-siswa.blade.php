@@ -138,11 +138,18 @@
 </head>
 
 <body>
-    @include('petugas.partials.sidebar', ['active' => 'daftar-siswa'])
+    @include('petugas.partials.sidebar', ['active' => 'persetujuan-siswa'])
 
     <main>
-        <h1 class="page-title">Daftar Siswa Baru</h1>
-        <p class="page-sub">Buat akun siswa baru. Setelah akun dibuat, siswa dapat langsung masuk menggunakan NIS dan kata sandi yang Anda tentukan.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h1 class="page-title">Tambah Akun Siswa Resmi</h1>
+                <p class="page-sub">Buat akun siswa langsung dari ruang petugas dengan status otomatis aktif/disetujui.</p>
+            </div>
+            <a href="{{ route('petugas.persetujuan-siswa') }}" style="color: #64748b; font-size: 13px; font-weight: 600; text-decoration: none; padding: 8px 14px; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px;">
+                ‹ Kembali ke Persetujuan Akun
+            </a>
+        </div>
 
         @if (session('status'))
         <div class="status-msg">{{ session('status') }}</div>

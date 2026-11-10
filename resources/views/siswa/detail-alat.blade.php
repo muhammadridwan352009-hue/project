@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -451,8 +451,9 @@
                                 ● {{ ($alat->stok ?? 1) > 0 ? 'Tersedia' : 'Habis' }}
                             </div>
                             <div class="item-title-large">{{ $alat->nama_alat }}</div>
-                            <div class="item-description">
-                                {{ $alat->deskripsi_tampil }}
+                            <div class="item-description-box" style="margin-bottom: 20px;">
+                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #00897b; margin-bottom: 4px;">Deskripsi:</div>
+                                <div class="item-description" style="margin-bottom: 0; font-size: 13px; color: #475569; line-height: 1.6; white-space: pre-line;">"{{ $alat->deskripsi_tampil }}"</div>
                             </div>
                         </div>
 

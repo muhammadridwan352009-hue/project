@@ -40,6 +40,7 @@ class ItemController extends Controller
                 Rule::unique('alats', 'kode_alat'),
             ],
             'nama_barang' => 'required|string|max:255',
+            'deskripsi'   => 'nullable|string',
             'stok'        => 'required|integer|min:0',
             'kondisi'     => 'required|in:baik,rusak_ringan,rusak_berat',
             'foto'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -52,7 +53,7 @@ class ItemController extends Controller
             'foto.max'             => 'Ukuran foto maksimal 2 MB.',
         ]);
 
-        $data = $request->only(['category_id', 'kode_barang', 'nama_barang', 'stok', 'kondisi']);
+        $data = $request->only(['category_id', 'kode_barang', 'nama_barang', 'deskripsi', 'stok', 'kondisi']);
 
         // Simpan foto barang ke storage/public/foto-barang
         if ($request->hasFile('foto')) {
@@ -92,12 +93,13 @@ class ItemController extends Controller
                 Rule::unique('alats', 'kode_alat')->ignore($item->alat_id),
             ],
             'nama_barang' => 'required|string|max:255',
+            'deskripsi'   => 'nullable|string',
             'stok'        => 'required|integer|min:0',
             'kondisi'     => 'required|in:baik,rusak_ringan,rusak_berat',
             'foto'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $data = $request->only(['category_id', 'kode_barang', 'nama_barang', 'stok', 'kondisi']);
+        $data = $request->only(['category_id', 'kode_barang', 'nama_barang', 'deskripsi', 'stok', 'kondisi']);
 
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('foto-barang', 'public');
@@ -144,6 +146,7 @@ class ItemController extends Controller
         $alat->fill([
             'kode_alat' => $item->kode_barang,
             'nama_alat' => $item->nama_barang,
+            'deskripsi' => $item->deskripsi,
             'kategori' => strtolower($category->nama),
             'stok' => $item->stok,
             'kondisi' => ucfirst(str_replace('_', ' ', $item->kondisi)),
