@@ -1,0 +1,52 @@
+# ============================================================
+# .dockerignore — File yang TIDAK perlu masuk ke Docker image
+# ============================================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Node
+node_modules/
+npm-debug.log
+
+# Laravel local env & database
+.env
+.env.backup
+.env.production
+database/database.sqlite
+database/database.sqlite-journal
+database/database.sqlite-wal
+database/database.sqlite-shm
+
+# Storage (akan dibuat ulang di container)
+storage/app/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/
+bootstrap/cache/
+
+# Tests
+tests/
+phpunit.xml
+.phpunit.cache/
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Readme & docs
+README.md
+DEPLOYMENT.md
+
+# Docker files (sudah ada di build context)
+# docker/  <-- jangan diabaikan, dipakai Dockerfile
+
+# Fly config (tidak perlu ada di dalam image)
+fly.toml

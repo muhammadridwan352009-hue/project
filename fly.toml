@@ -1,0 +1,55 @@
+# ============================================================
+# fly.toml — Konfigurasi Fly.io untuk SIMPATI
+# Laravel 12 + SQLite + Persistent Volume
+# ============================================================
+
+app = "simpati-smkn5"
+primary_region = "sin"       # Singapore — terdekat dari Indonesia
+
+[build]
+  dockerfile = "Dockerfile"
+
+# ============================================================
+# HTTP Service (port 8080 → public)
+# ============================================================
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.http_checks]]
+    interval = "10s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/"
+    protocol = "http"
+
+# ============================================================
+# Persistent Volume untuk SQLite database
+# Data TIDAK akan hilang saat redeploy!
+# ============================================================
+[[mounts]]
+  source = "simpati_db"
+  destination = "/data"
+
+# ============================================================
+# VM Resources (Free tier)
+# ============================================================
+[vm]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
