@@ -17,7 +17,7 @@ sed -i "s/listen 8080;/listen ${PORT};/g" /etc/nginx/http.d/default.conf
 echo ">>> Server akan berjalan di port: $PORT"
 
 # --------------------------------------------------
-# 2. Pastikan direktori storage ada
+# 2. Pastikan direktori storage & runtime ada
 # --------------------------------------------------
 mkdir -p /var/www/html/storage/app/public
 mkdir -p /var/www/html/storage/framework/cache/data
@@ -26,6 +26,8 @@ mkdir -p /var/www/html/storage/framework/views
 mkdir -p /var/www/html/storage/logs
 mkdir -p /var/www/html/bootstrap/cache
 mkdir -p /var/www/html/database
+mkdir -p /var/log/supervisor
+mkdir -p /run/nginx /var/run /var/log/nginx
 
 # --------------------------------------------------
 # 3. Setup file SQLite

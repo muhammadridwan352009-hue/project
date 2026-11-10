@@ -57,7 +57,9 @@ RUN mkdir -p \
     storage/framework/sessions \
     storage/framework/views \
     storage/logs \
-    database
+    database \
+    /var/log/supervisor \
+    /run/nginx
 
 # Build assets Vite (CSS/JS)
 RUN npm run build
