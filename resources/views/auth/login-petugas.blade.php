@@ -592,15 +592,10 @@
                         <span>Belum punya akun petugas? Hubungi tim sarpras sekolah tingkat pusat untuk aktivasi akun.</span>
                     </div>
 
-                    <div class="register-box" style="margin-top: 18px; text-align: center; font-size: 13px; color: #64748b;">
+                    <div class="register-box" style="margin-top: 20px; text-align: center; font-size: 13px; color: #64748b;">
                         Belum punya akun?
                         <a href="{{ route('register.siswa') }}" class="register-link">Daftar sebagai Siswa</a>
                     </div>
-
-                    <p style="margin: 14px 0 0; text-align: center; font-size: 12.5px; color: #64748b;">
-                        Bukan petugas?
-                        <a href="{{ route('login.siswa') }}" class="register-link">Masuk sebagai Siswa</a>
-                    </p>
                 </div>
             </div>
         </div>
