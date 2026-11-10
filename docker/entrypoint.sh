@@ -103,11 +103,19 @@ php artisan cache:clear 2>/dev/null || true
 php artisan view:clear 2>/dev/null || true
 
 # --------------------------------------------------
-# 7. Jalankan migrasi database
+# 7. Jalankan migrasi & seeder database otomatis
 # --------------------------------------------------
 echo ">>> Menjalankan migrasi database..."
 php artisan migrate --force --no-interaction || echo ">>> Peringatan: migrasi gagal atau sudah up-to-date."
 echo ">>> Migrasi selesai."
+
+# Cek apakah user petugas sudah ada di database, jika belum isi seeder default
+USER_COUNT=$(php -r "require 'vendor/autoload.php'; \$app = require_once 'bootstrap/app.php'; \$kernel = \$app->make(Illuminate\Contracts\Console\Kernel::class); \$kernel->bootstrap(); echo App\Models\User::count();" 2>/dev/null || echo "0")
+if [ "$USER_COUNT" = "0" ]; then
+    echo ">>> Database masih kosong, menjalankan seeder default (Petugas & Siswa)..."
+    php artisan db:seed --force || echo ">>> Gagal seed data awal."
+    echo ">>> Akun petugas & siswa default siap digunakan."
+fi
 
 # --------------------------------------------------
 # 8. Cache untuk produksi
