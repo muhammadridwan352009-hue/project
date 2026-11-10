@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Petugas;
 use App\Http\Controllers\Controller;
 use App\Models\Alat;
 use App\Models\Peminjaman;
+use App\Models\User;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -43,11 +44,16 @@ class DashboardController extends Controller
             ->orderBy('nama_alat')
             ->get();
 
+        $pendingSiswaCount = User::where('role', 'siswa')
+            ->where('status_akun', 'pending')
+            ->count();
+
         return view('petugas.dashboard', [
             'totalStok' => Alat::sum('stok'),
             'alats' => $alats,
             'dipinjamCount' => $statusCounts->get('dipinjam', 0),
             'menungguCount' => $statusCounts->get('menunggu', 0),
+            'pendingSiswaCount' => $pendingSiswaCount,
             'terlambatCount' => $lateCount,
             'peminjamans' => $peminjamans,
             'latePeminjamans' => $latePeminjamans,

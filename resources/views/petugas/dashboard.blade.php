@@ -177,7 +177,7 @@
         /* Stats Cards Bar */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 16px;
             margin-bottom: 28px;
         }
@@ -188,6 +188,19 @@
             padding: 16px 20px;
             display: flex;
             align-items: center;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        a.stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            border-color: #cbd5e1;
+        }
+        .stat-icon.info { background-color: #f0fdf4; border-color: #bbf7d0; color: #16a34a; }
+        .stat-icon.primary { background-color: #ecfeff; border-color: #a5f3fc; color: #0891b2; }
             gap: 16px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
@@ -627,11 +640,26 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 </div>
                 <div>
-                    <div class="stat-label">Perlu persetujuan</div>
+                    <div class="stat-label">Peminjaman</div>
                     <div class="stat-value">{{ $menungguCount }}</div>
-                    <div class="stat-sub" style="color:#d97706;">Pengajuan siswa menunggu</div>
+                    <div class="stat-sub" style="color:#d97706;">Pengajuan alat menunggu</div>
                 </div>
             </div>
+
+            <a href="{{ route('petugas.persetujuan-siswa') }}" class="stat-card" title="Buka Halaman Persetujuan Akun Siswa">
+                <div class="stat-icon primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <polyline points="16 11 18 13 22 9"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-label">Persetujuan Akun</div>
+                    <div class="stat-value" style="color: {{ ($pendingSiswaCount ?? 0) > 0 ? '#0284c7' : '#071b26' }};">{{ $pendingSiswaCount ?? 0 }}</div>
+                    <div class="stat-sub" style="color: {{ ($pendingSiswaCount ?? 0) > 0 ? '#0284c7' : '#94a3b8' }};">Akun siswa pending →</div>
+                </div>
+            </a>
 
             <div class="stat-card">
                 <div class="stat-icon danger">
