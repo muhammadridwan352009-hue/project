@@ -358,20 +358,107 @@
         @media (max-width: 980px) {
             .container {
                 flex-direction: column;
+                min-height: 100vh;
             }
             .panel-left {
                 width: 100%;
-                padding: 40px 28px;
+                padding: 36px 28px;
             }
             .feature-list {
                 display: none;
             }
             .panel-right {
                 width: 100%;
-                padding: 40px 20px;
+                padding: 36px 24px;
             }
             .panel-left h1 {
                 font-size: 26px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .panel-left {
+                padding: 24px 20px 20px;
+            }
+            .brand-header {
+                gap: 12px;
+            }
+            .brand-logo-card {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                padding: 4px;
+            }
+            .brand-meta h2 {
+                font-size: 19px;
+                letter-spacing: 1px;
+            }
+            .brand-meta span {
+                font-size: 10px;
+                letter-spacing: 0.6px;
+            }
+            .panel-left-content {
+                margin: 16px 0 12px;
+            }
+            .badge-pill {
+                font-size: 11px;
+                padding: 4px 10px;
+                margin-bottom: 8px;
+            }
+            .panel-left h1 {
+                font-size: 21px;
+                line-height: 1.3;
+                margin-bottom: 8px;
+            }
+            .panel-left-desc {
+                font-size: 12.5px;
+                line-height: 1.5;
+                color: #cbd5e1;
+            }
+            .footer-left {
+                margin-top: 14px;
+                padding-top: 12px;
+                font-size: 11px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .panel-right {
+                padding: 24px 16px 36px;
+                justify-content: flex-start;
+            }
+            .role-wrapper {
+                max-width: 100%;
+            }
+            .role-header h2 {
+                font-size: 20px;
+                margin-bottom: 6px;
+            }
+            .role-header p {
+                font-size: 12.5px;
+                margin-bottom: 18px;
+            }
+            .role-card {
+                padding: 14px 16px;
+                border-radius: 14px;
+                margin-bottom: 12px;
+            }
+            .role-info h3 {
+                font-size: 15px;
+            }
+            .role-info span {
+                font-size: 12px;
+                line-height: 1.4;
+            }
+            .role-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 18px;
+                border-radius: 12px;
+                margin-left: 10px;
+            }
+            .role-arrow {
+                font-size: 16px;
+                margin-left: 6px;
             }
         }
     </style>

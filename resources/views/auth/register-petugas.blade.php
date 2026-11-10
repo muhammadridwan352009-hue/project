@@ -352,20 +352,57 @@
         @media (max-width: 980px) {
             .container {
                 flex-direction: column;
+                min-height: 100vh;
             }
             .panel-left {
                 width: 100%;
-                padding: 40px 28px;
+                padding: 36px 28px;
             }
             .feature-list {
                 display: none;
             }
             .panel-right {
                 width: 100%;
-                padding: 40px 20px;
+                padding: 36px 24px;
             }
             .panel-left h1 {
                 font-size: 26px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .panel-left {
+                padding: 24px 20px 20px;
+            }
+            .brand-header {
+                gap: 12px;
+            }
+            .brand-logo-card {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                padding: 4px;
+            }
+            .brand-meta h2 {
+                font-size: 19px;
+                letter-spacing: 1px;
+            }
+            .brand-meta span {
+                font-size: 10px;
+            }
+            .panel-left-content,
+            .footer-left {
+                display: none;
+            }
+            .panel-right {
+                padding: 20px 16px 36px;
+            }
+            .card-form {
+                padding: 24px 18px;
+                border-radius: 14px;
+            }
+            .card-form h2 {
+                font-size: 20px;
             }
         }
     </style>
