@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -529,6 +529,9 @@
                         <label>
                             <span class="required">*</span> Tanggal Peminjaman
                         </label>
+                        <p style="font-size:12px;color:#64748b;margin:0 0 8px;">
+                            Pilih tanggal mulai peminjaman alat.
+                        </p>
                         <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" required
                             value="{{ old('tanggal_pinjam', date('Y-m-d')) }}"
                             min="{{ date('Y-m-d') }}"
@@ -544,7 +547,7 @@
                             <span class="required">*</span> Tanggal Pengembalian
                         </label>
                         <p style="font-size:12px;color:#64748b;margin:0 0 8px;">
-                            Lama peminjaman maksimal 7 hari. Jika masih diperlukan, ajukan perpanjangan 7 hari melalui halaman Peminjaman Saya.
+                            Maksimal 7 hari (dapat diperpanjang kemudian).
                         </p>
                         <input type="date" name="tanggal_kembali" id="tanggal_kembali" required
                             value="{{ old('tanggal_kembali') }}"
@@ -602,7 +605,7 @@
                 <!-- Info Penanggung Jawab -->
                 <div class="pj-card">
                     <div class="pj-card-header">
-                        <span class="icon"></span>
+                        <span class="icon">👤</span>
                         <span>Penanggung Jawab</span>
                     </div>
                     <div class="pj-info-grid">

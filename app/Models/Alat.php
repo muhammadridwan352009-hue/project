@@ -37,7 +37,6 @@ class Alat extends Model
         }
 
         $pemetaanGambar = [
-            'printer' => 'printer.jpg',
             'projector' => 'proyektor.jpg',
             'proyektor' => 'proyektor.jpg',
             'sajadah' => 'sajadah.jpg',

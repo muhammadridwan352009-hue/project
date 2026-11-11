@@ -557,18 +557,19 @@
             </a>
             <a href="{{ route('petugas.persetujuan-siswa') }}" class="nav-item {{ ($active ?? '') === 'persetujuan-siswa' ? 'active' : '' }}" title="Persetujuan Akun Siswa" data-tooltip="Persetujuan Akun Siswa{{ !empty($pendingSiswaCount) && $pendingSiswaCount > 0 ? ' (' . $pendingSiswaCount . ')' : '' }}">
                 <span class="nav-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Ikon Profil Siswa dengan Centang Verifikasi -->
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
-                        <polyline points="16 11 18 13 22 9"></polyline>
+                        <path d="M16 11l2 2 4-4" stroke-width="2.5" stroke="#2dd4bf"></path>
                     </svg>
                     @if(!empty($pendingSiswaCount) && $pendingSiswaCount > 0)
                         <span class="badge-dot"></span>
                     @endif
                 </span>
-                <span class="nav-text">Persetujuan Akun Siswa</span>
+                <span class="nav-text">Persetujuan Akun</span>
                 @if(!empty($pendingSiswaCount) && $pendingSiswaCount > 0)
-                    <span class="nav-badge">{{ $pendingSiswaCount }}</span>
+                    <span class="nav-badge" title="{{ $pendingSiswaCount }} akun menunggu persetujuan">{{ $pendingSiswaCount }}</span>
                 @endif
             </a>
             <a href="{{ route('petugas.persetujuan') }}" class="nav-item {{ ($active ?? '') === 'persetujuan' ? 'active' : '' }}" title="Persetujuan Peminjaman" data-tooltip="Persetujuan{{ !empty($menungguCount) && $menungguCount > 0 ? ' (' . $menungguCount . ')' : '' }}">

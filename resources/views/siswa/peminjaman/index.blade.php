@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -190,10 +190,12 @@
             border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 20px 24px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
             transition: 0.2s;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
@@ -203,6 +205,7 @@
         }
         .borrowing-info {
             flex: 1;
+            min-width: 240px;
         }
         .borrowing-meta {
             display: flex;
@@ -233,13 +236,14 @@
         .badge-category.osis { background: #dbeafe; color: #0284c7; }
 
         .borrowing-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 4px;
+            text-transform: capitalize;
         }
         .borrowing-date {
-            font-size: 12px;
+            font-size: 12.5px;
             color: #64748b;
         }
         .borrowing-date strong {
@@ -279,6 +283,62 @@
             color: #dc2626;
         }
 
+        .borrowing-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .extension-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px 14px;
+            border-radius: 10px;
+        }
+        .extension-action form {
+            margin: 0;
+        }
+        .extension-action button {
+            margin: 0;
+            padding: 7px 14px;
+            border: 0;
+            border-radius: 8px;
+            background: #00897b;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            border: none;
+        }
+        .btn-primary {
+            background: #00897b;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #00796b;
+        }
+
         /* Empty State */
         .empty-state {
             background: #fff;
@@ -310,28 +370,6 @@
             margin-bottom: 24px;
         }
 
-        /* Buttons */
-        .btn {
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-            border: none;
-        }
-        .btn-primary {
-            background: #00897b;
-            color: #fff;
-        }
-        .btn-primary:hover {
-            background: #00796b;
-        }
-
         /* Alert */
         .alert-success {
             background: #d1fae5;
@@ -355,21 +393,6 @@
             font-size: 13px;
             font-weight: 600;
             margin-bottom: 20px;
-        }
-        .extension-action {
-            margin-top: 12px;
-            font-size: 12px;
-            color: #64748b;
-        }
-        .extension-action button {
-            margin-top: 8px;
-            padding: 8px 12px;
-            border: 0;
-            border-radius: 8px;
-            background: #00897b;
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
         }
 
         /* Filter Tabs */
@@ -570,7 +593,7 @@
                         {{ $peminjaman->tanggal_kembali->format('d M Y') }}
                     </div>
                 </div>
-                <div>
+                <div class="borrowing-actions">
                     <span class="status-badge {{ $peminjaman->status }}">
                         @if($peminjaman->status == 'menunggu')
                              Menunggu
@@ -584,23 +607,24 @@
                             ✕ Ditolak
                         @endif
                     </span>
+
+                    @php
+                        $perpanjanganMenunggu = $peminjaman->perpanjangans->contains('status', 'menunggu');
+                    @endphp
+                    @if(in_array($peminjaman->status, ['disetujui', 'dipinjam'], true))
+                        <div class="extension-action">
+                            @if($perpanjanganMenunggu)
+                                <span>Permintaan perpanjangan sedang menunggu persetujuan petugas.</span>
+                            @elseif($peminjaman->tanggal_kembali->gte(today()))
+                                <span>Perlu tambahan waktu? Perpanjangan menambah masa pinjam 7 hari.</span>
+                                <form action="{{ route('siswa.peminjaman.perpanjangan', $peminjaman->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit">Ajukan perpanjangan 7 hari</button>
+                                </form>
+                            @endif
+                        </div>
+                    @endif
                 </div>
-                @php
-                    $perpanjanganMenunggu = $peminjaman->perpanjangans->contains('status', 'menunggu');
-                @endphp
-                @if(in_array($peminjaman->status, ['disetujui', 'dipinjam'], true))
-                    <div class="extension-action">
-                        @if($perpanjanganMenunggu)
-                            Permintaan perpanjangan sedang menunggu persetujuan petugas.
-                        @elseif($peminjaman->tanggal_kembali->gte(today()))
-                            Perlu tambahan waktu? Perpanjangan menambah masa pinjam 7 hari.
-                            <form action="{{ route('siswa.peminjaman.perpanjangan', $peminjaman->id) }}" method="POST">
-                                @csrf
-                                <button type="submit">Ajukan perpanjangan 7 hari</button>
-                            </form>
-                        @endif
-                    </div>
-                @endif
             </div>
             @endforeach
         @else

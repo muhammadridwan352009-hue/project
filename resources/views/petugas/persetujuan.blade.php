@@ -381,11 +381,21 @@
             </div>
         </header>
 
-        <div class="breadcrumb">Dashboard / <strong>Persetujuan</strong></div>
+        <div class="breadcrumb">Dashboard / <strong>Persetujuan Peminjaman</strong></div>
 
-        <div class="title-section">
-            <h2>Verifikasi &amp; persetujuan</h2>
-            <p>Tinjau pengajuan peminjaman alat dari siswa dan organisasi.</p>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+            <div class="title-section" style="margin-bottom: 0;">
+                <h2>Verifikasi &amp; persetujuan</h2>
+                <p>Tinjau pengajuan peminjaman alat dari siswa dan organisasi.</p>
+            </div>
+            <a href="{{ route('petugas.persetujuan-siswa') }}" style="background: linear-gradient(135deg, #00897b 0%, #00695c 100%); color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0, 137, 123, 0.25);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <polyline points="16 11 18 13 22 9"></polyline>
+                </svg>
+                <span>Persetujuan Akun Siswa &rarr;</span>
+            </a>
         </div>
 
         <!-- Notifikasi -->

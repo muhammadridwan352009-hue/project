@@ -231,9 +231,10 @@
             line-height: 1;
         }
         .stat-sub {
-            font-size: 10px;
+            font-size: 11px;
             color: #94a3b8;
             margin-top: 4px;
+            white-space: nowrap;
         }
 
         /* Layout Grid Konten */
@@ -286,8 +287,8 @@
         .req-user {
             width: 140px;
         }
-        .req-user strong { font-size: 13px; color: #1e293b; display: block; }
-        .req-user span { font-size: 10px; color: #94a3b8; }
+        .req-user strong { font-size: 13px; color: #1e293b; display: block; word-break: break-word; text-transform: capitalize; }
+        .req-user span { font-size: 11px; color: #94a3b8; }
 
         .req-item-info {
             flex: 1;
@@ -399,7 +400,7 @@
         .catalog-section { margin-top: 4px; }
         .catalog-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
             gap: 20px;
         }
         .item-card {
@@ -469,10 +470,11 @@
             justify-content: space-between;
         }
         .item-title {
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 700;
             color: #1e293b;
             margin-bottom: 4px;
+            text-transform: capitalize;
         }
         .item-loc {
             font-size: 11px;
@@ -657,7 +659,9 @@
                 <div>
                     <div class="stat-label">Persetujuan Akun</div>
                     <div class="stat-value" style="color: {{ ($pendingSiswaCount ?? 0) > 0 ? '#0284c7' : '#071b26' }};">{{ $pendingSiswaCount ?? 0 }}</div>
-                    <div class="stat-sub" style="color: {{ ($pendingSiswaCount ?? 0) > 0 ? '#0284c7' : '#94a3b8' }};">Akun siswa pending →</div>
+                    <div class="stat-sub" style="color: {{ ($pendingSiswaCount ?? 0) > 0 ? '#0284c7' : '#94a3b8' }};">
+                        {{ ($pendingSiswaCount ?? 0) > 0 ? $pendingSiswaCount . ' akun siswa pending →' : 'Tidak ada antrean' }}
+                    </div>
                 </div>
             </a>
 
@@ -688,7 +692,6 @@
                     @php
                         $gambarAlat = null;
                         $pemetaanGambar = [
-                            'printer' => 'printer.jpg',
                             'projector' => 'proyektor.jpg',
                             'proyektor' => 'proyektor.jpg',
                             'sajadah' => 'sajadah.jpg',
