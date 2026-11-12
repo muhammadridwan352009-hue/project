@@ -95,6 +95,13 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Stok alat tidak tersedia.');
         }
 
+        // Kategori yang dipilih siswa harus sesuai dengan kategori alat yang dipinjam.
+        if (strtolower($alat->kategori ?? '') !== strtolower($data['kategori'])) {
+            throw ValidationException::withMessages([
+                'kategori' => 'Kategori yang dipilih tidak sesuai dengan kategori alat (' . ucfirst($alat->kategori) . ').',
+            ]);
+        }
+
         Peminjaman::create([
             'user_id'           => Auth::id(),
             'alat_id'           => $data['alat_id'],
@@ -109,6 +116,44 @@ class PeminjamanController extends Controller
 
         return redirect()->route('siswa.peminjaman.index')
             ->with('success', 'Peminjaman berhasil diajukan! Menunggu persetujuan petugas.');
+    }
+
+    public function ajukanPengembalian($id)
+    {
+        DB::transaction(function () use ($id) {
+            $peminjaman = Peminjaman::query()
+                ->where('user_id', Auth::id())
+                ->lockForUpdate()
+                ->findOrFail($id);
+
+            // Siswa tidak boleh mengajukan jika status bukan disetujui / dipinjam
+            if (!in_array($peminjaman->status, ['disetujui', 'dipinjam'], true)) {
+                if ($peminjaman->status === 'menunggu_konfirmasi') {
+                    throw ValidationException::withMessages([
+                        'pengembalian' => 'Pengajuan pengembalian untuk alat ini sedang menunggu konfirmasi petugas.',
+                    ]);
+                }
+
+                if ($peminjaman->status === 'dikembalikan') {
+                    throw ValidationException::withMessages([
+                        'pengembalian' => 'Alat ini sudah dikembalikan.',
+                    ]);
+                }
+
+                throw ValidationException::withMessages([
+                    'pengembalian' => 'Pengajuan pengembalian hanya dapat dilakukan untuk alat yang sedang dipinjam atau telah disetujui.',
+                ]);
+            }
+
+            // Update status menjadi menunggu_konfirmasi
+            $peminjaman->update([
+                'status' => 'menunggu_konfirmasi',
+                'tanggal_pengajuan_kembali' => now(),
+            ]);
+        });
+
+        return redirect()->route('siswa.peminjaman.index')
+            ->with('success', 'Pengajuan pengembalian alat berhasil dikirim! Menunggu konfirmasi dan pemeriksaan petugas.');
     }
 
     public function requestPerpanjangan($id)
@@ -164,43 +209,48 @@ class PeminjamanController extends Controller
     }
 
     /**
-     * Halaman Form Laporan Kondisi Alat
+     * Halaman Form & Riwayat Laporan Kondisi Alat Siswa
      */
     public function laporanKondisi(Request $request)
     {
+        $userId = $request->user()->id;
+
+        // Ambil peminjaman siswa untuk pilihan alat (yang pernah / sedang disetujui, dipinjam, menunggu_konfirmasi, dikembalikan)
         $peminjamans = Peminjaman::query()
-            ->where('user_id', $request->user()->id)
-            ->where(function ($query) {
-                $query->whereIn('status', ['disetujui', 'dipinjam', 'dikembalikan'])
-                    ->orWhereHas('laporanKondisi');
-            })
-            ->with(['alat', 'laporanKondisi'])
+            ->where('user_id', $userId)
+            ->whereIn('status', ['disetujui', 'dipinjam', 'menunggu_konfirmasi', 'dikembalikan'])
+            ->with('alat')
             ->latest()
             ->get();
 
-        $peminjaman = $peminjamans->firstWhere('id', (int) $request->query('peminjaman_id'))
-            ?? $peminjamans->first(fn (Peminjaman $item) => $item->laporanKondisi === null)
-            ?? $peminjamans->first();
+        // Ambil riwayat laporan kondisi alat yang pernah dikirim oleh siswa ini
+        $riwayatLaporan = LaporanKondisiAlat::query()
+            ->where(function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                    ->orWhereHas('peminjaman', function ($q) use ($userId) {
+                        $q->where('user_id', $userId);
+                    });
+            })
+            ->with(['alat', 'peminjaman'])
+            ->latest()
+            ->get();
 
         return view('siswa.laporan-kondisi', [
-            'peminjaman'  => $peminjaman,
-            'peminjamans' => $peminjamans,
-            'laporan'     => $peminjaman?->laporanKondisi,
+            'peminjamans'    => $peminjamans,
+            'riwayatLaporan' => $riwayatLaporan,
         ]);
     }
 
     /**
-     * Simpan Laporan Kondisi Alat
+     * Simpan Laporan Kondisi Alat dari Siswa
      */
     public function storeLaporanKondisi(Request $request)
     {
         $data = $request->validate([
             'peminjaman_id'       => 'required|exists:peminjamans,id',
-            'lokasi_kegiatan'     => 'required|string|max:255',
-            'tanggal_pengembalian' => 'nullable|date',
-            'kondisi_terima'      => 'required|in:baik,rusak_ringan,rusak_berat,belum_dipakai',
-            'deskripsi_kerusakan' => 'required|string|max:1000',
-            'kirim_dengan_foto'   => 'nullable|boolean',
+            'kondisi_terima'      => 'required|in:rusak_ringan,rusak_berat,tidak_berfungsi,kehilangan',
+            'deskripsi_kerusakan' => 'required|string|max:1500',
+            'foto'                => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $peminjaman = Peminjaman::query()
@@ -208,28 +258,28 @@ class PeminjamanController extends Controller
             ->with('alat')
             ->findOrFail($data['peminjaman_id']);
 
-        $laporanSebelumnya = LaporanKondisiAlat::where('peminjaman_id', $peminjaman->id)->exists();
-        if (!$laporanSebelumnya && !in_array($peminjaman->status, ['disetujui', 'dipinjam', 'dikembalikan'], true)) {
-            abort(403, 'Laporan hanya dapat dibuat untuk peminjaman yang sudah disetujui atau selesai.');
+        $fotoPath = null;
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+            $fotoPath = $request->file('foto')->store('laporan-kondisi', 'public');
         }
 
-        LaporanKondisiAlat::updateOrCreate(
-            ['peminjaman_id' => $peminjaman->id],
-            [
-                'nama_peminjam' => $request->user()->name,
-                'kode_inventaris' => $peminjaman->alat->kode_alat,
-                'kategori' => $peminjaman->kategori,
-                'lokasi_kegiatan' => $data['lokasi_kegiatan'],
-                'tanggal_pengembalian' => $data['tanggal_pengembalian'] ?? null,
-                'kondisi_terima' => $data['kondisi_terima'],
-                'deskripsi_kerusakan' => $data['deskripsi_kerusakan'],
-                'kirim_dengan_foto' => $request->boolean('kirim_dengan_foto'),
-            ]
-        );
+        LaporanKondisiAlat::create([
+            'user_id'             => $request->user()->id,
+            'peminjaman_id'       => $peminjaman->id,
+            'alat_id'             => $peminjaman->alat_id,
+            'nama_peminjam'       => $request->user()->name,
+            'kode_inventaris'     => $peminjaman->alat?->kode_alat ?? 'KODE-ALAT',
+            'kategori'            => $peminjaman->kategori ?? $peminjaman->alat?->kategori ?? '-',
+            'lokasi_kegiatan'     => $peminjaman->lokasi_penggunaan ?? '-',
+            'tanggal_pengembalian'=> $peminjaman->tanggal_kembali,
+            'kondisi_terima'      => $data['kondisi_terima'],
+            'deskripsi_kerusakan' => $data['deskripsi_kerusakan'],
+            'kirim_dengan_foto'   => (bool) $fotoPath,
+            'foto'                => $fotoPath,
+            'status'              => 'menunggu',
+        ]);
 
-        return redirect()->route('siswa.laporan-kondisi', ['peminjaman_id' => $peminjaman->id])
-            ->with('success', $laporanSebelumnya
-                ? 'Laporan kondisi alat berhasil diperbarui.'
-                : 'Laporan kondisi alat berhasil dikirim! Terima kasih.');
+        return redirect()->route('siswa.laporan-kondisi')
+            ->with('success', 'Laporan kondisi alat berhasil dikirim! Status saat ini: Menunggu konfirmasi/tanggapan dari petugas.');
     }
 }

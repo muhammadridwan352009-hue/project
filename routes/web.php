@@ -63,6 +63,8 @@ Route::middleware(['auth', 'role:siswa'])->prefix('siswa')->name('siswa.')->grou
 
     // 3. Proses simpan data peminjaman
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+    Route::post('/peminjaman/{id}/pengembalian', [PeminjamanController::class, 'ajukanPengembalian'])
+        ->name('peminjaman.pengembalian');
     Route::post('/peminjaman/{id}/perpanjangan', [PeminjamanController::class, 'requestPerpanjangan'])
         ->name('peminjaman.perpanjangan');
 
@@ -121,6 +123,8 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
     Route::put('/petugas/perpanjangan/{id}', [ApprovalController::class, 'updatePerpanjangan'])
         ->name('petugas.perpanjangan.update');
     Route::get('/petugas/laporan', [LaporanController::class, 'index'])->name('petugas.laporan');
+    Route::get('/petugas/laporan/{id}', [LaporanController::class, 'show'])->name('petugas.laporan.show');
+    Route::post('/petugas/laporan/{id}/status', [LaporanController::class, 'updateStatus'])->name('petugas.laporan.status');
     Route::get('/petugas/laporan/kondisi/export', [LaporanController::class, 'exportKondisi'])
         ->name('petugas.laporan.kondisi.export');
 

@@ -381,60 +381,180 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 980px) {
+            html, body {
+                min-height: 100%;
+                background-color: #f8fafc;
+            }
             .container {
                 flex-direction: column;
                 min-height: 100vh;
+                margin: 0;
+                padding: 0;
             }
             .panel-left {
                 width: 100%;
-                padding: 36px 28px;
+                padding: 28px 36px 22px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+                flex-shrink: 0;
+                justify-content: flex-start;
+            }
+            .brand-header {
+                gap: 12px;
+                justify-content: flex-start;
+                align-items: center;
+            }
+            .brand-logo-card {
+                width: 42px;
+                height: 42px;
+                border-radius: 12px;
+                padding: 3px;
+            }
+            .brand-meta {
+                text-align: left;
+            }
+            .brand-meta h2 {
+                font-size: 18px;
+                letter-spacing: 1px;
+                line-height: 1.1;
+            }
+            .brand-meta span {
+                font-size: 10px;
+                letter-spacing: 0.5px;
+            }
+            .panel-left-content {
+                margin: 28px 0;
+            }
+            .panel-left h1 {
+                font-size: 28px;
+            }
+            .panel-left-desc {
+                font-size: 13px;
             }
             .feature-list {
-                display: none;
+                width: 100%;
+            }
+            .footer-left {
+                font-size: 11px;
             }
             .panel-right {
                 width: 100%;
-                padding: 36px 24px;
+                flex: 1;
+                min-height: 420px;
+                padding: 40px 24px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: #f8fafc;
             }
-            .panel-left h1 {
-                font-size: 26px;
+            .form-wrapper {
+                width: 100%;
+                max-width: 420px;
+            }
+            .card-form {
+                width: 100%;
+                padding: 28px 24px;
+                border-radius: 18px;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+                box-sizing: border-box;
             }
         }
 
         @media (max-width: 640px) {
             .panel-left {
-                padding: 24px 20px 20px;
-            }
-            .brand-header {
-                gap: 12px;
+                padding: 20px 18px 18px;
             }
             .brand-logo-card {
-                width: 46px;
-                height: 46px;
-                border-radius: 12px;
-                padding: 4px;
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                padding: 3px;
             }
             .brand-meta h2 {
-                font-size: 19px;
-                letter-spacing: 1px;
+                font-size: 16px;
             }
             .brand-meta span {
-                font-size: 10px;
+                font-size: 9px;
             }
-            .panel-left-content,
+            .panel-left-content {
+                margin: 24px 0;
+            }
+            .badge-pill {
+                padding: 6px 10px;
+                font-size: 9px;
+                margin-bottom: 14px;
+            }
+            .panel-left h1 {
+                font-size: 24px;
+            }
+            .panel-left-desc {
+                font-size: 12px;
+                margin-bottom: 18px;
+            }
+            .feature-list {
+                gap: 9px;
+            }
+            .feature-card {
+                gap: 10px;
+                padding: 10px 11px;
+            }
+            .feature-icon-wrap {
+                width: 30px;
+                height: 30px;
+            }
+            .feature-text strong {
+                font-size: 12px;
+            }
+            .feature-text p {
+                font-size: 10.5px;
+            }
             .footer-left {
-                display: none;
+                gap: 10px;
+                font-size: 9px;
             }
             .panel-right {
-                padding: 24px 16px 36px;
-                justify-content: flex-start;
+                min-height: 0;
+                padding: 24px 14px;
+            }
+            .form-wrapper {
+                max-width: 100%;
             }
             .card-form {
-                padding: 24px 20px;
+                padding: 22px 18px;
                 border-radius: 16px;
             }
             .card-form h2 {
+                font-size: 20px;
+            }
+            .card-form p.intro-desc {
+                font-size: 12.5px;
+                margin-bottom: 18px;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-control {
+                padding: 11px 13px;
+                font-size: 13.5px;
+            }
+            .btn-submit {
+                padding: 12px;
+                font-size: 13.5px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .panel-left {
+                padding-right: 14px;
+                padding-left: 14px;
+            }
+            .panel-left h1 {
                 font-size: 21px;
+            }
+            .footer-left {
+                align-items: flex-start;
+                flex-direction: column;
             }
         }
     </style>

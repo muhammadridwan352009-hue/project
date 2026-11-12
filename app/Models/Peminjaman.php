@@ -26,6 +26,7 @@ class Peminjaman extends Model
         'status',
         'kondisi_kembali',
         'catatan_kondisi',
+        'tanggal_pengajuan_kembali',
         'kondisi_awal_1',
         'kondisi_awal_2',
         'kondisi_awal_3',
@@ -45,6 +46,7 @@ class Peminjaman extends Model
         'tanggal_pinjam' => 'date',
         'tanggal_kembali' => 'date',
         'tanggal_pengembalian' => 'date',
+        'tanggal_pengajuan_kembali' => 'datetime',
     ];
 
     // Relasi ke pengguna

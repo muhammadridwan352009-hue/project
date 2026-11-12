@@ -20,79 +20,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Kiri - Ruang Petugas */
-        aside {
-            width: 260px;
-            background-color: #071b26;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 24px;
-            flex-shrink: 0;
-        }
-        .brand {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            background: #fff;
-            color: #071b26;
-            padding: 8px 12px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-bottom: 30px;
-        }
-        .menu-label {
-            font-size: 11px;
-            color: #8b9bb4;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-        }
-        nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #b0c4de;
-            text-decoration: none;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 14px;
-            margin-bottom: 6px;
-            transition: 0.2s;
-        }
-        nav a.active {
-            background-color: #00897b;
-            color: #fff;
-            font-weight: 600;
-        }
-        nav a:hover:not(.active) {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
-        .sidebar-footer {
-            font-size: 11px;
-            color: #7a8b9e;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 16px;
-        }
-        .logout-form { margin-top: 12px; }
-        .logout-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 9px 10px;
-            color: #cfe3ea;
-            background: none;
-            border: 0;
-            font: inherit;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .logout-button:hover { color: #fff; }
-        
-
-
         /* Area Utama */
         main {
             flex: 1;
@@ -103,50 +30,50 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             padding-bottom: 16px;
             border-bottom: 1px solid #e2e8f0;
         }
         header .title-sub {
             font-size: 11px;
-            color: #00897b;
+            color: #2563eb;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
         header h1 {
-            font-size: 22px;
-            color: #1a202c;
-            font-weight: bold;
+            font-size: 24px;
+            color: #071b26;
+            margin-top: 4px;
         }
         .user-badge {
             background: #fff;
-            border: 1px solid #e2e8f0;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
+            border: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 13px;
             font-weight: 600;
-            color: #2d3748;
         }
-        .dot {
+        .user-badge .dot {
             width: 8px;
             height: 8px;
-            background-color: #f59e0b;
+            background-color: #10b981;
             border-radius: 50%;
         }
+
         .breadcrumb {
             font-size: 12px;
-            color: #718096;
-            margin-bottom: 20px;
+            color: #64748b;
+            margin-bottom: 16px;
         }
+        .breadcrumb strong { color: #1e293b; }
 
-        /* Title & Badge Header */
         .title-section {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-end;
             margin-bottom: 20px;
         }
         .title-section h2 {
@@ -162,25 +89,37 @@
         .badge-status-group {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
         .pill-count-orange {
             background-color: #ffedd5;
             color: #ea580c;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
+            border: 1px solid #fed7aa;
         }
-        .pill-count-red {
-            background-color: #fef2f2;
-            color: #ef4444;
-            padding: 6px 12px;
+        .pill-count-blue {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
+            border: 1px solid #bfdbfe;
+        }
+        .pill-count-green {
+            background-color: #d1fae5;
+            color: #047857;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid #a7f3d0;
         }
 
-        /* Tab Switcher Bar */
+        /* Tab Switcher */
         .tab-switcher {
             background: #fff;
             border: 1px solid #e2e8f0;
@@ -193,516 +132,437 @@
         .tab-btn {
             flex: 1;
             text-align: center;
-            padding: 10px 12px;
+            padding: 12px 16px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 13px;
             color: #64748b;
             text-decoration: none;
             font-weight: 600;
             transition: 0.2s;
-        }
-        .tab-btn.active {
-            background-color: #00897b;
-            color: #fff;
-        }
-
-        /* Main Content Layout Grid */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        /* Left Queue Card */
-        .queue-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
-        .queue-header {
-            font-size: 14px;
-            font-weight: bold;
-            color: #1e293b;
-            margin-bottom: 14px;
-        }
-        .search-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 12px;
-            margin-bottom: 16px;
+            cursor: pointer;
+            border: none;
+            background: none;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
         }
-        .search-box input {
-            border: none;
-            background: transparent;
-            outline: none;
-            width: 100%;
-            font-size: 12px;
-        }
-
-        /* Queue List Items */
-        .queue-item {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: 0.2s;
-            background: #fff;
-        }
-        .queue-item.active {
-            border-color: #10b981;
-            background-color: #e6f4ea;
-        }
-        .queue-item:hover:not(.active) {
+        .tab-btn:hover {
+            color: #2563eb;
             background-color: #f8fafc;
         }
-        .queue-user-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
+        .tab-btn.active {
+            background-color: #2563eb;
+            color: #fff;
         }
-        .queue-user-name {
-            font-size: 13px;
-            font-weight: 700;
-            color: #071b26;
-        }
-        .queue-date-danger {
-            font-size: 10px;
-            font-weight: 700;
-            color: #ef4444;
-        }
-        .queue-date-muted {
-            font-size: 10px;
-            font-weight: 700;
-            color: #64748b;
-        }
-        .queue-item-desc {
-            font-size: 11px;
-            color: #64748b;
-            margin-bottom: 8px;
-        }
-
-        /* Badge Code */
-        .badge-code {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 9px;
-            font-weight: bold;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #334155;
-        }
-        .badge-code .cat { color: #7c3aed; }
-        .badge-code .cat.osis { color: #0284c7; }
-        .badge-code .cat.rohis { color: #059669; }
-
-        /* Right Detail Card */
-        .detail-panel {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
-        .detail-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-        .req-id {
-            font-size: 11px;
-            font-weight: bold;
-            color: #00897b;
-            letter-spacing: 0.5px;
-        }
-        .status-pill-red {
-            background-color: #fef2f2;
-            color: #ef4444;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 700;
-        }
-        .detail-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #071b26;
-            margin-bottom: 20px;
-        }
-
-        /* Profile & Item Summary Grid */
-        .summary-box-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .summary-card-inner {
-            background-color: #f8fafc;
-            border: 1px solid #f1f5f9;
-            border-radius: 12px;
-            padding: 16px;
-        }
-        .inner-label {
-            font-size: 10px;
-            color: #94a3b8;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-        .borrower-name {
-            font-size: 14px;
-            font-weight: 800;
-            color: #071b26;
-        }
-        .borrower-sub {
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-        .borrower-stat {
-            font-size: 10px;
-            color: #ef4444;
-            margin-top: 6px;
-            font-weight: 600;
-        }
-
-        .item-name-large {
-            font-size: 13px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-top: 6px;
-            margin-bottom: 8px;
-        }
-        .stock-available-tag {
-            font-size: 10px;
-            color: #00897b;
-            background-color: #e6f4ea;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-weight: bold;
+        .tab-badge {
             display: inline-block;
-        }
-
-        /* Metadata Info Cards 3 Columns */
-        .meta-info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .meta-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 12px;
-        }
-        .meta-card .label { font-size: 10px; color: #94a3b8; margin-bottom: 4px; }
-        .meta-card .val { font-size: 11px; font-weight: 700; color: #1e293b; }
-
-        /* Notes & Penalty Box */
-        .note-penalty-box {
-            background-color: #fffbeb;
-            border: 1px solid #fef3c7;
-            border-radius: 10px;
-            padding: 14px;
-            font-size: 11px;
-            color: #92400e;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .note-penalty-box strong { display: block; font-size: 10px; text-transform: uppercase; margin-bottom: 4px; color: #d97706; }
-
-        /* Condition Checklist */
-        .verify-list {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .verify-item {
-            flex: 1;
-            background-color: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            color: #166534;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Action Footer Buttons */
-        .action-footer-grid {
-            display: grid;
-            grid-template-columns: 140px 140px 1fr;
-            gap: 12px;
-            padding-top: 16px;
-            border-top: 1px solid #f1f5f9;
-            margin-bottom: 20px;
-        }
-        .btn-damage {
-            background-color: #ef4444;
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .btn-note-damage {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            color: #334155;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .btn-confirm-return {
-            background-color: #00897b;
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* Fine Calculator Bar Bottom */
-        .fine-bar {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
+            padding: 2px 8px;
             border-radius: 12px;
-            padding: 14px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .fine-text {
             font-size: 11px;
-            color: #64748b;
-        }
-        .btn-fine-calc {
-            background-color: #fff;
-            border: 1px solid #cbd5e1;
-            color: #071b26;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 12px;
             font-weight: 700;
-            cursor: pointer;
+            background: rgba(0,0,0,0.08);
         }
+        .tab-btn.active .tab-badge {
+            background: rgba(255,255,255,0.25);
+            color: #fff;
+        }
+
         .tab-view {
             display: none;
         }
         .tab-view.active-view {
             display: block;
         }
-        .queue-item:focus-visible,
-        .tab-btn:focus-visible,
-        button:focus-visible,
-        input:focus-visible {
-            outline: 3px solid #38bdf8;
-            outline-offset: 2px;
-        }
-        .interaction-message {
-            display: none;
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            border-radius: 8px;
-            color: #065f46;
-            font-size: 12px;
-            margin-bottom: 16px;
-            padding: 10px 14px;
-        }
-        .interaction-message.visible {
-            display: block;
-        }
-        .returned-toolbar {
-            align-items: center;
+
+        /* Search & Filter Toolbar */
+        .search-toolbar {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 18px;
         }
-        .returned-toolbar h3 {
-            color: #071b26;
-            font-size: 18px;
-            margin-bottom: 4px;
+        .search-input-wrap {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .returned-toolbar p {
-            color: #718096;
-            font-size: 12px;
+        .search-input-wrap input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 13px;
+            color: #1e293b;
         }
-        .returned-count-pill,
-        .returned-status-pill {
-            background: #e6f4ea;
-            border-radius: 20px;
-            color: #047857;
+
+        /* Table Card Container */
+        .table-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table.simpati-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+        table.simpati-table thead {
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        table.simpati-table th {
+            padding: 14px 16px;
             font-size: 11px;
             font-weight: 700;
-            padding: 6px 10px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
-        .returned-search-wrap {
+        table.simpati-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            vertical-align: middle;
+        }
+        table.simpati-table tr:hover {
+            background-color: #fbfcfe;
+        }
+
+        /* Badges */
+        .badge-cat {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            text-transform: uppercase;
+        }
+        .badge-cat.osis { background: #e0f2fe; color: #0284c7; }
+        .badge-cat.rohis { background: #d1fae5; color: #059669; }
+        .badge-cat.multimedia { background: #ede9fe; color: #7c3aed; }
+        .badge-cat.band { background: #fee2e2; color: #dc2626; }
+
+        .badge-status {
+            display: inline-flex;
             align-items: center;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 10px 12px;
-        }
-        .returned-search-wrap input {
-            border: 0;
-            flex: 1;
-            font-size: 12px;
-            outline: 0;
-        }
-        .returned-grid {
-            display: grid;
-            gap: 14px;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        }
-        .returned-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
+            gap: 5px;
+            padding: 4px 10px;
             border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-status.menunggu_konfirmasi {
+            background-color: #ffedd5;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+        .badge-status.dipinjam, .badge-status.disetujui {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+        .badge-status.dikembalikan {
+            background-color: #d1fae5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .badge-late-danger {
+            display: inline-block;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid #fca5a5;
+            white-space: nowrap;
+        }
+        .badge-ontime-success {
+            display: inline-block;
+            background-color: #ecfdf5;
+            color: #047857;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid #a7f3d0;
+            white-space: nowrap;
+        }
+
+        /* Buttons */
+        .btn-confirm-action {
+            background-color: #2563eb;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .btn-confirm-action:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(7, 27, 38, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
             padding: 16px;
         }
-        .returned-card-top,
-        .returned-dates {
+        .modal-overlay.active {
             display: flex;
-            gap: 10px;
+        }
+        .modal-container {
+            background: #fff;
+            width: 100%;
+            max-width: 580px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-header {
+            padding: 20px 24px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
             justify-content: space-between;
         }
-        .returned-card-user {
+        .modal-header h3 {
+            font-size: 17px;
+            font-weight: 700;
             color: #071b26;
-            font-size: 13px;
-            font-weight: 700;
         }
-        .returned-card-class,
-        .returned-date-box .lbl {
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
             color: #64748b;
-            font-size: 10px;
-            margin-top: 3px;
-        }
-        .returned-item-name {
-            color: #1e293b;
-            font-size: 13px;
-            font-weight: 700;
-            margin: 12px 0 8px;
-        }
-        .returned-dates {
-            margin-top: 14px;
-        }
-        .returned-date-box .val {
-            color: #334155;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 3px;
-        }
-        .returned-detail-status {
-            background: #e6f4ea;
-            color: #047857;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 6px 10px;
-            border-radius: 20px;
-        }
-        .returned-fine {
-            border-top: 1px solid #f1f5f9;
-            color: #64748b;
-            font-size: 11px;
-            margin-top: 12px;
-            padding-top: 10px;
-        }
-        .returned-fine.has-fine {
-            color: #b45309;
-            font-weight: 700;
-        }
-        .returned-service-confirm {
-            background: #00897b;
-            color: #fff;
-            font-size: 13px;
-            font-weight: 700;
-            padding: 12px;
-            border-radius: 10px;
-            border: 0;
             cursor: pointer;
-            margin-top: 12px;
-            width: 100%;
+            padding: 4px;
         }
-        .verify-item.is-damaged {
-            background: #fef2f2;
-            border-color: #fecaca;
-            color: #b91c1c;
+        .modal-body {
+            padding: 24px;
         }
-        .empty-state {
+        .modal-info-box {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 20px;
+            font-size: 12.5px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .modal-info-box .info-label {
             color: #64748b;
-            font-size: 12px;
-            padding: 16px 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .modal-info-box .info-val {
+            color: #0f172a;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+        .condition-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .condition-option-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
             text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            user-select: none;
         }
-        @media (max-width: 900px) {
-            aside {
-                padding: 18px 12px;
-                width: 210px;
-            }
-            main {
-                padding: 24px 20px;
-            }
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
+        .condition-option-card input {
+            display: none;
         }
-        @media (max-width: 600px) {
-            body {
-                display: block;
-            }
-            aside {
-                width: 100%;
-            }
-            aside nav {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            main {
-                padding: 18px 12px;
-            }
-            .summary-box-grid,
-            .meta-info-grid {
-                grid-template-columns: 1fr;
-            }
-            .action-footer-grid {
-                grid-template-columns: 1fr;
-            }
-            .verify-list,
-            .fine-bar,
-            .title-section {
-                align-items: stretch;
-                flex-direction: column;
-            }
-            .tab-switcher {
-                flex-direction: column;
-            }
+        .condition-option-card:hover {
+            border-color: #93c5fd;
+        }
+        .condition-option-card.selected-baik {
+            border-color: #10b981;
+            background-color: #ecfdf5;
+            color: #065f46;
+        }
+        .condition-option-card.selected-rusak_ringan {
+            border-color: #f59e0b;
+            background-color: #fffbeb;
+            color: #92400e;
+        }
+        .condition-option-card.selected-rusak_berat {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+        .condition-option-title {
+            font-size: 13px;
+            font-weight: 700;
+            display: block;
+            margin-top: 4px;
+        }
+        .condition-option-desc {
+            font-size: 10.5px;
+            color: #64748b;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+        .condition-option-card.selected-baik .condition-option-desc,
+        .condition-option-card.selected-rusak_ringan .condition-option-desc,
+        .condition-option-card.selected-rusak_berat .condition-option-desc {
+            color: inherit;
+            opacity: 0.9;
+        }
+        textarea.form-textarea {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            outline: none;
+            resize: vertical;
+            min-height: 70px;
+        }
+        textarea.form-textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .modal-notice {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 11.5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-notice.notice-warning {
+            background-color: #fffbeb;
+            border-color: #fef3c7;
+            color: #92400e;
+        }
+        .modal-footer {
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .btn-modal-cancel {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-modal-submit {
+            background: #2563eb;
+            border: none;
+            color: #fff;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-modal-submit:hover {
+            background: #1d4ed8;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            color: #047857;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .empty-placeholder {
+            text-align: center;
+            padding: 45px 20px;
+            color: #64748b;
+        }
+        .empty-placeholder .icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .empty-placeholder h4 {
+            font-size: 15px;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        .empty-placeholder p {
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            main { padding: 18px 14px; }
+            .tab-switcher { flex-direction: column; }
+            .condition-options { grid-template-columns: 1fr; }
+            .modal-info-box { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -711,421 +571,471 @@
     <!-- Sidebar Kiri -->
     @include('petugas.partials.sidebar', ['active' => 'pengembalian'])
 
-
     <!-- Area Utama -->
     <main>
         <header>
             <div style="display: flex; align-items: center; gap: 12px;">
-            <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
-            <div>
-                <div class="title-sub">SISTEM INVENTARIS SEKOLAH</div>
-                <h1>Pengembalian inventaris</h1>
-            </div>
+                <button type="button" class="header-sidebar-toggle-btn" onclick="toggleSidebar()" title="Sembunyikan / Tampilkan Sidebar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div>
+                    <div class="title-sub">SISTEM INVENTARIS SEKOLAH (SIMPATI)</div>
+                    <h1>Pengembalian Alat</h1>
+                </div>
             </div>
             <div class="user-badge">
                 <span class="dot"></span>
-                <span>Rizky Maulana</span>
+                <span>{{ Auth::user()->name }}</span>
             </div>
         </header>
 
-        <div class="breadcrumb">Dashboard / <strong>Pengembalian inventaris</strong></div>
+        <div class="breadcrumb">Dashboard / <strong>Pengembalian Alat</strong></div>
+
+        {{-- Alert Success --}}
+        @if(session('success'))
+            <div class="alert-success">
+                <span>✅</span>
+                {{ session('success') }}
+            </div>
+        @endif
 
         <div class="title-section">
             <div>
-                <h2>Pengembalian inventaris</h2>
-                <p>Catat barang kembali, kondisi, dan denda keterlambatan.</p>
+                <h2>Manajemen Pengembalian Alat</h2>
+                <p>Periksa kondisi fisik alat, hitung otomatis keterlambatan, dan konfirmasi pengembalian.</p>
             </div>
             <div class="badge-status-group">
-                <span class="pill-count-orange">• <span id="waiting-badge-count">0</span> menunggu</span>
-                <span class="pill-count-red">• <span id="late-badge-count">0</span> terlambat</span>
+                <span class="pill-count-orange">⏳ {{ count($konfirmasiRecords) }} Menunggu Konfirmasi</span>
+                <span class="pill-count-blue">📦 {{ count($belumRecords) }} Belum Dikembalikan</span>
+                <span class="pill-count-green">✅ {{ count($sudahRecords) }} Riwayat Selesai</span>
             </div>
         </div>
 
-        <!-- Tab Switcher -->
+        <!-- 3 TAB SWITCHER SESUAI KETENTUAN -->
         <div class="tab-switcher">
-            <a href="#view-belum" class="tab-btn {{ $activeTab === 'belum' ? 'active' : '' }}" data-tab="belum" aria-current="{{ $activeTab === 'belum' ? 'page' : 'false' }}">Belum dikembalikan - <span id="pending-count">0</span></a>
-            <a href="#view-sudah" class="tab-btn {{ $activeTab === 'sudah' ? 'active' : '' }}" data-tab="sudah" aria-current="{{ $activeTab === 'sudah' ? 'page' : 'false' }}">Sudah dikembalikan - <span id="returned-count">0</span></a>
+            <button type="button" class="tab-btn {{ $activeTab === 'belum' ? 'active' : '' }}" onclick="switchTab('belum')">
+                <span>1. Belum Dikembalikan</span>
+                <span class="tab-badge">{{ count($belumRecords) }}</span>
+            </button>
+            <button type="button" class="tab-btn {{ $activeTab === 'konfirmasi' ? 'active' : '' }}" onclick="switchTab('konfirmasi')">
+                <span>2. Menunggu Konfirmasi</span>
+                <span class="tab-badge">{{ count($konfirmasiRecords) }}</span>
+            </button>
+            <button type="button" class="tab-btn {{ $activeTab === 'sudah' ? 'active' : '' }}" onclick="switchTab('sudah')">
+                <span>3. Riwayat Pengembalian</span>
+                <span class="tab-badge">{{ count($sudahRecords) }}</span>
+            </button>
         </div>
-        <div id="interaction-message" class="interaction-message" role="status" aria-live="polite"></div>
-        <div id="view-belum" class="tab-view {{ $activeTab === 'belum' ? 'active-view' : '' }}">
-        <!-- Main Content Grid -->
-        <div class="content-grid">
-            
-            <!-- Antrean Pengembalian (Kiri) -->
-            <div class="queue-card">
-                <div class="queue-header">Antrean pengembalian</div>
-                <div class="search-box">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: BELUM DIKEMBALIKAN -->
+        <!-- ========================================== -->
+        <div id="tab-content-belum" class="tab-view {{ $activeTab === 'belum' ? 'active-view' : '' }}">
+            <div class="search-toolbar">
+                <div class="search-input-wrap">
                     <span>🔍</span>
-                    <input id="queue-search" type="search" placeholder="Cari peminjam atau alat..." aria-label="Cari antrean pengembalian">
+                    <input type="text" id="search-belum" placeholder="Cari nama siswa atau nama alat yang sedang dipinjam..." onkeyup="filterTable('belum')">
                 </div>
-                <div id="queue-list"></div>
             </div>
 
-            <!-- Detail Pengembalian (Kanan) -->
-            <div id="detail-panel" class="detail-panel">
-                <div class="detail-top-bar">
-                    <span id="detail-id" class="req-id"></span>
-                    <span id="detail-status" class="status-pill-red"></span>
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="simpati-table" id="table-belum">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Siswa & Kelas</th>
+                                <th>Alat & Kategori</th>
+                                <th>Tanggal Pinjam</th>
+                                <th>Batas Pengembalian</th>
+                                <th>Keterlambatan</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($belumRecords as $index => $row)
+                                <tr class="item-row" data-search="{{ strtolower($row['name'] . ' ' . $row['item'] . ' ' . $row['code'] . ' ' . $row['className']) }}">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #071b26;">{{ $row['name'] }}</div>
+                                        <div style="font-size: 11px; color: #64748b;">{{ $row['className'] }} &bull; NIS: {{ $row['nis'] }}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #1e293b;">{{ $row['item'] }}</div>
+                                        <div style="display: flex; gap: 6px; margin-top: 4px;">
+                                            <span style="font-family: monospace; font-size: 10px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{{ $row['code'] }}</span>
+                                            <span class="badge-cat {{ strtolower($row['category']) }}">{{ $row['category'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ $row['borrowDate'] }}</td>
+                                    <td style="font-weight: 600;">{{ $row['dueDate'] }}</td>
+                                    <td>
+                                        @if($row['lateDays'] > 0)
+                                            <span class="badge-late-danger">⚠️ Terlambat {{ $row['lateDays'] }} hari</span>
+                                        @else
+                                            <span class="badge-ontime-success">✓ Belum jatuh tempo</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge-status dipinjam">📦 Sedang Dipinjam</span>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <button type="button" class="btn-confirm-action" onclick='openConfirmModal(@json($row))'>
+                                            🔍 Periksa & Kembalikan
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8">
+                                        <div class="empty-placeholder">
+                                            <div class="icon">📦</div>
+                                            <h4>Tidak ada alat yang belum dikembalikan</h4>
+                                            <p>Semua alat yang dipinjam telah dikembalikan atau belum ada peminjaman aktif.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-                <div class="detail-title">Detail pengembalian</div>
-
-                <!-- Profile & Item Summary Grid -->
-                <div class="summary-box-grid">
-                    <div class="summary-card-inner">
-                        <div class="inner-label">Peminjam</div>
-                        <div id="detail-borrower" class="borrower-name"></div>
-                        <div id="detail-student" class="borrower-sub"></div>
-                        <div id="detail-role" class="borrower-sub" style="font-weight: 600;"></div>
-                        <div id="detail-stat" class="borrower-stat"></div>
-                    </div>
-
-                    <div class="summary-card-inner">
-                        <div class="inner-label">Barang Dikembalikan</div>
-                        <div class="badge-code">
-                            <span id="detail-code"></span>
-                            <span id="detail-category" class="cat"></span>
-                        </div>
-                        <div id="detail-item" class="item-name-large"></div>
-                        <div class="stock-available-tag">• Menunggu pemeriksaan</div>
-                    </div>
-                </div>
-
-                <!-- Metadata Grid -->
-                <div class="meta-info-grid">
-                    <div class="meta-card">
-                        <div class="label">Tanggal Pinjam</div>
-                        <div id="detail-borrow-date" class="val"></div>
-                    </div>
-                    <div class="meta-card">
-                        <div class="label">Batas Kembali</div>
-                        <div id="detail-due-date" class="val"></div>
-                    </div>
-                    <div class="meta-card">
-                        <div class="label">Tanggal Kembali</div>
-                        <div id="detail-return-date" class="val"></div>
-                    </div>
-                </div>
-
-                <!-- Notes & Penalty Box -->
-                <div class="note-penalty-box">
-                    <strong>Catatan & Denda Keterlambatan</strong>
-                    <span id="detail-note"></span>
-                </div>
-
-                <!-- Condition Checklist -->
-                <div class="verify-list">
-                    <div id="condition-physical" class="verify-item">
-                        <span>✓</span> Kondisi fisik baik
-                    </div>
-                    <div id="condition-accessories" class="verify-item">
-                        <span>✓</span> Aksesori lengkap
-                    </div>
-                    <div id="condition-cleanliness" class="verify-item">
-                        <span>✓</span> Kebersihan baik
-                    </div>
-                </div>
-
-                <!-- Action Footer Buttons -->
-                <form method="POST" action="{{ route('petugas.pengembalian.konfirmasi', ['id' => '__ID__']) }}" id="return-form">
-                    @csrf
-                    <input type="hidden" name="kondisi_kembali" id="form-kondisi" value="baik">
-                    <input type="hidden" name="catatan_kondisi" id="form-catatan" value="">
-                    <div class="action-footer-grid">
-                        <button type="button" class="btn-damage">✖ Tandai rusak</button>
-                        <button type="button" class="btn-note-damage">Catat kerusakan</button>
-                        <button type="submit" class="btn-confirm-return">✓ Konfirmasi pengembalian</button>
-                    </div>
-                </form>
-
-                <div class="fine-bar">
-                    <div class="fine-text" id="fine-text-el">
-                        Data diambil langsung dari database peminjaman.
-                    </div>
-                </div>
-
             </div>
-
         </div>
-        </div> <!-- /view-belum -->
 
-        <!-- ============ VIEW: SUDAH DIKEMBALIKAN ============ -->
-        <div id="view-sudah" class="tab-view {{ $activeTab === 'sudah' ? 'active-view' : '' }}">
-            <div class="returned-toolbar">
-                <div>
-                    <h3>Riwayat pengembalian — <span id="returned-heading-count">0</span> barang</h3>
-                    <p>Daftar peminjaman yang sudah dikembalikan.</p>
+        <!-- ========================================== -->
+        <!-- TAB 2: MENUNGGU KONFIRMASI -->
+        <!-- ========================================== -->
+        <div id="tab-content-konfirmasi" class="tab-view {{ $activeTab === 'konfirmasi' ? 'active-view' : '' }}">
+            <div class="search-toolbar">
+                <div class="search-input-wrap">
+                    <span>🔍</span>
+                    <input type="text" id="search-konfirmasi" placeholder="Cari nama siswa atau nama alat pengajuan..." onkeyup="filterTable('konfirmasi')">
                 </div>
-                <span class="returned-count-pill">✓ Data tersimpan</span>
             </div>
-            <div class="returned-search-wrap">
-                <span class="icon">🔍</span>
-                <input id="returned-search" type="search" placeholder="Cari nama peminjam, kode barang, atau kategori..." aria-label="Cari riwayat pengembalian">
+
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="simpati-table" id="table-konfirmasi">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Siswa & Kelas</th>
+                                <th>Alat Diajukan</th>
+                                <th>Tanggal Pinjam</th>
+                                <th>Batas Pengembalian</th>
+                                <th>Keterlambatan</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($konfirmasiRecords as $index => $row)
+                                <tr class="item-row" data-search="{{ strtolower($row['name'] . ' ' . $row['item'] . ' ' . $row['code'] . ' ' . $row['className']) }}">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #071b26;">{{ $row['name'] }}</div>
+                                        <div style="font-size: 11px; color: #64748b;">{{ $row['className'] }} &bull; NIS: {{ $row['nis'] }}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #1e293b;">{{ $row['item'] }}</div>
+                                        <div style="display: flex; gap: 6px; margin-top: 4px;">
+                                            <span style="font-family: monospace; font-size: 10px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{{ $row['code'] }}</span>
+                                            <span class="badge-cat {{ strtolower($row['category']) }}">{{ $row['category'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ $row['borrowDate'] }}</td>
+                                    <td style="font-weight: 600;">{{ $row['dueDate'] }}</td>
+                                    <td>
+                                        @if($row['lateDays'] > 0)
+                                            <span class="badge-late-danger">⚠️ Terlambat {{ $row['lateDays'] }} hari</span>
+                                        @else
+                                            <span class="badge-ontime-success">✓ Tepat waktu (0 hari)</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge-status menunggu_konfirmasi">⏳ Menunggu Konfirmasi</span>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <button type="button" class="btn-confirm-action" onclick='openConfirmModal(@json($row))'>
+                                            ✓ Konfirmasi Pengembalian
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="8">
+                                        <div class="empty-placeholder">
+                                            <div class="icon">⏳</div>
+                                            <h4>Tidak ada pengajuan menunggu konfirmasi</h4>
+                                            <p>Saat siswa menekan "Ajukan Pengembalian", daftarnya akan otomatis muncul di sini.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div id="returned-grid" class="returned-grid">
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: RIWAYAT PENGEMBALIAN -->
+        <!-- ========================================== -->
+        <div id="tab-content-sudah" class="tab-view {{ $activeTab === 'sudah' ? 'active-view' : '' }}">
+            <div class="search-toolbar">
+                <div class="search-input-wrap">
+                    <span>🔍</span>
+                    <input type="text" id="search-sudah" placeholder="Cari riwayat berdasarkan nama siswa atau alat..." onkeyup="filterTable('sudah')">
+                </div>
             </div>
-        </div> <!-- /view-sudah -->
+
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="simpati-table" id="table-sudah">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Siswa & NIS</th>
+                                <th>Alat & Kategori</th>
+                                <th>Tgl Pinjam</th>
+                                <th>Batas Kembali</th>
+                                <th>Tgl Pengembalian</th>
+                                <th>Keterlambatan</th>
+                                <th>Kondisi Diterima</th>
+                                <th>Catatan Pemeriksaan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($sudahRecords as $index => $row)
+                                <tr class="item-row" data-search="{{ strtolower($row['name'] . ' ' . $row['item'] . ' ' . $row['code'] . ' ' . $row['className'] . ' ' . $row['condition']) }}">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #071b26;">{{ $row['name'] }}</div>
+                                        <div style="font-size: 11px; color: #64748b;">{{ $row['className'] }} &bull; NIS: {{ $row['nis'] }}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #1e293b;">{{ $row['item'] }}</div>
+                                        <div style="display: flex; gap: 6px; margin-top: 4px;">
+                                            <span style="font-family: monospace; font-size: 10px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">{{ $row['code'] }}</span>
+                                            <span class="badge-cat {{ strtolower($row['category']) }}">{{ $row['category'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ $row['borrowDate'] }}</td>
+                                    <td>{{ $row['dueDate'] }}</td>
+                                    <td style="font-weight: 700; color: #047857;">{{ $row['returnDate'] }}</td>
+                                    <td>
+                                        @if($row['lateDays'] > 0)
+                                            <span class="badge-late-danger">Terlambat {{ $row['lateDays'] }} hari</span>
+                                        @else
+                                            <span class="badge-ontime-success">Tepat waktu</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($row['condition'] === 'baik')
+                                            <span style="color: #047857; font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                                <span>✓</span> Baik (Stok +1)
+                                            </span>
+                                        @elseif($row['condition'] === 'rusak_ringan')
+                                            <span style="color: #d97706; font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                                <span>⚠️</span> Rusak Ringan
+                                            </span>
+                                        @else
+                                            <span style="color: #dc2626; font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                                <span>✖</span> Rusak Berat
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span style="font-size: 12px; color: #475569;">
+                                            {{ $row['damageNote'] ?: '-' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9">
+                                        <div class="empty-placeholder">
+                                            <div class="icon">📋</div>
+                                            <h4>Belum ada riwayat pengembalian</h4>
+                                            <p>Data pengembalian yang telah dikonfirmasi akan tercatat di sini.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
     </main>
 
-<script>
-(function(){
-    var pendingReturns = @js($pendingReturns);
-    var returnedRecords = @js($returnedRecords);
-    var selectedId = pendingReturns.length ? pendingReturns[0].id : null;
-    var dailyFine = 5000;
-    var queueList = document.getElementById('queue-list');
-    var returnedGrid = document.getElementById('returned-grid');
-    var detailPanel = document.getElementById('detail-panel');
-    var messageBox = document.getElementById('interaction-message');
-    var queueSearch = document.getElementById('queue-search');
-    var returnedSearch = document.getElementById('returned-search');
+    <!-- ========================================== -->
+    <!-- MODAL PEMERIKSAAN & KONFIRMASI PENGEMBALIAN -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Pemeriksaan & Konfirmasi Pengembalian</h3>
+                <button type="button" class="modal-close-btn" onclick="closeConfirmModal()">&times;</button>
+            </div>
+            <form id="modalForm" method="POST" action="">
+                @csrf
+                <div class="modal-body">
+                    <!-- Ringkasan Peminjaman -->
+                    <div class="modal-info-box">
+                        <div>
+                            <div class="info-label">Nama Siswa</div>
+                            <div class="info-val" id="modalStudentName">-</div>
+                        </div>
+                        <div>
+                            <div class="info-label">Kelas / NIS</div>
+                            <div class="info-val" id="modalStudentClass">-</div>
+                        </div>
+                        <div>
+                            <div class="info-label">Nama Alat & Kode</div>
+                            <div class="info-val" id="modalItemName">-</div>
+                        </div>
+                        <div>
+                            <div class="info-label">Keterlambatan</div>
+                            <div class="info-val" id="modalLateDays">-</div>
+                        </div>
+                    </div>
 
-    function makeElement(tag, className, text) {
-        var element = document.createElement(tag);
-        if (className) element.className = className;
-        if (text !== undefined) element.textContent = text;
-        return element;
-    }
+                    <!-- Pilihan Kondisi Barang -->
+                    <div class="form-group">
+                        <label>Pilihan Kondisi Barang <span style="color: #ef4444;">*</span></label>
+                        <div class="condition-options">
+                            <label class="condition-option-card selected-baik" id="card-baik" onclick="selectCondition('baik')">
+                                <input type="radio" name="kondisi_kembali" value="baik" checked>
+                                <span style="font-size: 20px;">✅</span>
+                                <span class="condition-option-title">Baik</span>
+                                <span class="condition-option-desc">Layak pakai, stok bertambah otomatis</span>
+                            </label>
+                            <label class="condition-option-card" id="card-rusak_ringan" onclick="selectCondition('rusak_ringan')">
+                                <input type="radio" name="kondisi_kembali" value="rusak_ringan">
+                                <span style="font-size: 20px;">⚠️</span>
+                                <span class="condition-option-title">Rusak Ringan</span>
+                                <span class="condition-option-desc">Butuh perbaikan, stok tidak bertambah</span>
+                            </label>
+                            <label class="condition-option-card" id="card-rusak_berat" onclick="selectCondition('rusak_berat')">
+                                <input type="radio" name="kondisi_kembali" value="rusak_berat">
+                                <span style="font-size: 20px;">❌</span>
+                                <span class="condition-option-title">Rusak Berat</span>
+                                <span class="condition-option-desc">Tidak layak, stok tidak bertambah</span>
+                            </label>
+                        </div>
+                    </div>
 
-    function showMessage(message) {
-        messageBox.textContent = message;
-        messageBox.classList.add('visible');
-    }
+                    <!-- Catatan Pemeriksaan Barang -->
+                    <div class="form-group">
+                        <label for="modalCatatan">Catatan Pemeriksaan Barang</label>
+                        <textarea class="form-textarea" name="catatan_kondisi" id="modalCatatan" placeholder="Tuliskan catatan kelengkapan, goresan, atau detail pemeriksaan lainnya (opsional)..."></textarea>
+                    </div>
 
-    function money(amount) {
-        return 'Rp ' + new Intl.NumberFormat('id-ID').format(amount);
-    }
+                    <!-- Notice Informasional -->
+                    <div class="modal-notice" id="modalNoticeBox">
+                        <span>ℹ️</span>
+                        <span id="modalNoticeText">Barang dalam kondisi <strong>Baik</strong>: Stok barang akan otomatis bertambah +1 dan status menjadi Dikembalikan.</span>
+                    </div>
+                </div>
 
-    function categoryClass(categoryClassName) {
-        return categoryClassName ? 'cat ' + categoryClassName : 'cat';
-    }
+                <div class="modal-footer">
+                    <button type="button" class="btn-modal-cancel" onclick="closeConfirmModal()">Batal</button>
+                    <button type="submit" class="btn-modal-submit" id="btnSubmitModal">✓ Konfirmasi Pengembalian</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    function getSelected() {
-        return pendingReturns.find(function(item) {
-            return item.id === selectedId;
-        }) || null;
-    }
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active-view'));
 
-    function renderCounts() {
-        document.getElementById('pending-count').textContent = pendingReturns.length;
-        document.getElementById('waiting-badge-count').textContent = pendingReturns.length;
-        document.getElementById('late-badge-count').textContent = pendingReturns.filter(function(item) {
-            return item.lateDays > 0;
-        }).length;
-        document.getElementById('returned-count').textContent = returnedRecords.length;
-        document.getElementById('returned-heading-count').textContent = returnedRecords.length;
-    }
-
-    function renderQueue() {
-        var query = queueSearch.value.trim().toLocaleLowerCase('id-ID');
-        queueList.replaceChildren();
-
-        var visibleItems = pendingReturns.filter(function(item) {
-            return [item.name, item.item, item.code, item.category].join(' ').toLocaleLowerCase('id-ID').includes(query);
-        });
-        if (!visibleItems.length) {
-            queueList.appendChild(makeElement('div', 'empty-state', pendingReturns.length ? 'Tidak ada antrean yang cocok.' : 'Tidak ada peminjaman yang menunggu pengembalian.'));
-            return;
+            event?.currentTarget?.classList.add('active');
+            const targetView = document.getElementById('tab-content-' + tabName);
+            if (targetView) {
+                targetView.classList.add('active-view');
+            }
         }
 
-        visibleItems.forEach(function(item) {
-            var card = makeElement('div', 'queue-item' + (item.id === selectedId ? ' active' : ''));
-            card.setAttribute('role', 'button');
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('aria-pressed', item.id === selectedId ? 'true' : 'false');
-            card.dataset.returnId = item.id;
+        function filterTable(tabName) {
+            const input = document.getElementById('search-' + tabName);
+            const filter = input.value.toLowerCase().trim();
+            const table = document.getElementById('table-' + tabName);
+            const rows = table.querySelectorAll('tbody tr.item-row');
 
-            var top = makeElement('div', 'queue-user-top');
-            top.appendChild(makeElement('span', 'queue-user-name', item.name));
-            top.appendChild(makeElement('span', item.lateDays > 0 ? 'queue-date-danger' : 'queue-date-muted', '• ' + item.dueLabel));
-            card.appendChild(top);
-            card.appendChild(makeElement('div', 'queue-item-desc', item.item));
-
-            var badge = makeElement('div', 'badge-code');
-            badge.appendChild(makeElement('span', '', item.code));
-            badge.appendChild(makeElement('span', categoryClass(item.categoryClass), item.category));
-            card.appendChild(badge);
-            queueList.appendChild(card);
-        });
-    }
-
-    function updateDetail() {
-        var item = getSelected();
-        detailPanel.hidden = !item;
-        if (!item) return;
-
-        document.getElementById('detail-id').textContent = item.id;
-        var status = document.getElementById('detail-status');
-        status.textContent = '• ' + item.dueLabel;
-        status.hidden = item.lateDays <= 0;
-        document.getElementById('detail-borrower').textContent = item.name;
-        document.getElementById('detail-student').textContent = item.className + ' • NIS ' + item.nis;
-        document.getElementById('detail-role').textContent = item.role;
-        document.getElementById('detail-stat').textContent = item.stat;
-        document.getElementById('detail-code').textContent = item.code;
-        var category = document.getElementById('detail-category');
-        category.textContent = item.category;
-        category.className = categoryClass(item.categoryClass);
-        document.getElementById('detail-item').textContent = item.item;
-        document.getElementById('detail-borrow-date').textContent = item.borrowDate;
-        document.getElementById('detail-due-date').textContent = item.dueDate;
-        document.getElementById('detail-return-date').textContent = item.returnDate;
-        document.getElementById('form-kondisi').value = item.damaged ? 'rusak_ringan' : 'baik';
-        document.getElementById('form-catatan').value = item.damageNote;
-
-        var note = 'Barang diterima kembali. ';
-        note += item.lateDays > 0
-            ? 'Terlambat ' + item.lateDays + ' hari — denda ' + money(item.lateDays * dailyFine) + '. '
-            : 'Tidak terlambat — tanpa denda. ';
-        note += item.damageNote
-            ? 'Catatan kerusakan: ' + item.damageNote + ' '
-            : (item.damaged ? 'Barang ditandai rusak. ' : 'Kondisi barang belum ditandai rusak. ');
-        note += 'Data pengembalian akan tersimpan ke database saat dikonfirmasi.';
-        document.getElementById('detail-note').textContent = note;
-
-        var physical = document.getElementById('condition-physical');
-        physical.classList.toggle('is-damaged', item.damaged);
-        physical.querySelector('span').textContent = item.damaged ? '✖' : '✓';
-        physical.lastChild.textContent = item.damaged ? ' Kondisi fisik rusak' : ' Kondisi fisik baik';
-        document.querySelector('.btn-damage').textContent = item.damaged ? '✓ Tandai kondisi baik' : '✖ Tandai rusak';
-    }
-
-    function renderReturned() {
-        var query = returnedSearch.value.trim().toLocaleLowerCase('id-ID');
-        returnedGrid.replaceChildren();
-
-        var visibleItems = returnedRecords.filter(function(item) {
-            return [item.name, item.nis, item.item, item.code, item.category].join(' ').toLocaleLowerCase('id-ID').includes(query);
-        });
-        if (!visibleItems.length) {
-            returnedGrid.appendChild(makeElement(
-                'div',
-                'empty-state',
-                returnedRecords.length ? 'Tidak ada riwayat yang cocok.' : 'Belum ada peminjaman yang dikembalikan.'
-            ));
-            return;
-        }
-
-        visibleItems.forEach(function(item) {
-            var card = makeElement('div', 'returned-card');
-            var top = makeElement('div', 'returned-card-top');
-            var student = makeElement('div');
-            student.appendChild(makeElement('div', 'returned-card-user', item.name));
-            student.appendChild(makeElement('div', 'returned-card-class', item.className + ' • NIS ' + item.nis));
-            top.appendChild(student);
-            top.appendChild(makeElement('span', 'returned-status-pill', '✓ Dikembalikan'));
-            card.appendChild(top);
-            card.appendChild(makeElement('div', 'returned-item-name', item.item));
-
-            var badge = makeElement('div', 'badge-code');
-            badge.appendChild(makeElement('span', '', item.code));
-            badge.appendChild(makeElement('span', categoryClass(item.categoryClass), item.category));
-            card.appendChild(badge);
-
-            var dates = makeElement('div', 'returned-dates');
-            [['Pinjam', item.borrowDate], ['Kembali', item.returnDate]].forEach(function(date) {
-                var dateBox = makeElement('div', 'returned-date-box');
-                dateBox.appendChild(makeElement('div', 'lbl', date[0]));
-                dateBox.appendChild(makeElement('div', 'val', date[1]));
-                dates.appendChild(dateBox);
+            rows.forEach(row => {
+                const searchData = row.getAttribute('data-search') || '';
+                if (searchData.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
             });
-            card.appendChild(dates);
-            var fine = item.fine > 0 ? 'Denda keterlambatan: ' + money(item.fine) : 'Tanpa denda';
-            card.appendChild(makeElement('div', 'returned-fine' + (item.fine > 0 ? ' has-fine' : ''), fine));
-            returnedGrid.appendChild(card);
-        });
-    }
-
-    function activateTab(name) {
-        document.querySelectorAll('.tab-view').forEach(function(view) {
-            view.classList.toggle('active-view', view.id === 'view-' + name);
-        });
-        document.querySelectorAll('.tab-switcher .tab-btn').forEach(function(tab) {
-            var active = tab.dataset.tab === name;
-            tab.classList.toggle('active', active);
-            tab.setAttribute('aria-current', active ? 'page' : 'false');
-        });
-    }
-
-    document.querySelectorAll('.tab-switcher .tab-btn').forEach(function(tab) {
-        tab.addEventListener('click', function(event) {
-            event.preventDefault();
-            activateTab(tab.dataset.tab);
-        });
-    });
-
-    queueList.addEventListener('click', function(event) {
-        var card = event.target.closest('.queue-item');
-        if (!card) return;
-        selectedId = card.dataset.returnId;
-        renderQueue();
-        updateDetail();
-    });
-    queueList.addEventListener('keydown', function(event) {
-        if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.queue-item')) {
-            event.preventDefault();
-            event.target.click();
-        }
-    });
-    queueSearch.addEventListener('input', renderQueue);
-    returnedSearch.addEventListener('input', renderReturned);
-
-    document.querySelector('.btn-damage').addEventListener('click', function() {
-        var item = getSelected();
-        if (!item) return;
-        item.damaged = !item.damaged;
-        if (!item.damaged) item.damageNote = '';
-        document.getElementById('form-kondisi').value = item.damaged ? 'rusak_ringan' : 'baik';
-        document.getElementById('form-catatan').value = item.damageNote;
-        updateDetail();
-        showMessage(item.damaged ? 'Barang ditandai rusak.' : 'Kondisi barang ditandai baik.');
-    });
-
-    document.querySelector('.btn-note-damage').addEventListener('click', function() {
-        var item = getSelected();
-        if (!item) return;
-        var note = window.prompt('Catat kerusakan barang:', item.damageNote);
-        if (note === null) return;
-        item.damageNote = note.trim();
-        item.damaged = Boolean(item.damageNote);
-        document.getElementById('form-kondisi').value = item.damaged ? 'rusak_ringan' : 'baik';
-        document.getElementById('form-catatan').value = item.damageNote;
-        updateDetail();
-        showMessage(item.damageNote ? 'Catatan kerusakan disimpan.' : 'Catatan kerusakan dihapus.');
-    });
-
-    document.getElementById('return-form').addEventListener('submit', function(event) {
-        var item = getSelected();
-        if (!item) {
-            event.preventDefault();
-            return;
-        }
-        if (!window.confirm('Konfirmasi pengembalian atas nama ' + item.name + '?')) {
-            event.preventDefault();
-            return;
         }
 
-        this.action = this.action.replace('__ID__', encodeURIComponent(item.id));
-    });
+        function selectCondition(kondisi) {
+            ['baik', 'rusak_ringan', 'rusak_berat'].forEach(k => {
+                const card = document.getElementById('card-' + k);
+                if (card) {
+                    card.classList.remove('selected-baik', 'selected-rusak_ringan', 'selected-rusak_berat');
+                }
+            });
 
-    function renderAll() {
-        renderCounts();
-        renderQueue();
-        renderReturned();
-        updateDetail();
-    }
+            const targetCard = document.getElementById('card-' + kondisi);
+            if (targetCard) {
+                targetCard.classList.add('selected-' + kondisi);
+                const radio = targetCard.querySelector('input[type="radio"]');
+                if (radio) radio.checked = true;
+            }
 
-    activateTab(@js($activeTab));
-    renderAll();
-})();
-</script>
-    
+            const noticeBox = document.getElementById('modalNoticeBox');
+            const noticeText = document.getElementById('modalNoticeText');
 
+            if (kondisi === 'baik') {
+                noticeBox.className = 'modal-notice';
+                noticeText.innerHTML = 'Barang dalam kondisi <strong>Baik</strong>: Stok alat akan otomatis bertambah +1 dan status menjadi Dikembalikan.';
+            } else {
+                noticeBox.className = 'modal-notice notice-warning';
+                noticeText.innerHTML = 'Barang berstatus <strong>' + (kondisi === 'rusak_ringan' ? 'Rusak Ringan' : 'Rusak Berat') + '</strong>: Stok alat <strong>TIDAK AKAN</strong> bertambah secara otomatis sebelum dinyatakan layak digunakan.';
+            }
+        }
+
+        function openConfirmModal(data) {
+            const form = document.getElementById('modalForm');
+            form.action = "{{ url('petugas/pengembalian') }}/" + data.id + "/konfirmasi";
+
+            document.getElementById('modalStudentName').textContent = data.name;
+            document.getElementById('modalStudentClass').textContent = data.className + ' (NIS: ' + data.nis + ')';
+            document.getElementById('modalItemName').textContent = data.item + ' [' + data.code + ']';
+
+            const lateText = data.lateDays > 0 ? (data.lateDays + ' hari terlambat') : 'Tepat waktu (0 hari)';
+            document.getElementById('modalLateDays').textContent = lateText;
+            document.getElementById('modalLateDays').style.color = data.lateDays > 0 ? '#ef4444' : '#10b981';
+
+            document.getElementById('modalCatatan').value = data.damageNote || '';
+            selectCondition(data.condition || 'baik');
+
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeConfirmModal();
+            }
+        });
+    </script>
 </body>
 </html>

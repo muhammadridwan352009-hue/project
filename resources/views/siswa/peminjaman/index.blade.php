@@ -147,7 +147,7 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -273,6 +273,28 @@
         .status-badge.dipinjam {
             background: #d1fae5;
             color: #047857;
+        }
+        .status-badge.menunggu_konfirmasi {
+            background: #ffedd5;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+        .btn-return {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-return:hover {
+            background: #1d4ed8;
         }
         .status-badge.dikembalikan {
             background: #f1f5f9;
@@ -528,6 +550,9 @@
             {{ session('success') }}
         </div>
         @endif
+        @if($errors->has('pengembalian'))
+        <div class="alert-error">{{ $errors->first('pengembalian') }}</div>
+        @endif
         @if($errors->has('perpanjangan'))
         <div class="alert-error">{{ $errors->first('perpanjangan') }}</div>
         @endif
@@ -538,46 +563,57 @@
             $menunggu = $peminjamans->where('status', 'menunggu')->count();
             $disetujui = $peminjamans->where('status', 'disetujui')->count();
             $dipinjam = $peminjamans->where('status', 'dipinjam')->count();
+            $menungguKonfirmasi = $peminjamans->where('status', 'menunggu_konfirmasi')->count();
             $dikembalikan = $peminjamans->where('status', 'dikembalikan')->count();
+            $ditolak = $peminjamans->where('status', 'ditolak')->count();
         @endphp
 
         <div class="stats-grid">
-            <div class="stat-card active">
+            <div class="stat-card active" data-filter="all">
                 <div class="number">{{ $total }}</div>
                 <div class="label">Semua</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" data-filter="menunggu">
                 <div class="number">{{ $menunggu }}</div>
                 <div class="label">Menunggu</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" data-filter="disetujui">
                 <div class="number">{{ $disetujui }}</div>
                 <div class="label">Disetujui</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" data-filter="dipinjam">
                 <div class="number">{{ $dipinjam }}</div>
                 <div class="label">Dipinjam</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" data-filter="menunggu_konfirmasi">
+                <div class="number">{{ $menungguKonfirmasi }}</div>
+                <div class="label">Menunggu Konfirmasi</div>
+            </div>
+            <div class="stat-card" data-filter="dikembalikan">
                 <div class="number">{{ $dikembalikan }}</div>
                 <div class="label">Dikembalikan</div>
+            </div>
+            <div class="stat-card" data-filter="ditolak">
+                <div class="number">{{ $ditolak }}</div>
+                <div class="label">Ditolak</div>
             </div>
         </div>
 
         {{-- Filter Tabs --}}
         <div class="filter-tabs">
-            <a href="#" class="filter-tab active">Semua {{ $total }}</a>
-            <a href="#" class="filter-tab">Menunggu {{ $menunggu }}</a>
-            <a href="#" class="filter-tab">Disetujui {{ $disetujui }}</a>
-            <a href="#" class="filter-tab">Dipinjam {{ $dipinjam }}</a>
-            <a href="#" class="filter-tab">Dikembalikan {{ $dikembalikan }}</a>
-            <a href="#" class="filter-tab">Ditolak {{ $peminjamans->where('status', 'ditolak')->count() }}</a>
+            <a href="#" class="filter-tab active" data-filter="all">Semua {{ $total }}</a>
+            <a href="#" class="filter-tab" data-filter="menunggu">Menunggu {{ $menunggu }}</a>
+            <a href="#" class="filter-tab" data-filter="disetujui">Disetujui {{ $disetujui }}</a>
+            <a href="#" class="filter-tab" data-filter="dipinjam">Dipinjam {{ $dipinjam }}</a>
+            <a href="#" class="filter-tab" data-filter="menunggu_konfirmasi">Menunggu Konfirmasi {{ $menungguKonfirmasi }}</a>
+            <a href="#" class="filter-tab" data-filter="dikembalikan">Dikembalikan {{ $dikembalikan }}</a>
+            <a href="#" class="filter-tab" data-filter="ditolak">Ditolak {{ $peminjamans->where('status', 'ditolak')->count() }}</a>
         </div>
 
         {{-- Daftar Peminjaman --}}
         @if($peminjamans->count() > 0)
             @foreach($peminjamans as $peminjaman)
-            <div class="borrowing-card">
+            <div class="borrowing-card" data-status="{{ $peminjaman->status }}">
                 <div class="borrowing-info">
                     <div class="borrowing-meta">
                         <span class="badge-code">{{ $peminjaman->alat->kode_alat ?? '-' }}</span>
@@ -589,8 +625,11 @@
                         {{ $peminjaman->alat->nama_alat ?? 'Alat tidak ditemukan' }}
                     </div>
                     <div class="borrowing-date">
-                        <strong>{{ $peminjaman->tanggal_pinjam->format('d M Y') }}</strong> - 
-                        {{ $peminjaman->tanggal_kembali->format('d M Y') }}
+                        Tanggal Pinjam: <strong>{{ $peminjaman->tanggal_pinjam->format('d M Y') }}</strong> &bull; 
+                        Batas Pengembalian: <strong>{{ $peminjaman->tanggal_kembali->format('d M Y') }}</strong>
+                        @if($peminjaman->tanggal_pengembalian)
+                            &bull; Tanggal Pengembalian: <strong>{{ $peminjaman->tanggal_pengembalian->format('d M Y') }}</strong>
+                        @endif
                     </div>
                 </div>
                 <div class="borrowing-actions">
@@ -600,13 +639,25 @@
                         @elseif($peminjaman->status == 'disetujui')
                             ✓ Disetujui
                         @elseif($peminjaman->status == 'dipinjam')
-                            📦 Dipinjam
+                            📦 Sedang Dipinjam
+                        @elseif($peminjaman->status == 'menunggu_konfirmasi')
+                            ⏳ Menunggu Konfirmasi Petugas
                         @elseif($peminjaman->status == 'dikembalikan')
                             ✅ Dikembalikan
                         @elseif($peminjaman->status == 'ditolak')
                             ✕ Ditolak
                         @endif
                     </span>
+
+                    {{-- Tombol Ajukan Pengembalian untuk alat yang sedang disetujui / dipinjam --}}
+                    @if(in_array($peminjaman->status, ['disetujui', 'dipinjam'], true))
+                        <form action="{{ route('siswa.peminjaman.pengembalian', $peminjaman->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengajukan pengembalian untuk alat ini?');" style="margin: 0;">
+                            @csrf
+                            <button type="submit" class="btn-return">
+                                🔄 Ajukan Pengembalian
+                            </button>
+                        </form>
+                    @endif
 
                     @php
                         $perpanjanganMenunggu = $peminjaman->perpanjangans->contains('status', 'menunggu');
@@ -616,10 +667,10 @@
                             @if($perpanjanganMenunggu)
                                 <span>Permintaan perpanjangan sedang menunggu persetujuan petugas.</span>
                             @elseif($peminjaman->tanggal_kembali->gte(today()))
-                                <span>Perlu tambahan waktu? Perpanjangan menambah masa pinjam 7 hari.</span>
+                                <span>Perlu perpanjangan waktu?</span>
                                 <form action="{{ route('siswa.peminjaman.perpanjangan', $peminjaman->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit">Ajukan perpanjangan 7 hari</button>
+                                    <button type="submit">Perpanjang 7 hari</button>
                                 </form>
                             @endif
                         </div>
@@ -645,6 +696,26 @@
             const label = sidebar.querySelector('.toggle-label');
             if (label) label.textContent = sidebar.classList.contains('collapsed') ? '' : 'Ciutkan';
         }
+
+        // Tab Filtering
+        document.querySelectorAll('.filter-tab, .stat-card').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const filter = this.dataset.filter;
+                if (!filter) return;
+
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === filter));
+                document.querySelectorAll('.stat-card').forEach(s => s.classList.toggle('active', s.dataset.filter === filter));
+
+                document.querySelectorAll('.borrowing-card').forEach(card => {
+                    if (filter === 'all' || card.dataset.status === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
     </script>
 
 </body>

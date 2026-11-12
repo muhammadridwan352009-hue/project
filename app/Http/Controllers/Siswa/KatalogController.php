@@ -22,21 +22,4 @@ class KatalogController extends Controller
 
         return view('siswa.detail-alat', compact('alat'));
     }
-
-    // Mengarahkan ke formulir peminjaman
-    public function ajukan($id)
-    {
-        $alat = Alat::findOrFail($id);
-
-        if (($alat->stok ?? 0) <= 0) {
-            return redirect()
-                ->route('siswa.katalog.show', $id)
-                ->with(
-                    'error',
-                    'Maaf, stok alat ini sedang habis atau tidak tersedia.'
-                );
-        }
-
-           return view('siswa.peminjaman-form', compact('alat'));
-    }
 }

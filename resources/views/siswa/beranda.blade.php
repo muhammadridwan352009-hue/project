@@ -315,6 +315,7 @@
         .status-badge.menunggu { background: #fef3c7; color: #92400e; }
         .status-badge.disetujui { background: #dbeafe; color: #1e40af; }
         .status-badge.dipinjam { background: #d1fae5; color: #047857; }
+        .status-badge.menunggu_konfirmasi { background: #ffedd5; color: #c2410c; }
         .status-badge.dikembalikan { background: #f1f5f9; color: #475569; }
         .status-badge.ditolak { background: #fee2e2; color: #dc2626; }
         .empty-loans {
@@ -441,7 +442,11 @@
         <!-- Banner Sambutan -->
         <div class="banner">
             <div>
-                <h2>Selamat siang, {{ \Illuminate\Support\Str::before($siswa->name, ' ') }}! 👋</h2>
+                @php
+                    $jam = now()->hour;
+                    $sapaan = $jam < 11 ? 'Selamat pagi' : ($jam < 15 ? 'Selamat siang' : ($jam < 18 ? 'Selamat sore' : 'Selamat malam'));
+                @endphp
+                <h2>{{ $sapaan }}, {{ \Illuminate\Support\Str::before($siswa->name, ' ') }}! 👋</h2>
                 <p>Lihat status dan riwayat alat yang sudah Anda ajukan untuk dipinjam.</p>
             </div>
            <a href="{{ route('siswa.peminjaman.index') }}" class="btn-banner">Lihat pinjaman</a>
@@ -530,6 +535,7 @@
                                 @case('menunggu') Menunggu @break
                                 @case('disetujui') Disetujui @break
                                 @case('dipinjam') Dipinjam @break
+                                @case('menunggu_konfirmasi') Menunggu Konfirmasi @break
                                 @case('dikembalikan') Dikembalikan @break
                                 @case('ditolak') Ditolak @break
                                 @default {{ ucfirst($peminjaman->status) }}
@@ -565,7 +571,7 @@
                             ];
                         @endphp
                         @foreach($kategoriList as $cat)
-                        <a href="{{ route('siswa.katalog') }}" class="category-box">
+                        <a href="{{ route('siswa.katalog') }}?kategori={{ $cat['slug'] }}" class="category-box">
                             <span class="icon">{{ $iconMap[$cat['slug']] ?? '📦' }}</span>
                             <div class="cat-name">{{ $cat['nama'] }}</div>
                             <div class="cat-count">{{ $cat['count'] }} unit</div>

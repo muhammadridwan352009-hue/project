@@ -327,7 +327,7 @@
             font-weight: 600;
         }
         .stock-badge.ready { background: #d1fae5; color: #047857; }
-        .stock-badge.busy { background: #fee2e2; color: #dc2626; }
+        .stock-badge.habis { background: #fee2e2; color: #dc2626; }
         .condition {
             font-size: 10px;
             color: #94a3b8;
@@ -418,10 +418,10 @@
             </div>
 
             <div class="filter-tags">
-                <div class="tags-group">
-                    <a href="#" class="tag active">Semua alat · {{ $alats->count() }}</a>
+                <div class="tags-group" id="kategori-tags">
+                    <a href="#" class="tag active" data-kategori="">Semua alat · {{ $alats->count() }}</a>
                     @foreach($alats->groupBy('kategori') as $kategori => $alatKategori)
-                        <a href="#" class="tag">{{ ucfirst($kategori) }} · {{ $alatKategori->count() }}</a>
+                        <a href="#" class="tag" data-kategori="{{ strtolower($kategori) }}">{{ ucfirst($kategori) }} · {{ $alatKategori->count() }}</a>
                     @endforeach
                 </div>
                 <div class="tag-info" id="catalog-result-count">Menampilkan {{ $alats->count() }} alat</div>
@@ -431,7 +431,7 @@
        <!-- Catalog Grid -->
        <div class="catalog-grid">
            @foreach($alats as $alat)
-           <div class="item-card" data-search="{{ strtolower($alat->nama_alat . ' ' . ($alat->kode_alat ?? '') . ' ' . ($alat->lokasi ?? '') . ' ' . ($alat->kategori ?? '')) }}">
+           <div class="item-card" data-search="{{ strtolower($alat->nama_alat . ' ' . ($alat->kode_alat ?? '') . ' ' . ($alat->lokasi ?? '') . ' ' . ($alat->kategori ?? '')) }}" data-kategori="{{ strtolower($alat->kategori ?? '') }}">
                <div class="card-img-wrapper">
                    @if($alat->foto_katalog)
                        <img
@@ -458,7 +458,7 @@
                     </div>
                     <div style="margin-top: 10px;">
                         <div class="card-meta">
-                            <span class="stock-badge ready">{{ $alat->stok ?? 3 }} tersedia</span>
+                            <span class="stock-badge {{ ($alat->stok ?? 0) > 0 ? 'ready' : 'habis' }}">{{ ($alat->stok ?? 0) > 0 ? ($alat->stok . ' tersedia') : 'Stok habis' }}</span>
                             <span class="condition">{{ $alat->kondisi ?? 'Kondisi baik' }}</span>
                         </div>
                        {{-- Tombol Lihat Detail dinamis dengan ID alat --}}
@@ -477,20 +477,55 @@
             const catalogItems = document.querySelectorAll('.item-card');
             const resultCount = document.getElementById('catalog-result-count');
             const noResults = document.getElementById('catalog-no-results');
+            const kategoriTags = document.querySelectorAll('#kategori-tags .tag');
 
-            catalogSearch.addEventListener('input', () => {
+            // Filter kategori aktif (dari tag yang diklik / parameter URL ?kategori=)
+            let kategoriAktif = '';
+
+            const applyFilter = () => {
                 const query = catalogSearch.value.trim().toLocaleLowerCase('id');
                 let visibleCount = 0;
 
                 catalogItems.forEach((item) => {
-                    const matches = item.dataset.search.includes(query);
+                    const cocokKategori = !kategoriAktif || (item.dataset.kategori === kategoriAktif);
+                    const cocokCari = !query || item.dataset.search.includes(query);
+                    const matches = cocokKategori && cocokCari;
                     item.hidden = !matches;
                     if (matches) visibleCount++;
                 });
 
                 resultCount.textContent = `Menampilkan ${visibleCount} alat`;
                 noResults.hidden = visibleCount > 0;
+            };
+
+            // tandai data-kategori tiap kartu agar filter kategori bekerja
+            catalogItems.forEach((item) => {
+                if (!item.dataset.kategori) {
+                    item.dataset.kategori = item.dataset.search.split(' ').filter(Boolean).slice(-1)[0] || '';
+                }
             });
+
+            catalogSearch.addEventListener('input', applyFilter);
+
+            kategoriTags.forEach((tag) => {
+                tag.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    kategoriAktif = tag.dataset.kategori || '';
+                    kategoriTags.forEach((t) => t.classList.toggle('active', t === tag));
+                    applyFilter();
+                });
+            });
+
+            // Aktifkan kategori otomatis jika URL membawa ?kategori=xxx (dari beranda / kartu kategori)
+            const params = new URLSearchParams(window.location.search);
+            const kategoriUrl = (params.get('kategori') || '').toLocaleLowerCase('id');
+            if (kategoriUrl) {
+                const tagCocok = Array.from(kategoriTags).find((t) => t.dataset.kategori === kategoriUrl);
+                if (tagCocok) {
+                    tagCocok.click();
+                    tagCocok.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
         </script>
     
 

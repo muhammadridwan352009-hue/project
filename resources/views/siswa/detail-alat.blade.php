@@ -504,7 +504,7 @@
                     <div class="card-box">
                         <div class="card-box-title">Aturan peminjaman</div>
                         <ul class="rule-list">
-                            <li><span class="check">✓</span> Maksimal peminjaman 3 hari.</li>
+                            <li><span class="check">✓</span> Maksimal peminjaman 7 hari (dapat diperpanjang).</li>
                             <li><span class="check">✓</span> Wajib didampingi petugas atau pengurus.</li>
                             <li><span class="check">✓</span> Periksa kondisi fisik saat pengambilan.</li>
                             <li><span class="check">✓</span> Kerusakan wajib dilaporkan segera.</li>
