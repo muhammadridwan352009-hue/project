@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
 use App\Models\User;
 use App\Models\Peminjaman;
 
@@ -22,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS di production (Railway, Fly.io proxy)
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         // Bagikan variabel jumlah pending ke sidebar petugas
         View::composer('petugas.partials.sidebar', function ($view) {
             try {
