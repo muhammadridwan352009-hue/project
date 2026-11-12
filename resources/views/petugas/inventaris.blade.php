@@ -305,7 +305,7 @@
         }
         .status-pill.baik { background-color: #d1fae5; color: #059669; }
         .status-pill.cek { background-color: #fef3c7; color: #d97706; }
-        .status-pill.dipakai { background-color: #ffedd5; color: #ea580c; }
+        .status-pill.rusak { background-color: #fee2e2; color: #dc2626; }
 
         .location-text {
             font-size: 12px;
@@ -403,7 +403,7 @@
             .filter-card { flex-direction: column; }
             .search-box input { font-size: 16px; }
             .table-card { overflow-x: auto; }
-            table { min-width: 640px; }
+            table { min-width: 760px; }
             th, td { padding: 12px 12px; }
             .table-footer { flex-direction: column; gap: 8px; text-align: center; }
         }
@@ -433,7 +433,7 @@
             </div>
             <div class="user-badge">
                 <span class="dot"></span>
-                <span>Rizky Maulana</span>
+                <span>{{ Auth::user()->name }}</span>
             </div>
         </header>
 
@@ -442,11 +442,11 @@
         <div class="title-section">
             <div>
                 <h2>Manajemen inventaris</h2>
-                <p>Kelola {{ $items->count() }} unit alat dari seluruh organisasi siswa.</p>
+                <p>Kelola {{ $items->count() }} jenis inventaris dengan total {{ $items->sum('stok') }} unit.</p>
             </div>
             <div class="action-buttons">
                 <a href="{{ route('petugas.inventaris.create') }}" class="btn-primary">
-                    <span>+</span> Tambah alat
+                    <span>+</span> Tambah inventaris
                 </a>
             </div>
         </div>
@@ -472,9 +472,10 @@
                             <input type="checkbox" style="accent-color: #00897b;">
                         </th>
                         <th>Inventaris</th>
-                        <th>Stok</th>
+                        <th>Total unit</th>
+                        <th>Tersedia</th>
                         <th>Kondisi</th>
-                        <th>Lokasi</th>
+                        <th>Deskripsi</th>
                         <th style="text-align: right; padding-right: 20px;">Aksi</th>
                     </tr>
                 </thead>
@@ -499,12 +500,12 @@
                                 <div style="display:flex; align-items:center; gap:10px;">
                                     @if($item->foto && file_exists(storage_path('app/public/' . $item->foto)))
                                     <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto {{ $item->nama_barang }}"
-                                        style="width:42px; height:42px; object-fit:cover; border-radius:8px; border:1px solid #e2e8f0; flex-shrink:0;">
+                                        style="width:42px; height:42px; object-fit:contain; object-position:center; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0; flex-shrink:0;">
                                     @else
                                     <div style="width:42px; height:42px; border-radius:8px; border:1px solid #e2e8f0; background:#f1f5f9; color:#94a3b8; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
                                     @endif
                                     <div>
-                                        <strong>{{ $item->nama_barang }}</strong>
+                                        <strong style="text-transform: capitalize;">{{ $item->nama_barang }}</strong>
                                         <div class="badge-code">
                                             <span>{{ $item->kode_barang }}</span>
                                             <span class="cat {{ $catClass }}">{{ strtoupper(optional($item->category)->nama ?? '-') }}</span>
@@ -514,12 +515,13 @@
                             </div>
                         </td>
                         <td><span class="stock-text">{{ $item->stok }}</span></td>
+                        <td><span class="stock-text">{{ $item->alat ? $item->alat->stok . ' unit' : 'Belum tersinkron' }}</span></td>
                         <td>
                             <span class="status-pill {{ $item->kondisi === 'baik' ? 'baik' : ($item->kondisi === 'rusak_ringan' ? 'cek' : 'rusak') }}">
                                 • {{ str_replace('_', ' ', ucfirst($item->kondisi)) }}
                             </span>
                         </td>
-                        <td><span class="location-text">{{ optional($item->category)->nama ?? '-' }}</span></td>
+                        <td><span class="location-text">{{ $item->deskripsi ? \Illuminate\Support\Str::limit($item->deskripsi, 60) : '-' }}</span></td>
                         <td>
                             <div class="action-cell">
                                 <a href="{{ route('petugas.inventaris.edit', $item) }}" class="btn-edit">✏️ Edit</a>
@@ -534,8 +536,8 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" style="text-align:center; padding:40px; color:#94a3b8; font-size:13px;">
-                            Belum ada data inventaris. Klik "Tambah alat" untuk mendaftarkan barang baru.
+                        <td colspan="7" style="text-align:center; padding:40px; color:#94a3b8; font-size:13px;">
+                            Belum ada data inventaris. Klik "Tambah inventaris" untuk mendaftarkan barang baru.
                         </td>
                     </tr>
                     @endforelse
@@ -549,6 +551,14 @@
         </div>
     </main>
     
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.table-card tbody tr').forEach(function(row) {
+                row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+            });
+        });
+    </script>
 
 </body>
 </html>

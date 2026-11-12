@@ -227,7 +227,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Stok</label>
+                    <label>Total unit</label>
                     <input type="number" name="stok" value="{{ old('stok', $item->stok) }}" min="0" class="form-control" required>
                     @error('stok') <div class="error-msg">{{ $message }}</div> @enderror
                 </div>

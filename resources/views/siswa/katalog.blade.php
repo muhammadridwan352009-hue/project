@@ -233,7 +233,7 @@
             position: relative;
             width: 100%;
             height: 160px;
-            background: #e2e8f0;
+            background: #f8fafc;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -244,7 +244,12 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 220px;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            background: #f8fafc;
             z-index: 1;
         }
         .placeholder-text {
@@ -279,22 +284,7 @@
         .badge-code .cat.osis { color: #0284c7; }
         .badge-code .cat.rohis { color: #059669; }
 
-        .btn-fav {
-            position: absolute;
-            bottom: 12px;
-            left: 12px;
-            z-index: 2;
-            width: 30px;
-            height: 30px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            border: none;
-            cursor: pointer;
-        }
+
 
         .card-body {
             padding: 16px;
@@ -443,15 +433,14 @@
                        <span class="placeholder-text">{{ $alat->nama_alat }}</span>
                    @endif
                    <div class="badge-code">
-                        <span>{{ $alat->kode_alat ?? 'MM-CAM-014' }}</span>
-                        <span class="cat">{{ $alat->kategori ?? 'MULTIMEDIA' }}</span>
-                    </div>
-                    <button class="btn-fav">â™¡</button>
+                        <span>{{ $alat->kode_alat ?? 'INV-'.$alat->id }}</span>
+                        <span class="cat">{{ strtoupper($alat->kategori ?? 'UMUM') }}</span>
+                   </div>
                 </div>
                 <div class="card-body">
                     <div>
-                        <div class="item-title">{{ $alat->nama_alat }}</div>
-                        <div class="item-loc">{{ ucfirst($alat->kategori ?? 'multimedia') }}</div>
+                        <div class="item-title" style="text-transform: capitalize;">{{ $alat->nama_alat }}</div>
+                        <div class="item-loc">{{ ucfirst($alat->kategori ?? 'umum') }}</div>
                         <div style="font-size: 11px; color: #64748b; margin-top: 6px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="{{ $alat->deskripsi_tampil }}">
                             {{ $alat->deskripsi_tampil }}
                         </div>

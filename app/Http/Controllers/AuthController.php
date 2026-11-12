@@ -34,7 +34,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'name' => $validated['name'],
+            'name' => trim(preg_replace('/\s+/', ' ', $validated['name'])),
             'nis' => $validated['nis'],
             'kelas' => $validated['tingkat_kelas'].' '.$validated['jurusan'],
             'email' => $validated['email'],
@@ -70,7 +70,7 @@ class AuthController extends Controller
         ]);
 
         User::create([
-            'name' => $validated['name'],
+            'name' => trim(preg_replace('/\s+/', ' ', $validated['name'])),
             'nis' => $validated['nis'],
             'kelas' => $validated['tingkat_kelas'].' '.$validated['jurusan'],
             'email' => $validated['email'],

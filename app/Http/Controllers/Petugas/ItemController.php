@@ -10,13 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ItemController extends Controller
 {
     // Read: Menampilkan daftar barang
     public function index()
     {
-        $items = Item::with('category')->latest()->get();
+        $items = Item::with(['category', 'alat'])->latest()->get();
         return view('petugas.inventaris', compact('items'));
     }
 
@@ -64,7 +65,7 @@ class ItemController extends Controller
             $item = Item::create($data);
             $category = Category::findOrFail($item->category_id);
             $alat = new Alat();
-            $this->syncStudentCatalogItem($alat, $item, $category);
+            $this->syncStudentCatalogItem($alat, $item, $category, (int) $item->stok);
             $alat->save();
             $item->alat()->associate($alat)->save();
         });
@@ -107,10 +108,34 @@ class ItemController extends Controller
 
         $fotoLama = $item->foto;
         DB::transaction(function () use ($item, $data) {
+            $item = Item::query()->lockForUpdate()->findOrFail($item->id);
+            $stokLama = (int) $item->stok;
+            $stokBaru = (int) $data['stok'];
+            $alatBaru = !$item->alat_id;
+            $alat = $alatBaru
+                ? new Alat()
+                : Alat::query()->lockForUpdate()->findOrFail($item->alat_id);
+
+            $peminjamanAktif = $alatBaru
+                ? 0
+                : $alat->peminjamans()
+                    ->whereIn('status', ['disetujui', 'dipinjam', 'menunggu_konfirmasi'])
+                    ->count();
+            $stokTersediaLama = $alatBaru ? 0 : (int) $alat->stok;
+            $stokTidakTersedia = $alatBaru
+                ? 0
+                : max(0, $stokLama - $stokTersediaLama - $peminjamanAktif);
+
+            if ($stokBaru < $peminjamanAktif + $stokTidakTersedia) {
+                throw ValidationException::withMessages([
+                    'stok' => 'Total unit tidak boleh lebih sedikit daripada unit yang sedang dipinjam atau tidak layak digunakan.',
+                ]);
+            }
+
+            $stokTersediaBaru = $stokBaru - $peminjamanAktif - $stokTidakTersedia;
             $item->update($data);
             $category = Category::findOrFail($item->category_id);
-            $alat = $item->alat_id ? Alat::findOrFail($item->alat_id) : new Alat();
-            $this->syncStudentCatalogItem($alat, $item, $category);
+            $this->syncStudentCatalogItem($alat, $item, $category, $stokTersediaBaru);
             $alat->save();
             $item->alat()->associate($alat)->save();
         });
@@ -141,14 +166,14 @@ class ItemController extends Controller
                          ->with('success', 'Data barang berhasil dihapus!');
     }
 
-    private function syncStudentCatalogItem(Alat $alat, Item $item, Category $category): void
+    private function syncStudentCatalogItem(Alat $alat, Item $item, Category $category, int $stokTersedia): void
     {
         $alat->fill([
             'kode_alat' => $item->kode_barang,
             'nama_alat' => $item->nama_barang,
             'deskripsi' => $item->deskripsi,
             'kategori' => strtolower($category->nama),
-            'stok' => $item->stok,
+            'stok' => $stokTersedia,
             'kondisi' => ucfirst(str_replace('_', ' ', $item->kondisi)),
             'is_active' => true,
         ]);

@@ -51,4 +51,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Nama siap tampil: spasi ganda dibuang, setiap kata diawali huruf besar
+     * (Title Case) agar wrapping teks tidak terpotong canggung.
+     */
+    public function getNamaTampilAttribute(): string
+    {
+        $nama = trim((string) preg_replace('/\s+/', ' ', $this->name ?? ''));
+
+        return mb_convert_case($nama, MB_CASE_TITLE, 'UTF-8');
+    }
 }

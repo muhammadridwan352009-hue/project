@@ -160,7 +160,7 @@
             position: relative;
             width: 100%;
             height: 220px;
-            background: #2d3748;
+            background: #f8fafc;
             border-radius: 12px;
             overflow: hidden;
             display: flex;
@@ -172,7 +172,12 @@
         .img-container > img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 220px;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            background: #f8fafc;
         }
         .badge-code {
             position: absolute;
@@ -372,6 +377,7 @@
             .detail-grid { grid-template-columns: 1fr; }
             .item-main-card { grid-template-columns: 1fr; }
             .img-container { height: 180px; }
+            .img-container > img { max-height: 180px; }
         }
         @media (max-width: 768px) {
             main { padding: 18px 14px; }
@@ -447,10 +453,10 @@
 
                     <div class="info-header">
                         <div>
-                            <div class="status-pill {{ ($alat->stok ?? 1) > 0 ? '' : 'empty' }}">
-                                ● {{ ($alat->stok ?? 1) > 0 ? 'Tersedia' : 'Habis' }}
+                            <div class="status-pill {{ ($alat->stok ?? 0) > 0 ? '' : 'empty' }}">
+                                ● {{ ($alat->stok ?? 0) > 0 ? 'Tersedia' : 'Habis' }}
                             </div>
-                            <div class="item-title-large">{{ $alat->nama_alat }}</div>
+                            <div class="item-title-large">{{ Str::title($alat->nama_alat ?? '') }}</div>
                             <div class="item-description-box" style="margin-bottom: 20px;">
                                 <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #00897b; margin-bottom: 4px;">Deskripsi:</div>
                                 <div class="item-description" style="margin-bottom: 0; font-size: 13px; color: #475569; line-height: 1.6; white-space: pre-line;">"{{ $alat->deskripsi_tampil }}"</div>
@@ -459,16 +465,16 @@
 
                         <div class="quick-specs">
                             <div class="spec-box">
-                                <div class="label">Stok</div>
-                                <div class="value">{{ $alat->stok ?? 1 }} unit</div>
+                                <div class="label">Stok tersedia</div>
+                                <div class="value">{{ $alat->stok ?? 0 }} unit</div>
                             </div>
                             <div class="spec-box">
                                 <div class="label">Kondisi</div>
                                 <div class="value">{{ $alat->kondisi ?? 'Baik' }}</div>
                             </div>
                             <div class="spec-box">
-                                <div class="label">Lokasi</div>
-                                <div class="value">{{ $alat->lokasi ?? 'Ruang Sarpras' }}</div>
+                                <div class="label">Kategori</div>
+                                <div class="value">{{ ucfirst($alat->kategori ?? 'Umum') }}</div>
                             </div>
                         </div>
                     </div>
@@ -487,15 +493,19 @@
                             </tr>
                             <tr>
                                 <td>Lokasi</td>
-                                <td>{{ $alat->lokasi ?? 'Ruang Sarpras' }}</td>
+                                <td>Lokasi belum dicatat</td>
                             </tr>
                             <tr>
                                 <td>Kondisi</td>
                                 <td>{{ $alat->kondisi ?? 'Baik' }}</td>
                             </tr>
                             <tr>
+                                <td>Unit tersedia</td>
+                                <td>{{ $alat->stok ?? 0 }} unit</td>
+                            </tr>
+                            <tr>
                                 <td>Kelengkapan</td>
-                                <td>Unit utama & aksesoris standar</td>
+                                <td>Unit utama (detail saat pengambilan)</td>
                             </tr>
                         </table>
                     </div>

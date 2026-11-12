@@ -387,7 +387,7 @@
             }
             .container {
                 flex-direction: column;
-                min-height: 100vh;
+                min-height: 100vh; 
                 margin: 0;
                 padding: 0;
             }

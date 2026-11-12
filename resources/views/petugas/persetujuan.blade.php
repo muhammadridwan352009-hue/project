@@ -520,7 +520,7 @@
                     <tr>
                         <td>
                             <div class="peminjam-info">
-                                <strong>{{ $b->user->name ?? 'Siswa' }}</strong>
+                                <strong>{{ $b->user->nama_tampil ?? 'Siswa' }}</strong>
                                 <span>Siswa • {{ ucfirst($b->kategori) }}</span>
                             </div>
                         </td>

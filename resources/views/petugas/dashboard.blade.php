@@ -201,9 +201,6 @@
         }
         .stat-icon.info { background-color: #f0fdf4; border-color: #bbf7d0; color: #16a34a; }
         .stat-icon.primary { background-color: #ecfeff; border-color: #a5f3fc; color: #0891b2; }
-            gap: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
         .stat-icon {
             width: 42px;
             height: 42px;
@@ -417,6 +414,7 @@
             position: relative;
             width: 100%;
             height: 160px;
+            background: #f8fafc;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -429,6 +427,11 @@
             height: 100%;
             padding: 8px;
             object-fit: contain;
+            object-position: center;
+            max-width: 100%;
+            max-height: 220px;
+            display: block;
+            background: #f8fafc;
             z-index: 1;
         }
         .placeholder-text {
@@ -620,9 +623,9 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 </div>
                 <div>
-                    <div class="stat-label">Total stok alat</div>
+                    <div class="stat-label">Total unit inventaris</div>
                     <div class="stat-value">{{ $totalStok }}</div>
-                    <div class="stat-sub">Unit tersedia di inventaris</div>
+                    <div class="stat-sub">{{ $stokTersedia }} unit tersedia saat ini</div>
                 </div>
             </div>
 
@@ -631,9 +634,9 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
                 </div>
                 <div>
-                    <div class="stat-label">Sedang dipinjam</div>
+                    <div class="stat-label">Peminjaman aktif</div>
                     <div class="stat-value">{{ $dipinjamCount }}</div>
-                    <div class="stat-sub" style="color:#10b981;">Sedang digunakan siswa</div>
+                    <div class="stat-sub" style="color:#10b981;">Disetujui, dipinjam & menunggu konfirmasi</div>
                 </div>
             </div>
 
@@ -641,11 +644,16 @@
                 <div class="stat-icon warning">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 </div>
-                <div>
-                    <div class="stat-label">Peminjaman</div>
-                    <div class="stat-value">{{ $menungguCount }}</div>
-                    <div class="stat-sub" style="color:#d97706;">Pengajuan alat menunggu</div>
-                </div>
+                <a href="{{ route('petugas.persetujuan') }}" class="stat-card" title="Buka Halaman Persetujuan Peminjaman">
+                    <div class="stat-icon warning">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <div>
+                        <div class="stat-label">Menunggu persetujuan</div>
+                        <div class="stat-value">{{ $menungguCount }}</div>
+                        <div class="stat-sub" style="color:#d97706;">Pengajuan peminjaman menunggu →</div>
+                    </div>
+                </a>
             </div>
 
             <a href="{{ route('petugas.persetujuan-siswa') }}" class="stat-card" title="Buka Halaman Persetujuan Akun Siswa">
@@ -677,43 +685,22 @@
             </div>
         </div>
 
-        <!-- Katalog Alat (gaya katalog siswa) -->
+        <!-- Pratinjau Katalog Siswa (sinkron dengan inventaris) -->
         <div class="catalog-section">
             <div class="title-section">
                 <div>
-                    <h2>Katalog alat</h2>
-                    <p>Pratinjau inventaris yang dilihat siswa di katalog.</p>
+                    <h2>Katalog alat siswa</h2>
+                    <p>Inventaris di bawah ini yang tampil di katalog siswa. Kelola datanya di halaman Inventaris.</p>
                 </div>
-                <a href="/petugas/inventaris" class="btn-add">Lihat semua</a>
+                <a href="{{ route('petugas.inventaris.index') }}" class="btn-add">Kelola inventaris</a>
             </div>
 
             <div class="catalog-grid">
-                @foreach($alats as $alat)
-                    @php
-                        $gambarAlat = null;
-                        $pemetaanGambar = [
-                            'projector' => 'proyektor.jpg',
-                            'proyektor' => 'proyektor.jpg',
-                            'sajadah' => 'sajadah.jpg',
-                            'sony' => 'sony1.jpg',
-                            'tenda' => 'tenda.jpg',
-                        ];
-                        $namaAlat = strtolower($alat->nama_alat);
-
-                        foreach ($pemetaanGambar as $kataKunci => $namaFile) {
-                            if (str_contains($namaAlat, $kataKunci) && file_exists(public_path($namaFile))) {
-                                $gambarAlat = $namaFile;
-                                break;
-                            }
-                        }
-                    @endphp
-
+                @forelse($alats as $alat)
                     <div class="item-card">
                         <div class="card-img-wrapper">
-                            @if($alat->foto && file_exists(storage_path('app/public/' . $alat->foto)))
-                                <img src="{{ asset('storage/' . $alat->foto) }}" alt="Foto {{ $alat->nama_alat }}" loading="lazy">
-                            @elseif($gambarAlat)
-                                <img src="{{ asset($gambarAlat) }}" alt="Foto {{ $alat->nama_alat }}" loading="lazy">
+                            @if($alat->foto_katalog)
+                                <img src="{{ $alat->foto_katalog }}" alt="Foto {{ $alat->nama_alat }}" loading="lazy">
                             @else
                                 <div class="placeholder-text">{{ $alat->nama_alat }}</div>
                             @endif
@@ -724,8 +711,14 @@
                         </div>
                         <div class="card-body">
                             <div>
-                                <div class="item-title">{{ $alat->nama_alat }}</div>
-                                <div class="item-loc">📍 {{ $alat->lokasi ?? 'Belum ada lokasi' }}</div>
+                                <div class="item-title">{{ Str::title($alat->nama_alat ?? '') }}</div>
+                                <div class="item-loc">
+                                    @if($alat->item)
+                                        📦 Total {{ $alat->item->stok }} unit · kondisi {{ strtolower($alat->item->kondisi ?? '-') }}
+                                    @else
+                                        📦 Belum tertaut ke data inventaris
+                                    @endif
+                                </div>
                             </div>
                             <div>
                                 <div class="card-meta">
@@ -734,11 +727,17 @@
                                     </span>
                                     <span class="condition">{{ $alat->kondisi ?? 'Kondisi baik' }}</span>
                                 </div>
-                                <a href="/petugas/inventaris" class="btn-action">Kelola inventaris</a>
+                                @if($alat->item)
+                                    <a href="{{ route('petugas.inventaris.edit', $alat->item) }}" class="btn-action">Kelola barang ini</a>
+                                @else
+                                    <a href="{{ route('petugas.inventaris.index') }}" class="btn-action">Lihat inventaris</a>
+                                @endif
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <p class="tag-info" style="grid-column: 1 / -1;">Belum ada alat aktif yang tampil di katalog siswa. Tambahkan melalui menu Inventaris.</p>
+                @endforelse
             </div>
         </div>
 
@@ -754,7 +753,7 @@
                 @forelse($peminjamans as $peminjaman)
                     <div class="request-item">
                         <div class="req-user">
-                            <strong>{{ $peminjaman->user->name ?? 'Siswa' }}</strong>
+                            <strong>{{ $peminjaman->user->nama_tampil ?? 'Siswa' }}</strong>
                             <span>Siswa • {{ ucfirst($peminjaman->kategori) }}</span>
                         </div>
                         <div class="req-item-info">
@@ -815,7 +814,7 @@
                     <ul class="late-list">
                         @forelse($latePeminjamans as $latePeminjaman)
                             <li>
-                                • {{ $latePeminjaman->user->name ?? 'Siswa' }}
+                                • {{ $latePeminjaman->user->nama_tampil ?? 'Siswa' }}
                                 • {{ $latePeminjaman->alat->nama_alat ?? 'Alat' }}
                                 • {{ $latePeminjaman->tanggal_kembali->diffInDays(today()) }} hari
                             </li>

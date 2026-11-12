@@ -25,6 +25,12 @@ class Alat extends Model
         return $this->hasMany(Peminjaman::class);
     }
 
+    // Barang inventaris (milik petugas) yang disinkronkan ke katalog siswa ini
+    public function item()
+    {
+        return $this->hasOne(Item::class, 'alat_id');
+    }
+
     public function laporanKondisis()
     {
         return $this->hasMany(LaporanKondisiAlat::class, 'alat_id');

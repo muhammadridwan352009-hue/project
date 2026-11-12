@@ -357,9 +357,13 @@
 
         #foto_preview {
             display: none;
+            max-width: 100%;
+            max-height: 220px;
             width: 100%;
-            height: 180px;
-            object-fit: cover;
+            height: 220px;
+            object-fit: contain;
+            object-position: center;
+            background: #f8fafc;
             border-radius: 12px;
             margin-top: 12px;
             border: 1px solid #e2e8f0;
@@ -536,7 +540,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="stok">Stok: <span class="required">*</span></label>
+                        <label for="stok">Total unit: <span class="required">*</span></label>
                         <input type="number" name="stok" id="stok" value="{{ old('stok') }}" min="0"
                             placeholder="Contoh: 5" class="form-control {{ $errors->has('stok') ? 'input-error' : '' }}" required>
                         @error('stok')
@@ -580,7 +584,7 @@
                 <h4>📌 Panduan pengisian</h4>
                 <ul class="info-list">
                     <li><span>🏷️</span><span><strong>Kode barang</strong> harus unik — tidak boleh sama dengan barang yang sudah terdaftar.</span></li>
-                    <li><span>🔢</span><span><strong>Stok</strong> diisi jumlah unit yang tersedia, minimal 0.</span></li>
+                    <li><span>🔢</span><span><strong>Total unit</strong> diisi jumlah fisik inventaris yang dimiliki, minimal 0.</span></li>
                     <li><span>🩺</span><span><strong>Kondisi</strong> diisi berdasarkan pemeriksaan terakhir alat.</span></li>
                     <li><span>📷</span><span><strong>Foto</strong> akan muncul di katalog yang dilihat siswa saat meminjam.</span></li>
                     <li><span>✅</span><span>Setelah disimpan, barang langsung muncul di daftar inventaris.</span></li>
