@@ -10,11 +10,12 @@ use Illuminate\View\View;
 
 class LaporanController extends Controller
 {
-    public function index(Request $request): View
+    /**
+     * Bangun query laporan beserta filter pencarian & kondisi.
+     * Dipakai bersama oleh halaman index dan ekspor CSV agar konsisten.
+     */
+    private function queryTersaring(?string $search, ?string $kondisi)
     {
-        $search = $request->query('search');
-        $kondisi = $request->query('kondisi');
-
         $query = LaporanKondisiAlat::query()
             ->with(['user', 'alat', 'peminjaman.user', 'peminjaman.alat'])
             ->latest();
@@ -39,7 +40,15 @@ class LaporanController extends Controller
             $query->where('kondisi_terima', $kondisi);
         }
 
-        $allLaporan = $query->get();
+        return $query;
+    }
+
+    public function index(Request $request): View
+    {
+        $search = $request->query('search');
+        $kondisi = $request->query('kondisi');
+
+        $allLaporan = $this->queryTersaring($search, $kondisi)->get();
 
         // Bagi menjadi 3 tab
         // 1. Semua
@@ -49,12 +58,8 @@ class LaporanController extends Controller
         $laporanMenunggu = $allLaporan->filter(fn ($item) => in_array($item->status, ['menunggu', 'sedang_diproses']));
         $laporanSelesai = $allLaporan->filter(fn ($item) => $item->status === 'selesai');
 
-        // Rekap untuk statistik
-        $totalLaporan = LaporanKondisiAlat::count();
-        $totalMenunggu = LaporanKondisiAlat::where('status', 'menunggu')->count();
-        $totalProses = LaporanKondisiAlat::where('status', 'sedang_diproses')->count();
-        $totalSelesai = LaporanKondisiAlat::where('status', 'selesai')->count();
-
+        // Rekap statistik mengikuti filter yang sedang aktif,
+        // sehingga angka statistik selalu konsisten dengan daftar di bawahnya.
         return view('petugas.laporan', [
             'laporanSemua'    => $laporanSemua,
             'laporanMenunggu' => $laporanMenunggu,
@@ -63,10 +68,10 @@ class LaporanController extends Controller
                 'semua'    => $laporanSemua->count(),
                 'menunggu' => $laporanMenunggu->count(),
                 'selesai'  => $laporanSelesai->count(),
-                'total'    => $totalLaporan,
-                'stat_menunggu' => $totalMenunggu,
-                'stat_proses'   => $totalProses,
-                'stat_selesai'  => $totalSelesai,
+                'total'         => $laporanSemua->count(),
+                'stat_menunggu' => $laporanMenunggu->filter(fn ($i) => $i->status === 'menunggu')->count(),
+                'stat_proses'   => $laporanMenunggu->filter(fn ($i) => $i->status === 'sedang_diproses')->count(),
+                'stat_selesai'  => $laporanSelesai->count(),
             ],
             'search'  => $search,
             'kondisi' => $kondisi,
@@ -102,21 +107,58 @@ class LaporanController extends Controller
             'catatan_petugas' => 'nullable|string|max:2000',
         ]);
 
-        $laporan = LaporanKondisiAlat::findOrFail($id);
+        $laporan = LaporanKondisiAlat::with(['alat', 'peminjaman'])->findOrFail($id);
+        $statusLama = $laporan->status;
+
         $laporan->update([
             'status'          => $request->status,
             'catatan_petugas' => $request->catatan_petugas,
         ]);
 
+        // Kirim notifikasi ke siswa hanya ketika status berubah,
+        // agar siswa tahu perkembangan laporannya.
+        if ($statusLama !== $request->status) {
+            $tujuanUserId = $laporan->user_id ?? $laporan->peminjaman?->user_id;
+            $namaAlat = $laporan->alat?->nama_alat ?? $laporan->peminjaman?->alat?->nama_alat ?? 'alat';
+
+            [$judul, $pesan] = match ($request->status) {
+                'sedang_diproses' => [
+                    'Laporan sedang diproses 🛠️',
+                    'Laporan kerusakan "' . $laporan->kondisi_label . '" untuk alat ' . $namaAlat . ' sedang ditangani petugas.'
+                        . ($request->catatan_petugas ? ' Catatan: ' . $request->catatan_petugas : ''),
+                ],
+                'selesai' => [
+                    'Laporan selesai ditangani ✅',
+                    'Laporan kerusakan untuk alat ' . $namaAlat . ' telah selesai ditangani. Terima kasih atas laporannya!'
+                        . ($request->catatan_petugas ? ' Catatan: ' . $request->catatan_petugas : ''),
+                ],
+                default => [
+                    'Status laporan diperbarui ℹ️',
+                    'Status laporan untuk alat ' . $namaAlat . ' dikembalikan ke "Menunggu" oleh petugas.'
+                        . ($request->catatan_petugas ? ' Catatan: ' . $request->catatan_petugas : ''),
+                ],
+            };
+
+            \App\Models\Notifikasi::create([
+                'user_id' => $tujuanUserId,
+                'peminjaman_id' => $laporan->peminjaman_id,
+                'jenis' => 'laporan',
+                'judul' => $judul,
+                'pesan' => $pesan,
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Status laporan berhasil diperbarui menjadi: ' . ucwords(str_replace('_', ' ', $request->status)));
     }
 
-    public function exportKondisi(): StreamedResponse
+    public function exportKondisi(Request $request): StreamedResponse
     {
-        $laporanKondisis = LaporanKondisiAlat::query()
-            ->with(['user', 'alat', 'peminjaman.user', 'peminjaman.alat'])
-            ->latest()
-            ->get();
+        // Ekspor mengikuti filter yang sedang aktif di halaman laporan
+        // (search & kondisi), konsisten dengan tampilan petugas.
+        $laporanKondisis = $this->queryTersaring(
+            $request->query('search'),
+            $request->query('kondisi')
+        )->get();
 
         return response()->streamDownload(function () use ($laporanKondisis): void {
             $output = fopen('php://output', 'w');

@@ -235,9 +235,18 @@ class PeminjamanController extends Controller
             ->latest()
             ->get();
 
+        // Daftar peminjaman yang masih punya laporan aktif (menunggu/diproses)
+        // agar dropdown form bisa menandai "sudah dilaporkan".
+        $peminjamanLaporanAktif = LaporanKondisiAlat::query()
+            ->whereIn('status', ['menunggu', 'sedang_diproses'])
+            ->pluck('peminjaman_id')
+            ->filter()
+            ->unique();
+
         return view('siswa.laporan-kondisi', [
-            'peminjamans'    => $peminjamans,
-            'riwayatLaporan' => $riwayatLaporan,
+            'peminjamans'            => $peminjamans,
+            'riwayatLaporan'         => $riwayatLaporan,
+            'peminjamanLaporanAktif' => $peminjamanLaporanAktif,
         ]);
     }
 
@@ -257,6 +266,19 @@ class PeminjamanController extends Controller
             ->where('user_id', $request->user()->id)
             ->with('alat')
             ->findOrFail($data['peminjaman_id']);
+
+        // Cegah laporan ganda: satu peminjaman hanya boleh memiliki
+        // satu laporan yang masih menunggu / sedang diproses.
+        $laporanAktif = LaporanKondisiAlat::query()
+            ->where('peminjaman_id', $peminjaman->id)
+            ->whereIn('status', ['menunggu', 'sedang_diproses'])
+            ->exists();
+
+        if ($laporanAktif) {
+            throw ValidationException::withMessages([
+                'peminjaman_id' => 'Alat ini sudah memiliki laporan yang masih diproses petugas. Mohon tunggu tanggapan sebelum membuat laporan baru.',
+            ]);
+        }
 
         $fotoPath = null;
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {

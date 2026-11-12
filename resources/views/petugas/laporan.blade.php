@@ -461,7 +461,7 @@
                 <h1>Laporan Kondisi Alat</h1>
             </div>
             <div class="header-actions">
-                <a href="{{ route('petugas.laporan.kondisi.export') }}" class="btn-export">
+                <a href="{{ route('petugas.laporan.kondisi.export', array_filter(['search' => $search, 'kondisi' => $kondisi && $kondisi !== 'all' ? $kondisi : null])) }}" class="btn-export" title="Ekspor CSV sesuai filter aktif">
                     <i class="fa-solid fa-file-excel"></i>
                     <span>Ekspor CSV</span>
                 </a>

@@ -403,9 +403,12 @@
                             <select name="peminjaman_id" id="peminjaman_id" required>
                                 <option value="" disabled selected>-- Pilih alat dari riwayat pinjam --</option>
                                 @foreach($peminjamans as $p)
-                                    <option value="{{ $p->id }}" {{ old('peminjaman_id') == $p->id ? 'selected' : '' }}>
-                                        {{ $p->alat->nama_alat ?? 'Alat #' . $p->alat_id }} 
-                                        ({{ $p->alat->kode_alat ?? 'KODE' }}) - Pinjam: {{ $p->tanggal_pinjam }}
+                                    @php
+                                        $sudahDilaporkan = $peminjamanLaporanAktif->contains($p->id);
+                                    @endphp
+                                    <option value="{{ $p->id }}" {{ old('peminjaman_id') == $p->id ? 'selected' : '' }} {{ $sudahDilaporkan ? 'disabled' : '' }}>
+                                        {{ $p->alat->nama_alat ?? 'Alat #' . $p->alat_id }}
+                                        ({{ $p->alat->kode_alat ?? 'KODE' }}) - Pinjam: {{ $p->tanggal_pinjam->translatedFormat('d M Y') }}{{ $sudahDilaporkan ? ' — Sudah dilaporkan' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -485,6 +488,26 @@
                         <span>Riwayat Laporan Saya ({{ $riwayatLaporan->count() }})</span>
                     </div>
                 </div>
+
+                @if($riwayatLaporan->isNotEmpty())
+                    {{-- Ringkasan status laporan --}}
+                    @php
+                        $jumlahMenunggu = $riwayatLaporan->where('status', 'menunggu')->count();
+                        $jumlahDiproses = $riwayatLaporan->where('status', 'sedang_diproses')->count();
+                        $jumlahSelesai  = $riwayatLaporan->where('status', 'selesai')->count();
+                    @endphp
+                    <div style="display:flex; gap:10px; margin-bottom: 16px; flex-wrap: wrap;">
+                        <span class="badge badge-menunggu" style="font-size:12px; padding:6px 12px;">
+                            <i class="fa-solid fa-hourglass-half"></i> Menunggu: {{ $jumlahMenunggu }}
+                        </span>
+                        <span class="badge badge-proses" style="font-size:12px; padding:6px 12px;">
+                            <i class="fa-solid fa-spinner"></i> Diproses: {{ $jumlahDiproses }}
+                        </span>
+                        <span class="badge badge-selesai" style="font-size:12px; padding:6px 12px;">
+                            <i class="fa-solid fa-circle-check"></i> Selesai: {{ $jumlahSelesai }}
+                        </span>
+                    </div>
+                @endif
 
                 @if($riwayatLaporan->isEmpty())
                     <div class="empty-state">
